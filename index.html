@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CAPITAL // OS v11.0 [MASTER]</title>
+    <title>CAPITAL // OS v12.0 [LOCKED]</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;800&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -229,8 +229,10 @@
         .stat-val.green { color: var(--green); }
         .stat-sub { font-family: var(--font-code); font-size: 11px; color: var(--text-dim); margin-top: 5px; }
 
-        .clock-box { display: flex; justify-content: space-between; align-items: flex-end; }
-        .clock-zone { font-size: 10px; color: var(--cyan); font-weight: 700; }
+        .clock-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; }
+        .clock-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; padding-top: 5px; }
+        .clock-zone { font-size: 10px; color: var(--cyan); font-weight: 700; font-family: var(--font-code); }
+        .clock-time { font-size: 14px; color: var(--text-main); font-weight: 600; font-family: var(--font-code); }
 
         /* ─── ALERT BOX ─── */
         .alert-box {
@@ -257,6 +259,9 @@
             margin-bottom: 15px; transition: all 0.3s ease;
         }
         .task-item:hover { border-color: var(--border-active); background: var(--bg-hover); }
+        .task-item.locked { opacity: 0.5; pointer-events: none; border-color: var(--border); filter: grayscale(100%); }
+        .task-item.locked .checkbox { border-color: var(--red); color: var(--red); }
+        .task-item.locked .checkbox::after { content: '✕'; font-weight: 800; font-size: 14px; }
         
         .task-header {
             padding: 20px 25px; display: flex; align-items: center; gap: 20px;
@@ -278,7 +283,6 @@
         .task-title { font-size: 16px; font-weight: 500; color: var(--text-main); flex: 1; transition: color 0.3s; }
         .task-meta { font-family: var(--font-code); font-size: 11px; color: var(--text-dim); background: var(--bg-panel); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); }
         
-        /* NEW: Time Estimate Tag */
         .time-tag {
             font-family: var(--font-code); font-size: 11px; color: var(--gold); 
             background: var(--gold-dim); padding: 4px 8px; border-radius: 4px; 
@@ -429,29 +433,32 @@
 
             <div class="grid-4">
                 <div class="card dense">
-                    <div class="clock-box">
-                        <span class="stat-label">NEW YORK</span>
-                        <span class="clock-zone">EST</span>
+                    <span class="stat-label">TEMPORAL LINK</span>
+                    <div class="clock-row">
+                        <span class="clock-zone">NYC</span>
+                        <span class="clock-time" id="clock_nyc">--:--:--</span>
                     </div>
-                    <div class="stat-val" id="clock_nyc">--:--:--</div>
-                    <div class="stat-sub">CLIENT TIME</div>
-                </div>
-                <div class="card dense">
-                    <div class="clock-box">
-                        <span class="stat-label">IST</span>
+                    <div class="clock-row">
                         <span class="clock-zone">IST</span>
+                        <span class="clock-time" id="clock_ist">--:--:--</span>
                     </div>
-                    <div class="stat-val" id="clock_ist">--:--:--</div>
-                    <div class="stat-sub">LOCAL TIME</div>
                 </div>
+                
                 <div class="card dense" style="border-left: 2px solid var(--gold);">
                     <span class="stat-label">MASTERY TRACKER</span>
                     <div class="stat-val gold" style="font-size:20px;" id="hud_hours">0 / 1000 H</div>
                     <div class="stat-sub">DEEP WORK LOGGED</div>
                 </div>
+
+                <div class="card dense" style="border-left: 2px solid var(--cyan);">
+                    <span class="stat-label">80/20 FOCUS (AUTO)</span>
+                    <div class="stat-val cyan" style="font-size:18px;" id="hud_focus_val">FOUNDATION</div>
+                    <div class="stat-sub" id="hud_focus_sub">80% DATA MODEL</div>
+                </div>
+
                 <div class="card dense">
                     <span class="stat-label">SYSTEM INTEGRITY</span>
-                    <div class="stat-val cyan" id="sys_integrity">0%</div>
+                    <div class="stat-val green" id="sys_integrity">0%</div>
                     <div class="stat-sub">TOTAL COMPLETION</div>
                 </div>
             </div>
@@ -661,7 +668,7 @@
             </div>
         </div>
 
-        <div id="p0" class="section">
+        <div id="p0" class="section" data-phase="0">
             <span class="pill">PHASE 0 (MONTH 1-6)</span>
             
             <div class="phase-header-grid">
@@ -798,7 +805,7 @@
             </div>
         </div>
 
-        <div id="p1" class="section">
+        <div id="p1" class="section" data-phase="1">
             <span class="pill">PHASE 1 (MONTH 7-18)</span>
             
             <div class="phase-header-grid">
@@ -949,7 +956,7 @@
                 </div>
             </div>
         </div>
-        <div id="p2" class="section">
+        <div id="p2" class="section" data-phase="2">
             <span class="pill">PHASE 2 (YEAR 2-4)</span>
             
             <div class="phase-header-grid">
@@ -1034,7 +1041,7 @@
             </div>
         </div>
 
-        <div id="p3" class="section">
+        <div id="p3" class="section" data-phase="3">
             <span class="pill">PHASE 3 (YEAR 5+)</span>
             
             <div class="phase-header-grid">
@@ -1124,7 +1131,41 @@
 </div>
 
 <script>
-    // --- NAVIGATION LOGIC ---
+    // --- STATE & METADATA ---
+    const allTasks = ['t0_1','t0_2','t0_3','t0_4','t0_5','t1_1','t1_2','t1_3','t1_4','t1_5','t1_6','t2_1','t2_2','t2_3','t3_1','t3_2','t3_3'];
+    
+    // TASK DATABASE
+    const taskMeta = {
+        't0_1': { phase: 0, obj: 'SECURE WORKSTATION', btn: 'OPEN STEPS', go: 'p0', hrs: 5 },
+        't0_2': { phase: 0, obj: 'ADMIN CERTIFICATION', btn: 'OPEN STUDY GUIDE', go: 'p0', hrs: 150 },
+        't0_3': { phase: 0, obj: 'SUPERBADGES (EXP)', btn: 'OPEN TRAILHEAD', go: 'p0', hrs: 40 },
+        't0_4': { phase: 0, obj: 'TRUST PROTOCOLS', btn: 'SETUP LEGAL', go: 'p0', hrs: 10 },
+        't0_5': { phase: 0, obj: 'BUILD DEMO', btn: 'VIEW SPECS', go: 'p0', hrs: 30 },
+        
+        't1_1': { phase: 1, obj: 'LINKEDIN POSITIONING', btn: 'EDIT PROFILE', go: 'p1', hrs: 5 },
+        't1_2': { phase: 1, obj: 'PORTFOLIO SITE', btn: 'BUILD CARRD', go: 'p1', hrs: 10 },
+        't1_3': { phase: 1, obj: 'CLIENT HUNTING', btn: 'OPEN SALES NAV', go: 'p1', hrs: 300 },
+        't1_4': { phase: 1, obj: 'ASYNC OPS', btn: 'VIEW STRATEGY', go: 'p1', hrs: 5 },
+        't1_5': { phase: 1, obj: 'LEGAL SETUP', btn: 'VIEW INDIA STACK', go: 'p1', hrs: 5 },
+        't1_6': { phase: 1, obj: 'PAYMENT RAILS', btn: 'SETUP WISE', go: 'p1', hrs: 2 },
+        
+        't2_1': { phase: 2, obj: 'TRUST INFRASTRUCTURE', btn: 'GET INSURANCE', go: 'p2', hrs: 5 },
+        't2_2': { phase: 2, obj: 'HIRE BUILDER', btn: 'POST JOB', go: 'p2', hrs: 50 },
+        't2_3': { phase: 2, obj: 'AUTOMATE ONBOARDING', btn: 'BUILD FORM', go: 'p2', hrs: 20 },
+        
+        't3_1': { phase: 3, obj: 'MARKET VALIDATION', btn: 'RUN ADS', go: 'p3', hrs: 20 },
+        't3_2': { phase: 3, obj: 'MVP SCOPING', btn: 'DEFINE FEATURES', go: 'p3', hrs: 500 },
+        't3_3': { phase: 3, obj: 'SECURITY REVIEW', btn: 'RUN CHECKMARX', go: 'p3', hrs: 100 }
+    };
+
+    const phaseConfig = {
+        0: { title: 'MASTERY & TRUST', sub: '80% SUPERBADGES' },
+        1: { title: 'SALES VOLUME', sub: '80% PROPOSALS' },
+        2: { title: 'ARCHITECTURE', sub: '0% CLICKING' },
+        3: { title: 'PRODUCT', sub: '80% ROADMAP' }
+    };
+
+    // --- NAVIGATION ---
     function go(id, closeMenu = true) {
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -1142,8 +1183,125 @@
         }
     }
 
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('active');
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+    function toggleTheme() { document.body.classList.toggle('light-mode'); }
+    function toggleAccordion(id) { document.getElementById(id).classList.toggle('open'); }
+
+    // --- PHASE LOCKING CORE ---
+    function isPhaseComplete(phaseNum) {
+        const tasksInPhase = Object.keys(taskMeta).filter(k => taskMeta[k].phase === phaseNum);
+        const completedInPhase = tasksInPhase.filter(k => document.getElementById(k).classList.contains('completed'));
+        return tasksInPhase.length === completedInPhase.length;
+    }
+
+    function checkPhaseLock() {
+        // Unlock Logic: Phase N unlocks only if Phase N-1 is complete
+        for(let i = 1; i <= 3; i++) {
+            const prevComplete = isPhaseComplete(i - 1);
+            const phaseContainer = document.querySelector(`.section[data-phase="${i}"]`);
+            const tasks = Object.keys(taskMeta).filter(k => taskMeta[k].phase === i);
+
+            tasks.forEach(taskId => {
+                const el = document.getElementById(taskId);
+                if (!prevComplete) {
+                    el.classList.add('locked');
+                    el.setAttribute('title', 'Complete Previous Phase to Unlock');
+                } else {
+                    el.classList.remove('locked');
+                    el.removeAttribute('title');
+                }
+            });
+        }
+    }
+
+    function toggleCheck(e, id) {
+        e.stopPropagation();
+        const el = document.getElementById(id);
+        
+        // Security Check
+        if(el.classList.contains('locked')) {
+            alert("ACCESS DENIED // SYSTEM LOCKED\n\nProtocol requires 100% completion of the previous Phase before proceeding.");
+            return;
+        }
+
+        el.classList.toggle('completed');
+        saveState();
+        updateHUD();
+        checkPhaseLock(); // Re-evaluate locks
+    }
+
+    // --- HUD INTELLIGENCE ---
+    function updateHUD() {
+        let totalHrs = 0;
+        let activePhase = 0;
+
+        // Calc progress per phase
+        for(let i=0; i<=3; i++) {
+            const tasks = Object.keys(taskMeta).filter(k => taskMeta[k].phase === i);
+            let done = 0;
+            tasks.forEach(tid => {
+                if(document.getElementById(tid).classList.contains('completed')) {
+                    done++;
+                    totalHrs += taskMeta[tid].hrs;
+                }
+            });
+            
+            const pct = Math.round((done / tasks.length) * 100);
+            
+            // Update Bar & Text
+            document.getElementById(`bar_p${i}`).style.width = pct + '%';
+            document.getElementById(`txt_p${i}`).innerText = pct + '%';
+            
+            const navBadge = document.getElementById(`nav_p${i}`);
+            if(navBadge) {
+                navBadge.innerText = pct + '%';
+                if(pct > 0) navBadge.style.color = 'var(--cyan)';
+            }
+
+            // Determine Active Phase (First non-100% phase)
+            if (pct < 100 && activePhase === 0 && i > 0 && isPhaseComplete(i-1)) {
+                activePhase = i;
+            } else if (pct < 100 && activePhase === 0 && i === 0) {
+                activePhase = 0;
+            }
+        }
+        
+        // Update Focus Box
+        const focusData = phaseConfig[activePhase] || phaseConfig[3];
+        document.getElementById('hud_focus_val').innerText = focusData.title;
+        document.getElementById('hud_focus_sub').innerText = focusData.sub;
+
+        // Update Hours
+        document.getElementById('hud_hours').innerText = totalHrs + " / 1000 H";
+        
+        // Next Step Logic
+        let nextTask = Object.keys(taskMeta).find(id => !document.getElementById(id).classList.contains('completed'));
+        if (nextTask) {
+            const meta = taskMeta[nextTask];
+            document.getElementById('hud_obj_label').innerText = "OBJECTIVE // " + (meta.phase === 0 ? "GENESIS" : "EXECUTION");
+            document.getElementById('hud_obj_text').innerText = meta.obj;
+            const btn = document.getElementById('hud_action');
+            btn.innerText = meta.btn;
+            btn.setAttribute('onclick', `go('${meta.go}', false); setTimeout(() => { document.getElementById('${nextTask}').scrollIntoView({behavior:'smooth', block:'center'}); if(!document.getElementById('${nextTask}').classList.contains('open')) toggleAccordion('${nextTask}'); }, 300);`);
+        }
+    }
+
+    // --- SYSTEM CORE ---
+    function saveState() {
+        Object.keys(taskMeta).forEach(id => {
+            const completed = document.getElementById(id).classList.contains('completed');
+            localStorage.setItem('capital_v12_' + id, completed);
+        });
+    }
+
+    function loadState() {
+        Object.keys(taskMeta).forEach(id => {
+            if(localStorage.getItem('capital_v12_' + id) === 'true') {
+                document.getElementById(id).classList.add('completed');
+            }
+        });
+        checkPhaseLock(); // Lock tasks on load
+        updateHUD();
     }
 
     function ftab(e, id) {
@@ -1152,209 +1310,35 @@
         document.getElementById(id).style.display = 'block';
         if(e && e.target) e.target.classList.add('active');
     }
-
-    function toggleTheme() {
-        document.body.classList.toggle('light-mode');
-    }
-
-    // --- ACCORDION & CHECKBOX ---
-    function toggleAccordion(id) {
-        const el = document.getElementById(id);
-        el.classList.toggle('open');
-    }
-
-    function toggleCheck(e, id) {
-        e.stopPropagation();
-        const el = document.getElementById(id);
-        el.classList.toggle('completed');
-        saveState();
-        updateHUD();
-    }
-
-    // --- STATE MANAGEMENT ---
-    const allTasks = ['t0_1','t0_2','t0_3','t0_4','t0_5','t1_1','t1_2','t1_3','t1_4','t1_5','t1_6','t2_1','t2_2','t2_3','t3_1','t3_2','t3_3'];
     
-    // Updated Task Metadata for PATCH v11.0
-    // hrs = Estimated hours to complete
-    const taskMeta = {
-        't0_1': { phase: 'PHASE 0', obj: 'SECURE WORKSTATION', btn: 'OPEN STEPS', go: 'p0', hrs: 5 },
-        't0_2': { phase: 'PHASE 0', obj: 'ADMIN CERTIFICATION', btn: 'OPEN STUDY GUIDE', go: 'p0', hrs: 150 },
-        't0_3': { phase: 'PHASE 0', obj: 'SUPERBADGES (EXP)', btn: 'OPEN TRAILHEAD', go: 'p0', hrs: 40 },
-        't0_4': { phase: 'PHASE 0', obj: 'TRUST PROTOCOLS', btn: 'SETUP LEGAL', go: 'p0', hrs: 10 },
-        't0_5': { phase: 'PHASE 0', obj: 'BUILD DEMO', btn: 'VIEW SPECS', go: 'p0', hrs: 30 },
-        
-        't1_1': { phase: 'PHASE 1', obj: 'LINKEDIN POSITIONING', btn: 'EDIT PROFILE', go: 'p1', hrs: 5 },
-        't1_2': { phase: 'PHASE 1', obj: 'PORTFOLIO SITE', btn: 'BUILD CARRD', go: 'p1', hrs: 10 },
-        't1_3': { phase: 'PHASE 1', obj: 'CLIENT HUNTING', btn: 'OPEN SALES NAV', go: 'p1', hrs: 300 },
-        't1_4': { phase: 'PHASE 1', obj: 'ASYNC OPS', btn: 'VIEW STRATEGY', go: 'p1', hrs: 5 },
-        't1_5': { phase: 'PHASE 1', obj: 'LEGAL SETUP', btn: 'VIEW INDIA STACK', go: 'p1', hrs: 5 },
-        't1_6': { phase: 'PHASE 1', obj: 'PAYMENT RAILS', btn: 'SETUP WISE', go: 'p1', hrs: 2 },
-        
-        't2_1': { phase: 'PHASE 2', obj: 'TRUST INFRASTRUCTURE', btn: 'GET INSURANCE', go: 'p2', hrs: 5 },
-        't2_2': { phase: 'PHASE 2', obj: 'HIRE BUILDER', btn: 'POST JOB', go: 'p2', hrs: 50 },
-        't2_3': { phase: 'PHASE 2', obj: 'AUTOMATE ONBOARDING', btn: 'BUILD FORM', go: 'p2', hrs: 20 },
-        
-        't3_1': { phase: 'PHASE 3', obj: 'MARKET VALIDATION', btn: 'RUN ADS', go: 'p3', hrs: 20 },
-        't3_2': { phase: 'PHASE 3', obj: 'MVP SCOPING', btn: 'DEFINE FEATURES', go: 'p3', hrs: 500 },
-        't3_3': { phase: 'PHASE 3', obj: 'SECURITY REVIEW', btn: 'RUN CHECKMARX', go: 'p3', hrs: 100 }
-    };
-
-    function saveState() {
-        allTasks.forEach(id => {
-            const completed = document.getElementById(id).classList.contains('completed');
-            localStorage.setItem('capital_v11_' + id, completed);
-        });
-        if(!localStorage.getItem('capital_v11_start')) {
-            localStorage.setItem('capital_v11_start', new Date().toISOString());
-        }
+    // Calculators
+    function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
+    function t(id, txt) { document.getElementById(id).innerText = txt; }
+    function c1() { 
+        let wk = v('in_f1_rate') * v('in_f1_hrs');
+        t('out_f1_wk', '$' + wk.toLocaleString()); t('out_f1_yr', '$' + (wk * 48).toLocaleString()); 
+    }
+    function c2() { 
+        let rev = (v('in_f2_ret') * v('in_f2_cli')) + (v('in_f2_proj') * v('in_f2_pcount'));
+        let cost = v('in_f2_staff') * v('in_f2_sal');
+        t('out_f2_rev', '$' + rev.toLocaleString()); t('out_f2_cost', '-$' + cost.toLocaleString());
+        t('out_f2_net', '$' + (rev - cost).toLocaleString()); t('out_f2_run', '$' + (rev * 12).toLocaleString());
+    }
+    function c3() { 
+        let arr = v('in_f3_lic') * v('in_f3_users');
+        t('out_f3_arr', '$' + (arr/1000000).toFixed(2) + 'M'); t('out_f3_exit', '$' + ((arr * v('in_f3_mult'))/1000000).toFixed(2) + 'M'); 
     }
 
-    function loadState() {
-        allTasks.forEach(id => {
-            if(localStorage.getItem('capital_v11_' + id) === 'true') {
-                document.getElementById(id).classList.add('completed');
-            }
-        });
-        updateHUD();
-        startClocks();
-    }
-
-    // --- INTELLIGENCE ENGINE ---
-    function updateHUD() {
-        // 1. Calculate Percentages & Hours
-        const p0 = ['t0_1','t0_2','t0_3','t0_4','t0_5'];
-        const p1 = ['t1_1','t1_2','t1_3','t1_4','t1_5','t1_6'];
-        const p2 = ['t2_1','t2_2','t2_3'];
-        const p3 = ['t3_1','t3_2','t3_3'];
+    // --- INIT ---
+    window.onload = function() {
+        loadState();
+        c1(); c2(); c3();
         
-        const calc = (arr) => {
-            let doneCount = 0;
-            let doneHrs = 0;
-            arr.forEach(id => {
-                if(document.getElementById(id).classList.contains('completed')) {
-                    doneCount++;
-                    doneHrs += taskMeta[id].hrs;
-                }
-            });
-            return { pct: Math.round((doneCount / arr.length) * 100), hrs: doneHrs };
-        }
-
-        const s0 = calc(p0);
-        const s1 = calc(p1);
-        const s2 = calc(p2);
-        const s3 = calc(p3);
-
-        const totalHrs = s0.hrs + s1.hrs + s2.hrs + s3.hrs;
-
-        // Update Bars
-        document.getElementById('bar_p0').style.width = s0.pct + '%'; document.getElementById('txt_p0').innerText = s0.pct + '%';
-        document.getElementById('bar_p1').style.width = s1.pct + '%'; document.getElementById('txt_p1').innerText = s1.pct + '%';
-        document.getElementById('bar_p2').style.width = s2.pct + '%'; document.getElementById('txt_p2').innerText = s2.pct + '%';
-        document.getElementById('bar_p3').style.width = s3.pct + '%'; document.getElementById('txt_p3').innerText = s3.pct + '%';
-        
-        const updateBadge = (id, pct) => {
-            const el = document.getElementById(id);
-            if(el) {
-                el.innerText = pct + '%';
-                if(pct > 0) el.style.color = 'var(--cyan)';
-                else el.style.color = 'var(--text-dim)';
-            }
-        };
-
-        updateBadge('nav_p0', s0.pct);
-        updateBadge('nav_p1', s1.pct);
-        updateBadge('nav_p2', s2.pct);
-        updateBadge('nav_p3', s3.pct);
-
-        // System Integrity
-        const totalIntegrity = Math.round((s0.pct + s1.pct + s2.pct + s3.pct) / 4);
-        document.getElementById('sys_integrity').innerText = totalIntegrity + '%';
-        
-        // Mastery Tracker
-        document.getElementById('hud_hours').innerText = totalHrs + " / 1000 H";
-
-        // 2. Intelligent Next Step Logic
-        let nextTask = allTasks.find(id => !document.getElementById(id).classList.contains('completed'));
-        
-        let hudPhase = "SYSTEM";
-        let hudObj = "MAINTENANCE MODE";
-        let hudBtn = "ALL SYSTEMS GO";
-        let hudAction = "console.log('Done')";
-        
-        let focusTitle = "FOUNDATION";
-        let focusSub = "80% COMPLIANCE";
-
-        if (nextTask) {
-            const meta = taskMeta[nextTask];
-            hudPhase = meta.phase;
-            hudObj = meta.obj;
-            hudBtn = meta.btn;
-            hudAction = `go('${meta.go}', false); setTimeout(() => { document.getElementById('${nextTask}').scrollIntoView({behavior: 'smooth', block: 'center'}); if(!document.getElementById('${nextTask}').classList.contains('open')) toggleAccordion('${nextTask}'); }, 300);`;
-            
-            if(meta.go === 'p0') { focusTitle = "TRUST"; focusSub = "100% SECURITY"; }
-            else if(meta.go === 'p1') { focusTitle = "VOLUME"; focusSub = "80% PROPOSALS"; }
-            else if(meta.go === 'p2') { focusTitle = "ARCHITECTURE"; focusSub = "0% CLICKING"; }
-            else if(meta.go === 'p3') { focusTitle = "PRODUCT"; focusSub = "80% ROADMAP"; }
-        } else {
-             hudPhase = "COMPLETE";
-             hudObj = "EXIT ACHIEVED";
-             hudBtn = "RESET SYSTEM";
-             hudAction = "localStorage.clear(); location.reload();";
-             focusTitle = "FREEDOM";
-             focusSub = "100% LIFE";
-        }
-        
-        document.getElementById('hud_obj_label').innerText = "OBJECTIVE // " + hudPhase;
-        document.getElementById('hud_obj_text').innerText = hudObj;
-        
-        const btnEl = document.getElementById('hud_action');
-        btnEl.innerText = hudBtn;
-        btnEl.setAttribute('onclick', hudAction);
-        
-        document.getElementById('hud_focus_val').innerText = focusTitle;
-        document.getElementById('hud_focus_sub').innerText = focusSub;
-    }
-
-    function startClocks() {
+        // Start Clock
         setInterval(() => {
             document.getElementById('clock_nyc').innerText = new Date().toLocaleTimeString('en-US', {timeZone:'America/New_York', hour12: false});
             document.getElementById('clock_ist').innerText = new Date().toLocaleTimeString('en-US', {timeZone:'Asia/Kolkata', hour12: false});
         }, 1000);
-    }
-
-    // --- CALCULATORS ---
-    function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
-    function t(id, txt) { document.getElementById(id).innerText = txt; }
-
-    function c1() { 
-        let wk = v('in_f1_rate') * v('in_f1_hrs');
-        t('out_f1_wk', '$' + wk.toLocaleString());
-        t('out_f1_yr', '$' + (wk * 48).toLocaleString()); 
-    }
-    
-    function c2() { 
-        let ret = v('in_f2_ret') * v('in_f2_cli');
-        let proj = v('in_f2_proj') * v('in_f2_pcount');
-        let rev = ret + proj;
-        
-        let cost = v('in_f2_staff') * v('in_f2_sal');
-        let net = rev - cost;
-
-        t('out_f2_rev', '$' + rev.toLocaleString());
-        t('out_f2_cost', '-$' + cost.toLocaleString());
-        t('out_f2_net', '$' + net.toLocaleString());
-        t('out_f2_run', '$' + (rev * 12).toLocaleString());
-    }
-    
-    function c3() { 
-        let arr = v('in_f3_lic') * v('in_f3_users');
-        t('out_f3_arr', '$' + (arr/1000000).toFixed(2) + 'M');
-        t('out_f3_exit', '$' + ((arr * v('in_f3_mult'))/1000000).toFixed(2) + 'M'); 
-    }
-
-    window.onload = function() {
-        loadState();
-        c1(); c2(); c3();
     }
 </script>
 </body>
