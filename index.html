@@ -61,9 +61,11 @@
             font-family: var(--font-head);
             font-size: 15px;
             line-height: 1.5;
-            height: 100vh; /* Viewport height for desktop */
+            /* FIX 2: Use dynamic viewport height to prevent cutoff on mobile resize */
+            height: 100vh;
+            height: 100dvh; 
             display: flex;
-            overflow: hidden; /* Prevent body scroll, handle in scroll-area */
+            overflow: hidden;
             transition: background 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.4s;
         }
 
@@ -153,25 +155,28 @@
             height: 60px; border-bottom: 1px solid var(--border); display: flex;
             justify-content: space-between; align-items: center; padding: 0 30px;
             background: var(--bg-panel); 
-            position: sticky; top: 0; z-index: 10;
+            /* FIX 2: Removing sticky and just letting it sit in flex flow prevents overlap issues */
+            flex-shrink: 0; 
+            z-index: 10;
         }
         
         .top-left-group { display: flex; align-items: center; gap: 15px; }
         
-        /* HAMBURGER & CLOSE TOGGLE */
+        /* FIX 1: Menu Toggle Logic */
         .menu-toggle {
-            display: none; background: transparent; border: none; 
+            display: none; /* Hidden on desktop */
+            background: transparent; border: none; 
             color: var(--text-main); font-size: 20px; cursor: pointer; 
             padding: 5px; margin-right: 5px;
         }
         .close-sidebar {
-            display: none; background: transparent; border: none;
+            display: none; /* Hidden on desktop */
+            background: transparent; border: none;
             color: var(--text-dim); font-size: 20px; cursor: pointer;
         }
         .close-sidebar:hover { color: var(--red); }
 
-        /* LIVE DOT MOBILE (Hidden on desktop, shown on mobile in top bar) */
-        .mobile-live-dot { display: none; }
+        .mobile-live-dot { display: none; } /* Hidden on desktop */
 
         .top-title { font-family: var(--font-code); font-size: 12px; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
         
@@ -186,7 +191,6 @@
             flex: 1; 
             overflow-y: auto; 
             padding: 40px; 
-            /* Fix for smooth scrolling on mobile */
             -webkit-overflow-scrolling: touch; 
         }
 
@@ -194,12 +198,10 @@
         h1 { font-size: 36px; color: var(--text-main); margin-bottom: 5px; text-transform: uppercase; letter-spacing: -1px; line-height: 1; font-weight: 700; text-shadow: 0 0 20px rgba(255,255,255,0.05); }
         h2 { font-size: 14px; color: var(--gold); font-family: var(--font-code); margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; }
         
-        /* Header Grid */
         .phase-header-grid {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 25px;
         }
-        
         .phase-info { display: flex; flex-direction: column; }
         
         .earning-badge {
@@ -267,7 +269,7 @@
         .checkbox {
             width: 22px; height: 22px; border: 1px solid var(--text-dim); background: var(--bg-void);
             display: flex; align-items: center; justify-content: center; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            flex-shrink: 0; /* Prevents shrinking on mobile */
+            flex-shrink: 0;
         }
         .task-item.completed .checkbox { 
             background: var(--green); border-color: var(--green); color: #000; 
@@ -285,24 +287,19 @@
         }
         .task-item.open .task-details { display: block; }
         
-        /* ─── DETAILS & TARGETS ─── */
         .detail-block { margin-bottom: 20px; position: relative; padding-left: 20px; border-left: 1px solid var(--border); margin-top: 25px; }
         .detail-title { font-family: var(--font-code); color: var(--gold); font-size: 11px; font-weight: 700; margin-bottom: 5px; }
         .detail-body { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
         .detail-body strong { color: var(--text-main); }
         .detail-body code { background: var(--bg-hover); color: var(--cyan); padding: 2px 5px; border-radius: 3px; font-family: var(--font-code); font-size: 13px; }
-        
         .text-link { color: var(--cyan); text-decoration: none; border-bottom: 1px dashed var(--cyan); transition: 0.2s; }
         .text-link:hover { color: var(--text-inv); background: var(--cyan); }
-
-        /* TARGET BOX COLOR CHANGE */
         .target-box {
             margin-top: 20px; background: var(--gold-dim); border: 1px solid var(--gold);
             padding: 10px 15px; font-family: var(--font-code); font-size: 12px; color: var(--gold);
             display: flex; align-items: center; font-weight: 600;
         }
         .target-box::before { content: 'TARGET // '; opacity: 0.6; margin-right: 8px; }
-
         .action-link {
             display: flex; align-items: center; justify-content: space-between;
             font-family: var(--font-code); font-size: 12px; color: var(--text-main);
@@ -312,10 +309,9 @@
         .action-link:hover { border-color: var(--cyan); background: var(--cyan-dim); color: var(--cyan); transform: translateX(5px); }
         .ico-txt { margin-right: 12px; opacity: 1; font-size: 16px; }
         
-        /* Updated Pill for Better Visibility */
         .pill { 
             font-family: var(--font-code); 
-            font-size: 14px; /* Increased from 11px */
+            font-size: 14px; 
             font-weight: 700;
             background: var(--bg-hover); 
             padding: 8px 16px; 
@@ -327,51 +323,28 @@
             letter-spacing: 0.5px;
         }
 
-        /* ─── PROGRESS BAR ─── */
-        .prog-container { 
-            margin-bottom: 15px; 
-            padding: 15px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            cursor: pointer; 
-            transition: all 0.2s; 
-        }
+        .prog-container { margin-bottom: 15px; padding: 15px; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
         .prog-container:hover { border-color: var(--text-dim); transform: translateX(5px); }
         .prog-container:active { transform: scale(0.98); border-color: var(--cyan); }
-        
         .prog-label { display: flex; justify-content: space-between; color: var(--text-main); margin-bottom: 8px; font-family: var(--font-head); font-weight: 600; font-size: 14px; }
         .prog-track { height: 12px; background: var(--bg-hover); border-radius: 2px; border: 1px solid var(--border); overflow: hidden; }
         .prog-fill { height: 100%; transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
 
-        /* ─── CALCULATORS ─── */
         .calc-wrapper { display: flex; gap: 30px; }
         .calc-panel { flex: 1; background: var(--bg-card); border: 1px solid var(--border); padding: 30px; transition: 0.3s; }
         .calc-panel.output { border-color: var(--green); background: rgba(0, 255, 157, 0.02); }
-        
         .calc-tabs { display: flex; gap: 2px; background: var(--border); margin-bottom: 30px; }
         .c-tab { flex: 1; background: var(--bg-card); border: none; padding: 15px; color: var(--text-dim); font-family: var(--font-code); font-size: 12px; cursor: pointer; text-transform: uppercase; font-weight: 700; transition: 0.2s; }
         .c-tab:hover { color: var(--text-main); }
         .c-tab.active { background: var(--bg-void); color: var(--gold); border-top: 3px solid var(--gold); }
-
         .inp-label { display: block; font-family: var(--font-code); font-size: 11px; color: var(--text-dim); margin-bottom: 8px; }
-        .inp-field { 
-            width: 100%; background: var(--bg-void); border: 1px solid var(--border); color: var(--text-main); 
-            padding: 12px; font-family: var(--font-code); font-size: 16px; text-align: right; transition: 0.2s;
-        }
+        .inp-field { width: 100%; background: var(--bg-void); border: 1px solid var(--border); color: var(--text-main); padding: 12px; font-family: var(--font-code); font-size: 16px; text-align: right; transition: 0.2s; }
         .inp-field:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0,240,255,0.1); }
 
-        /* ─── ANIMATIONS ─── */
         .section { display: none; }
         .section.active { display: block; animation: slideUpFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        
-        @keyframes slideUpFade { 
-            from { opacity: 0; transform: translateY(30px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ─── MOBILE / RESPONSIVE ─── */
         @media(max-width: 1100px) { 
@@ -382,33 +355,26 @@
             .sidebar { position: fixed; left: -270px; top: 0; bottom: 0; width: 260px; box-shadow: 50px 0 100px rgba(0,0,0,0.5); }
             .sidebar.active { transform: translateX(270px); }
             
+            /* FIX 1: Show menu buttons ONLY on mobile */
             .menu-toggle { display: block; }
             .close-sidebar { display: block; }
             
-            /* Live Dot in Top Bar */
+            /* Live Dot in Top Bar on Mobile */
             .mobile-live-dot { display: block; }
-            /* Hide Sidebar Live Dot to avoid duplicates */
             .sidebar .live-dot { display: none; }
 
             .top-bar { padding: 0 20px; }
-            
-            /* Clutter Reduction & Spacing */
-            .scroll-area { padding: 25px 20px; } /* More vertical space */
+            .scroll-area { padding: 25px 20px; }
             .phase-header-grid { flex-direction: column; align-items: flex-start; gap: 15px; }
             .phase-header-grid div[style*="text-align: right"] { text-align: left !important; width: 100%; }
             .earning-badge { width: 100%; text-align: center; }
-            
             .grid-2, .grid-3, .grid-4 { gap: 15px; }
             .card { padding: 20px; }
-            
-            /* Font Scaling */
             h1 { font-size: 28px; }
-            
             .task-header { padding: 15px 20px; }
             .task-details { padding: 0 20px 25px 62px; }
         }
         
-        /* Small phones */
         @media(max-width: 600px) {
             .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
         }
@@ -1133,7 +1099,7 @@
         // 3. Scroll to top
         document.querySelector('.scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
 
-        // 4. Mobile Logic (Only close if triggered by menu click, not dashboard card)
+        // 4. Mobile Logic (Only close if explicitly requested - i.e., from sidebar click)
         if(window.innerWidth <= 1100 && closeMenu) {
             document.getElementById('sidebar').classList.remove('active');
         }
