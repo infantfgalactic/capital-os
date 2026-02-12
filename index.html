@@ -20,7 +20,7 @@
             --text-dim: #888;
             --text-inv: #000;
 
-            /* SIGNALS - ORIGINAL GOLD/CYAN PRESERVED */
+            /* SIGNALS */
             --cyan: #00f0ff;
             --cyan-dim: rgba(0, 240, 255, 0.1);
             --gold: #ffd700;
@@ -89,6 +89,7 @@
             height: 70px;
             display: flex;
             align-items: center;
+            justify-content: space-between; /* Changed for close button */
             padding: 0 25px;
             border-bottom: 1px solid var(--border);
             font-family: var(--font-code);
@@ -99,6 +100,7 @@
             white-space: pre; 
         }
         .brand span { color: var(--gold); }
+        .brand-inner { display:flex; align-items:center; }
 
         .live-dot {
             width: 8px; height: 8px; background: var(--green);
@@ -156,12 +158,17 @@
         
         .top-left-group { display: flex; align-items: center; gap: 20px; }
         
-        /* HAMBURGER TOGGLE */
+        /* HAMBURGER & CLOSE TOGGLE */
         .menu-toggle {
             display: none; background: transparent; border: none; 
             color: var(--text-main); font-size: 20px; cursor: pointer; 
             padding: 5px; margin-right: 5px;
         }
+        .close-sidebar {
+            display: none; background: transparent; border: none;
+            color: var(--text-dim); font-size: 20px; cursor: pointer;
+        }
+        .close-sidebar:hover { color: var(--red); }
 
         .top-title { font-family: var(--font-code); font-size: 12px; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
         
@@ -297,8 +304,18 @@
         .pill { font-family:var(--font-code); font-size:11px; background:var(--bg-hover); padding:5px 10px; border-radius:100px; color:var(--text-dim); margin-bottom:15px; display:inline-block; border:1px solid var(--border); }
 
         /* ─── PROGRESS BAR ─── */
-        .prog-container { margin-bottom: 30px; cursor: pointer; transition: transform 0.2s; }
-        .prog-container:active { transform: scale(0.98); }
+        /* Improved for separation/clickability */
+        .prog-container { 
+            margin-bottom: 15px; 
+            padding: 15px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            cursor: pointer; 
+            transition: all 0.2s; 
+        }
+        .prog-container:hover { border-color: var(--text-dim); transform: translateX(5px); }
+        .prog-container:active { transform: scale(0.98); border-color: var(--cyan); }
+        
         .prog-label { display: flex; justify-content: space-between; color: var(--text-main); margin-bottom: 8px; font-family: var(--font-head); font-weight: 600; font-size: 14px; }
         .prog-track { height: 12px; background: var(--bg-hover); border-radius: 2px; border: 1px solid var(--border); overflow: hidden; }
         .prog-fill { height: 100%; transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -342,6 +359,7 @@
             .sidebar { position: fixed; left: -270px; top: 0; bottom: 0; width: 260px; box-shadow: 50px 0 100px rgba(0,0,0,0.5); }
             .sidebar.active { transform: translateX(270px); }
             .menu-toggle { display: block; }
+            .close-sidebar { display: block; }
             .top-bar { padding: 0 20px; }
         }
     </style>
@@ -349,7 +367,10 @@
 <body>
 
 <nav class="sidebar" id="sidebar">
-    <div class="brand"><div class="live-dot"></div>CAPITAL  //  <span>OS</span></div>
+    <div class="brand">
+        <div class="brand-inner"><div class="live-dot"></div>CAPITAL  //  <span>OS</span></div>
+        <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+    </div>
     <div class="nav-list">
         <div class="nav-label">SYSTEM</div>
         <button class="nav-btn active" onclick="go('dashboard')">00 // DASHBOARD</button>
@@ -425,30 +446,30 @@
             <div class="grid-1">
                 <div class="card">
                     <span class="stat-label">PHASE PROGRESSION</span>
-                    <div style="margin-top: 30px;">
+                    <div style="margin-top: 20px;">
                         
-                        <div class="prog-container" onclick="go('p0')">
+                        <div class="prog-container" onclick="go('p0', false)">
                             <div class="prog-label"><span>P0: GHOST PROTOCOL</span><span id="txt_p0">0%</span></div>
                             <div class="prog-track">
                                 <div id="bar_p0" class="prog-fill" style="width:0%; background:var(--cyan);"></div>
                             </div>
                         </div>
                         
-                        <div class="prog-container" onclick="go('p1')">
+                        <div class="prog-container" onclick="go('p1', false)">
                             <div class="prog-label"><span>P1: FIRST CLIENTS</span><span id="txt_p1">0%</span></div>
                             <div class="prog-track">
                                 <div id="bar_p1" class="prog-fill" style="width:0%; background:var(--text-dim);"></div>
                             </div>
                         </div>
 
-                        <div class="prog-container" onclick="go('p2')">
+                        <div class="prog-container" onclick="go('p2', false)">
                             <div class="prog-label"><span>P2: SCALE AGENCY</span><span id="txt_p2">0%</span></div>
                             <div class="prog-track">
                                 <div id="bar_p2" class="prog-fill" style="width:0%; background:var(--text-dim);"></div>
                             </div>
                         </div>
 
-                        <div class="prog-container" onclick="go('p3')">
+                        <div class="prog-container" onclick="go('p3', false)">
                             <div class="prog-label"><span>P3: SAAS EXIT</span><span id="txt_p3">0%</span></div>
                             <div class="prog-track">
                                 <div id="bar_p3" class="prog-fill" style="width:0%; background:var(--text-dim);"></div>
@@ -1045,23 +1066,25 @@
 </div>
 
 <script>
-    // --- NAVIGATION ---
-    function go(id) {
+    // --- NAVIGATION LOGIC ---
+    function go(id, closeMenu = true) {
+        // 1. Switch Sections
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         
-        // Scroll to top animation
-        document.querySelector('.scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
-        
+        // 2. Update Sidebar Highlights
+        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
         const btns = document.querySelectorAll('.nav-btn');
         btns.forEach(btn => {
             if(btn.getAttribute('onclick').includes(id)) btn.classList.add('active');
         });
 
-        // Close sidebar on mobile when link clicked
-        if(window.innerWidth <= 1100) {
-            toggleSidebar();
+        // 3. Scroll to top
+        document.querySelector('.scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
+
+        // 4. Mobile Logic (Only close if triggered by menu click, not dashboard card)
+        if(window.innerWidth <= 1100 && closeMenu) {
+            document.getElementById('sidebar').classList.remove('active');
         }
     }
 
@@ -1163,15 +1186,17 @@
         // Update Sidebar Badges
         const updateBadge = (id, pct) => {
             const el = document.getElementById(id);
-            el.innerText = pct + '%';
-            if(pct > 0) {
-                el.style.color = 'var(--cyan)';
-                el.style.borderColor = 'var(--cyan)';
-                el.style.background = 'rgba(0, 240, 255, 0.1)';
-            } else {
-                el.style.color = 'var(--text-dim)';
-                el.style.borderColor = 'var(--border)';
-                el.style.background = 'transparent';
+            if(el) {
+                el.innerText = pct + '%';
+                if(pct > 0) {
+                    el.style.color = 'var(--cyan)';
+                    el.style.borderColor = 'var(--cyan)';
+                    el.style.background = 'rgba(0, 240, 255, 0.1)';
+                } else {
+                    el.style.color = 'var(--text-dim)';
+                    el.style.borderColor = 'var(--border)';
+                    el.style.background = 'transparent';
+                }
             }
         };
 
@@ -1201,7 +1226,7 @@
             hudPhase = meta.phase;
             hudObj = meta.obj;
             hudBtn = meta.btn;
-            hudAction = `go('${meta.go}'); setTimeout(() => { document.getElementById('${nextTask}').scrollIntoView({behavior: 'smooth', block: 'center'}); if(!document.getElementById('${nextTask}').classList.contains('open')) toggleAccordion('${nextTask}'); }, 300);`;
+            hudAction = `go('${meta.go}', false); setTimeout(() => { document.getElementById('${nextTask}').scrollIntoView({behavior: 'smooth', block: 'center'}); if(!document.getElementById('${nextTask}').classList.contains('open')) toggleAccordion('${nextTask}'); }, 300);`;
             
             if(meta.go === 'p1') { focusTitle = "VOLUME"; focusSub = "80% PROPOSALS"; }
             else if(meta.go === 'p2') { focusTitle = "ARCHITECTURE"; focusSub = "0% CLICKING"; }
