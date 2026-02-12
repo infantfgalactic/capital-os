@@ -61,9 +61,9 @@
             font-family: var(--font-head);
             font-size: 15px;
             line-height: 1.5;
-            height: 100vh;
+            height: 100vh; /* Viewport height for desktop */
             display: flex;
-            overflow: hidden;
+            overflow: hidden; /* Prevent body scroll, handle in scroll-area */
             transition: background 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.4s;
         }
 
@@ -89,7 +89,7 @@
             height: 70px;
             display: flex;
             align-items: center;
-            justify-content: space-between; /* Changed for close button */
+            justify-content: space-between;
             padding: 0 25px;
             border-bottom: 1px solid var(--border);
             font-family: var(--font-code);
@@ -156,7 +156,7 @@
             position: sticky; top: 0; z-index: 10;
         }
         
-        .top-left-group { display: flex; align-items: center; gap: 20px; }
+        .top-left-group { display: flex; align-items: center; gap: 15px; }
         
         /* HAMBURGER & CLOSE TOGGLE */
         .menu-toggle {
@@ -170,6 +170,9 @@
         }
         .close-sidebar:hover { color: var(--red); }
 
+        /* LIVE DOT MOBILE (Hidden on desktop, shown on mobile in top bar) */
+        .mobile-live-dot { display: none; }
+
         .top-title { font-family: var(--font-code); font-size: 12px; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
         
         .theme-btn {
@@ -179,7 +182,13 @@
         }
         .theme-btn:hover { background: var(--bg-hover); border-color: var(--text-dim); }
 
-        .scroll-area { flex: 1; overflow-y: auto; padding: 40px; }
+        .scroll-area { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 40px; 
+            /* Fix for smooth scrolling on mobile */
+            -webkit-overflow-scrolling: touch; 
+        }
 
         /* ─── TYPOGRAPHY & CARDS ─── */
         h1 { font-size: 36px; color: var(--text-main); margin-bottom: 5px; text-transform: uppercase; letter-spacing: -1px; line-height: 1; font-weight: 700; text-shadow: 0 0 20px rgba(255,255,255,0.05); }
@@ -258,6 +267,7 @@
         .checkbox {
             width: 22px; height: 22px; border: 1px solid var(--text-dim); background: var(--bg-void);
             display: flex; align-items: center; justify-content: center; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0; /* Prevents shrinking on mobile */
         }
         .task-item.completed .checkbox { 
             background: var(--green); border-color: var(--green); color: #000; 
@@ -301,10 +311,23 @@
         }
         .action-link:hover { border-color: var(--cyan); background: var(--cyan-dim); color: var(--cyan); transform: translateX(5px); }
         .ico-txt { margin-right: 12px; opacity: 1; font-size: 16px; }
-        .pill { font-family:var(--font-code); font-size:11px; background:var(--bg-hover); padding:5px 10px; border-radius:100px; color:var(--text-dim); margin-bottom:15px; display:inline-block; border:1px solid var(--border); }
+        
+        /* Updated Pill for Better Visibility */
+        .pill { 
+            font-family: var(--font-code); 
+            font-size: 14px; /* Increased from 11px */
+            font-weight: 700;
+            background: var(--bg-hover); 
+            padding: 8px 16px; 
+            border-radius: 100px; 
+            color: var(--text-dim); 
+            margin-bottom: 20px; 
+            display: inline-block; 
+            border: 1px solid var(--border); 
+            letter-spacing: 0.5px;
+        }
 
         /* ─── PROGRESS BAR ─── */
-        /* Improved for separation/clickability */
         .prog-container { 
             margin-bottom: 15px; 
             padding: 15px;
@@ -358,9 +381,36 @@
             /* Sidebar Toggle Logic */
             .sidebar { position: fixed; left: -270px; top: 0; bottom: 0; width: 260px; box-shadow: 50px 0 100px rgba(0,0,0,0.5); }
             .sidebar.active { transform: translateX(270px); }
+            
             .menu-toggle { display: block; }
             .close-sidebar { display: block; }
+            
+            /* Live Dot in Top Bar */
+            .mobile-live-dot { display: block; }
+            /* Hide Sidebar Live Dot to avoid duplicates */
+            .sidebar .live-dot { display: none; }
+
             .top-bar { padding: 0 20px; }
+            
+            /* Clutter Reduction & Spacing */
+            .scroll-area { padding: 25px 20px; } /* More vertical space */
+            .phase-header-grid { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .phase-header-grid div[style*="text-align: right"] { text-align: left !important; width: 100%; }
+            .earning-badge { width: 100%; text-align: center; }
+            
+            .grid-2, .grid-3, .grid-4 { gap: 15px; }
+            .card { padding: 20px; }
+            
+            /* Font Scaling */
+            h1 { font-size: 28px; }
+            
+            .task-header { padding: 15px 20px; }
+            .task-details { padding: 0 20px 25px 62px; }
+        }
+        
+        /* Small phones */
+        @media(max-width: 600px) {
+            .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -391,6 +441,7 @@
     <div class="top-bar">
         <div class="top-left-group">
             <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <div class="live-dot mobile-live-dot"></div>
             <div class="top-title" id="current_phase_title">SYSTEM ACTIVE // ONLINE</div>
         </div>
         <button class="theme-btn" onclick="toggleTheme()">Day / Night</button>
