@@ -7,237 +7,598 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;800&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* ─── ORIGINAL COLORS ─── */
-            --bg-void: #050505; --bg-panel: #0a0a0a; --bg-card: #111; --bg-hover: #1a1a1a;
-            --border: #333; --border-active: #555;
-            --text-main: #e0e0e0; --text-dim: #888; --text-inv: #000;
-            --cyan: #00f0ff; --cyan-dim: rgba(0, 240, 255, 0.1);
-            --gold: #ffd700; --gold-dim: rgba(255, 215, 0, 0.05); /* ORIGINAL GOLD */
-            --green: #00ff9d; --red: #ff2a6d;
-            --font-head: 'Space Grotesk', sans-serif; --font-code: 'JetBrains Mono', monospace;
+            /* ─── NIGHT MODE (DEFAULT) ─── */
+            --bg-void: #050505;
+            --bg-panel: #0a0a0a;
+            --bg-card: #111;
+            --bg-hover: #1a1a1a;
+            
+            --border: #333;
+            --border-active: #555;
+            
+            --text-main: #e0e0e0;
+            --text-dim: #888;
+            --text-inv: #000;
+
+            /* SIGNALS - ORIGINAL GOLD/CYAN PRESERVED */
+            --cyan: #00f0ff;
+            --cyan-dim: rgba(0, 240, 255, 0.1);
+            --gold: #ffd700;
+            --gold-dim: rgba(255, 215, 0, 0.05);
+            --green: #00ff9d;
+            --red: #ff2a6d;
+            
+            --font-head: 'Space Grotesk', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
         }
+
+        /* ─── DAY MODE ─── */
         body.light-mode {
-            --bg-void: #e0e0e0; --bg-panel: #f0f0f0; --bg-card: #ffffff; --bg-hover: #e5e5e5;
-            --border: #ccc; --border-active: #999;
-            --text-main: #111; --text-dim: #555; --text-inv: #fff;
-            --cyan: #0066ff; --cyan-dim: rgba(0, 102, 255, 0.1);
-            --gold: #d4a000; --gold-dim: rgba(212, 160, 0, 0.05); --green: #00994d;
+            --bg-void: #e0e0e0;
+            --bg-panel: #f0f0f0;
+            --bg-card: #ffffff;
+            --bg-hover: #e5e5e5;
+            
+            --border: #ccc;
+            --border-active: #999;
+            
+            --text-main: #111;
+            --text-dim: #555;
+            --text-inv: #fff;
+
+            --cyan: #0066ff; 
+            --cyan-dim: rgba(0, 102, 255, 0.1);
+            --gold: #d4a000;
+            --gold-dim: rgba(212, 160, 0, 0.05);
+            --green: #00994d;
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-void); color: var(--text-main); font-family: var(--font-head); font-size: 15px; line-height: 1.5; height: 100vh; display: flex; overflow: hidden; transition: background 0.4s; }
+        
+        body {
+            background-color: var(--bg-void);
+            color: var(--text-main);
+            font-family: var(--font-head);
+            font-size: 15px;
+            line-height: 1.5;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            transition: background 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.4s;
+        }
+
+        /* ─── SCROLLBAR ─── */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: var(--bg-void); }
         ::-webkit-scrollbar-thumb { background: var(--border-active); border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
 
-        /* SIDEBAR (MOBILE ENABLED) */
-        .sidebar { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; z-index: 100; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .brand { height: 70px; display: flex; align-items: center; padding: 0 25px; border-bottom: 1px solid var(--border); font-family: var(--font-code); font-weight: 800; font-size: 14px; letter-spacing: 1px; color: var(--text-main); }
+        /* ─── SIDEBAR ─── */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 100;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .brand {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 25px;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-code);
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            white-space: pre; 
+        }
         .brand span { color: var(--gold); }
-        .live-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; margin-right: 12px; box-shadow: 0 0 10px var(--green); animation: blink 2s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        .nav-list { flex: 1; overflow-y: auto; padding: 25px 0; }
-        .nav-label { padding: 0 25px 8px; font-family: var(--font-code); font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 25px; font-weight: 700; }
-        .nav-btn { width: 100%; text-align: left; background: transparent; border: none; padding: 12px 25px; color: var(--text-dim); font-family: var(--font-head); font-size: 14px; font-weight: 500; cursor: pointer; border-left: 2px solid transparent; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s; }
-        .nav-btn:hover { color: var(--text-main); background: var(--bg-hover); padding-left: 30px; }
-        .nav-btn.active { color: var(--cyan); background: var(--cyan-dim); border-left-color: var(--cyan); font-weight: 700; }
-        .prog-tag { font-family: var(--font-code); font-size: 11px; padding: 2px 8px; background: transparent; color: var(--text-dim); border-radius: 4px; border: 1px solid var(--border); font-weight: 700; }
 
-        /* LAYOUT */
-        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-        .top-bar { height: 60px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: var(--bg-panel); position: sticky; top: 0; z-index: 10; }
-        .menu-btn { display: none; background: transparent; border: 1px solid var(--border); color: var(--cyan); font-size: 18px; padding: 5px 12px; cursor: pointer; margin-right: 15px; border-radius: 4px; }
-        .top-left { display: flex; align-items: center; }
+        .live-dot {
+            width: 8px; height: 8px; background: var(--green);
+            border-radius: 50%; margin-right: 12px;
+            box-shadow: 0 0 10px var(--green);
+            animation: blink 2s infinite;
+        }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        .nav-list { flex: 1; overflow-y: auto; padding: 25px 0; }
+        
+        .nav-label {
+            padding: 0 25px 8px;
+            font-family: var(--font-code);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 25px;
+            font-weight: 700;
+        }
+
+        .nav-btn {
+            width: 100%; text-align: left; background: transparent; border: none;
+            padding: 12px 25px; color: var(--text-dim); font-family: var(--font-head);
+            font-size: 14px; font-weight: 500; cursor: pointer;
+            border-left: 2px solid transparent; display: flex; align-items: center; justify-content: space-between;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .nav-btn:hover { color: var(--text-main); background: var(--bg-hover); padding-left: 30px; }
+        .nav-btn.active { 
+            color: var(--cyan); background: var(--cyan-dim); 
+            border-left-color: var(--cyan); font-weight: 700;
+        }
+        
+        .prog-tag {
+            font-family: var(--font-code); font-size: 11px; padding: 2px 8px;
+            background: transparent; color: var(--text-dim); border-radius: 4px; border: 1px solid var(--border);
+            font-weight: 700; transition: 0.3s;
+        }
+
+        /* ─── MAIN AREA ─── */
+        .main {
+            flex: 1; display: flex; flex-direction: column; overflow: hidden;
+            position: relative;
+        }
+        
+        /* HEADER */
+        .top-bar {
+            height: 60px; border-bottom: 1px solid var(--border); display: flex;
+            justify-content: space-between; align-items: center; padding: 0 30px;
+            background: var(--bg-panel); 
+            position: sticky; top: 0; z-index: 10;
+        }
+        
+        .top-left-group { display: flex; align-items: center; gap: 20px; }
+        
+        /* HAMBURGER TOGGLE */
+        .menu-toggle {
+            display: none; background: transparent; border: none; 
+            color: var(--text-main); font-size: 20px; cursor: pointer; 
+            padding: 5px; margin-right: 5px;
+        }
+
         .top-title { font-family: var(--font-code); font-size: 12px; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-        .theme-btn { background: transparent; border: 1px solid var(--border); color: var(--text-main); padding: 8px 16px; font-family: var(--font-code); font-size: 11px; cursor: pointer; text-transform: uppercase; font-weight: 600; }
+        
+        .theme-btn {
+            background: transparent; border: 1px solid var(--border); color: var(--text-main);
+            padding: 8px 16px; font-family: var(--font-code); font-size: 11px; cursor: pointer;
+            text-transform: uppercase; transition: 0.2s; font-weight: 600;
+        }
+        .theme-btn:hover { background: var(--bg-hover); border-color: var(--text-dim); }
+
         .scroll-area { flex: 1; overflow-y: auto; padding: 40px; }
 
-        /* UI ELEMENTS */
-        h1 { font-size: 36px; color: var(--text-main); margin-bottom: 5px; text-transform: uppercase; letter-spacing: -1px; line-height: 1; font-weight: 700; }
+        /* ─── TYPOGRAPHY & CARDS ─── */
+        h1 { font-size: 36px; color: var(--text-main); margin-bottom: 5px; text-transform: uppercase; letter-spacing: -1px; line-height: 1; font-weight: 700; text-shadow: 0 0 20px rgba(255,255,255,0.05); }
         h2 { font-size: 14px; color: var(--gold); font-family: var(--font-code); margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; }
-        .phase-header-grid { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 25px; }
-        .earning-badge { font-family: var(--font-code); font-size: 14px; color: var(--cyan); background: var(--cyan-dim); padding: 12px 24px; border-radius: 4px; border: 1px solid var(--cyan); display: inline-block; font-weight: 800; box-shadow: 0 0 20px rgba(0, 240, 255, 0.1); }
+        
+        /* Header Grid */
+        .phase-header-grid {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 25px;
+        }
+        
+        .phase-info { display: flex; flex-direction: column; }
+        
+        .earning-badge {
+            font-family: var(--font-code); font-size: 14px; color: var(--cyan);
+            background: var(--cyan-dim); padding: 12px 24px; border-radius: 4px;
+            border: 1px solid var(--cyan); display: inline-block; font-weight: 800;
+            letter-spacing: 0.5px; box-shadow: 0 0 20px rgba(0, 240, 255, 0.1); 
+        }
+
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px; }
         .grid-1 { display: grid; grid-template-columns: 1fr; gap: 25px; margin-bottom: 30px; }
-        .card { background: var(--bg-card); border: 1px solid var(--border); padding: 25px; position: relative; height: 100%; transition: all 0.3s; }
-        .card:hover { border-color: var(--border-active); transform: translateY(-3px); }
+
+        .card {
+            background: var(--bg-card); border: 1px solid var(--border); padding: 25px;
+            position: relative; height: 100%; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .card:hover { border-color: var(--border-active); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .card.dense { padding: 20px; }
+        .card.clickable { cursor: pointer; }
+        .card.clickable:hover { border-color: var(--cyan); }
+        
         .stat-label { font-family: var(--font-code); font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px; }
         .stat-val { font-family: var(--font-code); font-size: 26px; font-weight: 700; color: var(--text-main); letter-spacing: -1px; }
-        .stat-val.gold { color: var(--gold); } .stat-val.cyan { color: var(--cyan); } .stat-val.green { color: var(--green); }
+        .stat-val.gold { color: var(--gold); }
+        .stat-val.cyan { color: var(--cyan); }
+        .stat-val.green { color: var(--green); }
         .stat-sub { font-family: var(--font-code); font-size: 11px; color: var(--text-dim); margin-top: 5px; }
+
         .clock-box { display: flex; justify-content: space-between; align-items: flex-end; }
         .clock-zone { font-size: 10px; color: var(--cyan); font-weight: 700; }
-        .alert-box { background: linear-gradient(90deg, rgba(0,240,255,0.05) 0%, rgba(0,0,0,0) 100%); border: 1px solid var(--border-active); border-left: 4px solid var(--cyan); padding: 30px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
-        .alert-content h4 { color: var(--cyan); font-family: var(--font-code); font-size: 11px; margin-bottom: 8px; }
-        .alert-content p { font-size: 22px; font-weight: 600; color: var(--text-main); }
-        .exec-btn { background: var(--cyan); color: var(--text-inv); border: none; padding: 15px 30px; font-family: var(--font-code); font-weight: 800; font-size: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ─── ALERT BOX ─── */
+        .alert-box {
+            background: linear-gradient(90deg, rgba(0,240,255,0.05) 0%, rgba(0,0,0,0) 100%); 
+            border: 1px solid var(--border-active);
+            border-left: 4px solid var(--cyan); padding: 30px; 
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        .alert-box:hover { border-color: var(--cyan); }
+        .alert-content h4 { color: var(--cyan); font-family: var(--font-code); font-size: 11px; margin-bottom: 8px; letter-spacing: 1px; }
+        .alert-content p { font-size: 22px; font-weight: 600; color: var(--text-main); line-height: 1.2; }
         
-        .task-item { background: var(--bg-card); border: 1px solid var(--border); margin-bottom: 15px; }
-        .task-header { padding: 20px 25px; display: flex; align-items: center; gap: 20px; cursor: pointer; user-select: none; }
-        .checkbox { width: 22px; height: 22px; border: 1px solid var(--text-dim); background: var(--bg-void); display: flex; align-items: center; justify-content: center; }
-        .task-item.completed .checkbox { background: var(--green); border-color: var(--green); color: #000; }
+        .exec-btn {
+            background: var(--cyan); color: var(--text-inv); border: none; padding: 15px 30px;
+            font-family: var(--font-code); font-weight: 800; font-size: 12px; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; 
+        }
+        .exec-btn:hover { background: var(--text-main); color: var(--bg-void); box-shadow: 0 0 25px var(--cyan); }
+
+        /* ─── TASKS ─── */
+        .task-item {
+            background: var(--bg-card); border: 1px solid var(--border);
+            margin-bottom: 15px; transition: all 0.3s ease;
+        }
+        .task-item:hover { border-color: var(--border-active); background: var(--bg-hover); }
+        
+        .task-header {
+            padding: 20px 25px; display: flex; align-items: center; gap: 20px;
+            cursor: pointer; user-select: none;
+        }
+        
+        .checkbox {
+            width: 22px; height: 22px; border: 1px solid var(--text-dim); background: var(--bg-void);
+            display: flex; align-items: center; justify-content: center; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .task-item.completed .checkbox { 
+            background: var(--green); border-color: var(--green); color: #000; 
+            box-shadow: 0 0 15px var(--green); transform: scale(1.1);
+        }
         .task-item.completed .checkbox::after { content: '✓'; font-weight: 800; font-size: 14px; }
-        .task-title { font-size: 16px; font-weight: 500; color: var(--text-main); flex: 1; }
-        .task-details { display: none; padding: 0 25px 30px 67px; border-top: 1px solid var(--border); background: var(--bg-panel); animation: slideDown 0.3s ease-out; }
+        .task-item.completed .task-title { text-decoration: line-through; color: var(--text-dim); }
+        
+        .task-title { font-size: 16px; font-weight: 500; color: var(--text-main); flex: 1; transition: color 0.3s; }
+        .task-meta { font-family: var(--font-code); font-size: 11px; color: var(--text-dim); background: var(--bg-panel); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); }
+        
+        .task-details {
+            display: none; padding: 0 25px 30px 67px; border-top: 1px solid var(--border);
+            background: var(--bg-panel); animation: slideDown 0.3s ease-out;
+        }
         .task-item.open .task-details { display: block; }
+        
+        /* ─── DETAILS & TARGETS ─── */
         .detail-block { margin-bottom: 20px; position: relative; padding-left: 20px; border-left: 1px solid var(--border); margin-top: 25px; }
         .detail-title { font-family: var(--font-code); color: var(--gold); font-size: 11px; font-weight: 700; margin-bottom: 5px; }
         .detail-body { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
-        .target-box { margin-top: 20px; background: var(--gold-dim); border: 1px solid var(--gold); padding: 10px 15px; font-family: var(--font-code); font-size: 12px; color: var(--gold); display: flex; align-items: center; font-weight: 600; }
+        .detail-body strong { color: var(--text-main); }
+        .detail-body code { background: var(--bg-hover); color: var(--cyan); padding: 2px 5px; border-radius: 3px; font-family: var(--font-code); font-size: 13px; }
         
-        /* THE "DOPE" BUTTON STYLE */
-        .action-link { display: flex; align-items: center; justify-content: space-between; font-family: var(--font-code); font-size: 12px; color: var(--text-main); border: 1px solid var(--border); padding: 12px 20px; text-decoration: none; background: var(--bg-panel); font-weight: 600; width: 100%; margin-top:15px; }
-        
-        /* FINANCIAL ENGINE CSS */
+        .text-link { color: var(--cyan); text-decoration: none; border-bottom: 1px dashed var(--cyan); transition: 0.2s; }
+        .text-link:hover { color: var(--text-inv); background: var(--cyan); }
+
+        /* TARGET BOX COLOR CHANGE */
+        .target-box {
+            margin-top: 20px; background: var(--gold-dim); border: 1px solid var(--gold);
+            padding: 10px 15px; font-family: var(--font-code); font-size: 12px; color: var(--gold);
+            display: flex; align-items: center; font-weight: 600;
+        }
+        .target-box::before { content: 'TARGET // '; opacity: 0.6; margin-right: 8px; }
+
+        .action-link {
+            display: flex; align-items: center; justify-content: space-between;
+            font-family: var(--font-code); font-size: 12px; color: var(--text-main);
+            border: 1px solid var(--border); padding: 12px 20px; text-decoration: none;
+            background: var(--bg-panel); transition: all 0.2s; font-weight: 600; width: 100%;
+        }
+        .action-link:hover { border-color: var(--cyan); background: var(--cyan-dim); color: var(--cyan); transform: translateX(5px); }
+        .ico-txt { margin-right: 12px; opacity: 1; font-size: 16px; }
+        .pill { font-family:var(--font-code); font-size:11px; background:var(--bg-hover); padding:5px 10px; border-radius:100px; color:var(--text-dim); margin-bottom:15px; display:inline-block; border:1px solid var(--border); }
+
+        /* ─── PROGRESS BAR ─── */
+        .prog-container { margin-bottom: 30px; cursor: pointer; transition: transform 0.2s; }
+        .prog-container:active { transform: scale(0.98); }
+        .prog-label { display: flex; justify-content: space-between; color: var(--text-main); margin-bottom: 8px; font-family: var(--font-head); font-weight: 600; font-size: 14px; }
+        .prog-track { height: 12px; background: var(--bg-hover); border-radius: 2px; border: 1px solid var(--border); overflow: hidden; }
+        .prog-fill { height: 100%; transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+        /* ─── CALCULATORS ─── */
         .calc-wrapper { display: flex; gap: 30px; }
         .calc-panel { flex: 1; background: var(--bg-card); border: 1px solid var(--border); padding: 30px; transition: 0.3s; }
         .calc-panel.output { border-color: var(--green); background: rgba(0, 255, 157, 0.02); }
+        
         .calc-tabs { display: flex; gap: 2px; background: var(--border); margin-bottom: 30px; }
         .c-tab { flex: 1; background: var(--bg-card); border: none; padding: 15px; color: var(--text-dim); font-family: var(--font-code); font-size: 12px; cursor: pointer; text-transform: uppercase; font-weight: 700; transition: 0.2s; }
         .c-tab:hover { color: var(--text-main); }
         .c-tab.active { background: var(--bg-void); color: var(--gold); border-top: 3px solid var(--gold); }
+
         .inp-label { display: block; font-family: var(--font-code); font-size: 11px; color: var(--text-dim); margin-bottom: 8px; }
-        .inp-field { width: 100%; background: var(--bg-void); border: 1px solid var(--border); color: var(--text-main); padding: 12px; font-family: var(--font-code); font-size: 16px; text-align: right; transition: 0.2s; }
+        .inp-field { 
+            width: 100%; background: var(--bg-void); border: 1px solid var(--border); color: var(--text-main); 
+            padding: 12px; font-family: var(--font-code); font-size: 16px; text-align: right; transition: 0.2s;
+        }
         .inp-field:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0,240,255,0.1); }
 
+        /* ─── ANIMATIONS ─── */
         .section { display: none; }
-        .section.active { display: block; animation: slideUpFade 0.5s; }
-        @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .section.active { display: block; animation: slideUpFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        
+        @keyframes slideUpFade { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        /* MOBILE FIX */
+        /* ─── MOBILE / RESPONSIVE ─── */
         @media(max-width: 1100px) { 
             .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; } 
             .calc-wrapper { flex-direction: column; } 
-            .menu-btn { display: block; }
-            .sidebar { position: fixed; left: -270px; top: 0; bottom: 0; width: 260px; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
-            .sidebar.mobile-open { transform: translateX(270px); }
-            .scroll-area { padding: 20px; }
+            
+            /* Sidebar Toggle Logic */
+            .sidebar { position: fixed; left: -270px; top: 0; bottom: 0; width: 260px; box-shadow: 50px 0 100px rgba(0,0,0,0.5); }
+            .sidebar.active { transform: translateX(270px); }
+            .menu-toggle { display: block; }
+            .top-bar { padding: 0 20px; }
         }
     </style>
 </head>
 <body>
+
 <nav class="sidebar" id="sidebar">
-    <div class="brand"><div class="live-dot"></div>CAPITAL // OS</div>
+    <div class="brand"><div class="live-dot"></div>CAPITAL  //  <span>OS</span></div>
     <div class="nav-list">
         <div class="nav-label">SYSTEM</div>
-        <button class="nav-btn active" onclick="go('dashboard'); toggleSidebar()">00 // DASHBOARD</button>
-        <button class="nav-btn" onclick="go('finance'); toggleSidebar()">01 // FINANCIAL ENGINE</button>
-        <button class="nav-btn" onclick="go('intel'); toggleSidebar()">02 // INTEL & RESOURCES</button>
+        <button class="nav-btn active" onclick="go('dashboard')">00 // DASHBOARD</button>
+        <button class="nav-btn" onclick="go('finance')">01 // FINANCIAL ENGINE</button>
+        <button class="nav-btn" onclick="go('intel')">02 // INTEL & RESOURCES</button>
+
         <div class="nav-label">GHOST PROTOCOL</div>
-        <button class="nav-btn" onclick="go('p0'); toggleSidebar()">P0 // GENESIS <span class="prog-tag" id="nav_p0">0%</span></button>
+        <button class="nav-btn" onclick="go('p0')">P0 // GENESIS <span class="prog-tag" id="nav_p0">0%</span></button>
+        
         <div class="nav-label">EXECUTION</div>
-        <button class="nav-btn" onclick="go('p1'); toggleSidebar()">P1 // FREELANCE <span class="prog-tag" id="nav_p1">0%</span></button>
-        <button class="nav-btn" onclick="go('p2'); toggleSidebar()">P2 // AGENCY <span class="prog-tag" id="nav_p2">0%</span></button>
-        <button class="nav-btn" onclick="go('p3'); toggleSidebar()">P3 // SAAS EXIT <span class="prog-tag" id="nav_p3">0%</span></button>
+        <button class="nav-btn" onclick="go('p1')">P1 // FREELANCE <span class="prog-tag" id="nav_p1">0%</span></button>
+        <button class="nav-btn" onclick="go('p2')">P2 // AGENCY <span class="prog-tag" id="nav_p2">0%</span></button>
+        <button class="nav-btn" onclick="go('p3')">P3 // SAAS EXIT <span class="prog-tag" id="nav_p3">0%</span></button>
     </div>
 </nav>
 
 <div class="main">
     <div class="top-bar">
-        <div class="top-left">
-            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <div class="top-left-group">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
             <div class="top-title" id="current_phase_title">SYSTEM ACTIVE // ONLINE</div>
         </div>
         <button class="theme-btn" onclick="toggleTheme()">Day / Night</button>
     </div>
 
     <div class="scroll-area">
+
         <div id="dashboard" class="section active">
             <div class="phase-header-grid">
-                <div class="phase-info"><h2>LIVE OPERATIONS</h2><h1>MISSION CONTROL</h1></div>
+                <div class="phase-info">
+                    <h2>LIVE OPERATIONS</h2>
+                    <h1>MISSION CONTROL</h1>
+                </div>
             </div>
+            
             <div class="alert-box">
-                <div class="alert-content"><h4 id="hud_obj_label">CURRENT OBJECTIVE</h4><p id="hud_obj_text">SYSTEM INITIALIZATION...</p></div>
+                <div class="alert-content">
+                    <h4 id="hud_obj_label">CURRENT OBJECTIVE</h4>
+                    <p id="hud_obj_text">SYSTEM INITIALIZATION...</p>
+                </div>
                 <button class="exec-btn" id="hud_action">EXECUTE NOW</button>
             </div>
+
             <div class="grid-4">
                 <div class="card dense">
-                    <div class="clock-box"><span class="stat-label">NEW YORK</span><span class="clock-zone">EST</span></div>
+                    <div class="clock-box">
+                        <span class="stat-label">NEW YORK</span>
+                        <span class="clock-zone">EST</span>
+                    </div>
                     <div class="stat-val" id="clock_nyc">--:--:--</div>
+                    <div class="stat-sub">CLIENT TIME</div>
                 </div>
                 <div class="card dense">
-                    <div class="clock-box"><span class="stat-label">IST</span><span class="clock-zone">IST</span></div>
+                    <div class="clock-box">
+                        <span class="stat-label">IST</span>
+                        <span class="clock-zone">IST</span>
+                    </div>
                     <div class="stat-val" id="clock_ist">--:--:--</div>
+                    <div class="stat-sub">LOCAL TIME</div>
                 </div>
                 <div class="card dense" style="border-left: 2px solid var(--gold);">
-                    <span class="stat-label">80/20 FOCUS</span><div class="stat-val gold" style="font-size:20px;" id="hud_focus_val">FOUNDATION</div>
+                    <span class="stat-label">80/20 FOCUS (ACTIVE)</span>
+                    <div class="stat-val gold" style="font-size:20px;" id="hud_focus_val">FOUNDATION</div>
                     <div class="stat-sub" id="hud_focus_sub">80% DATA MODEL</div>
                 </div>
                 <div class="card dense">
-                    <span class="stat-label">SYSTEM INTEGRITY</span><div class="stat-val cyan" id="sys_integrity">0%</div>
+                    <span class="stat-label">SYSTEM INTEGRITY</span>
+                    <div class="stat-val cyan" id="sys_integrity">0%</div>
+                    <div class="stat-sub">TOTAL COMPLETION</div>
                 </div>
             </div>
-            <div class="grid-1"><div class="card"><span class="stat-label">PHASE PROGRESSION</span><div style="margin-top: 30px;">
-                <div class="prog-container" onclick="go('p0')"><div class="prog-label"><span>P0: GHOST PROTOCOL</span><span id="txt_p0">0%</span></div><div class="prog-track"><div id="bar_p0" class="prog-fill" style="width:0%; background:var(--cyan);"></div></div></div>
-                <div class="prog-container" onclick="go('p1')"><div class="prog-label"><span>P1: FIRST CLIENTS</span><span id="txt_p1">0%</span></div><div class="prog-track"><div id="bar_p1" class="prog-fill" style="width:0%; background:var(--text-dim);"></div></div></div>
-                <div class="prog-container" onclick="go('p2')"><div class="prog-label"><span>P2: SCALE AGENCY</span><span id="txt_p2">0%</span></div><div class="prog-track"><div id="bar_p2" class="prog-fill" style="width:0%; background:var(--text-dim);"></div></div></div>
-                <div class="prog-container" onclick="go('p3')"><div class="prog-label"><span>P3: SAAS EXIT</span><span id="txt_p3">0%</span></div><div class="prog-track"><div id="bar_p3" class="prog-fill" style="width:0%; background:var(--text-dim);"></div></div></div>
-            </div></div></div>
+
+            <div class="grid-1">
+                <div class="card">
+                    <span class="stat-label">PHASE PROGRESSION</span>
+                    <div style="margin-top: 30px;">
+                        
+                        <div class="prog-container" onclick="go('p0')">
+                            <div class="prog-label"><span>P0: GHOST PROTOCOL</span><span id="txt_p0">0%</span></div>
+                            <div class="prog-track">
+                                <div id="bar_p0" class="prog-fill" style="width:0%; background:var(--cyan);"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="prog-container" onclick="go('p1')">
+                            <div class="prog-label"><span>P1: FIRST CLIENTS</span><span id="txt_p1">0%</span></div>
+                            <div class="prog-track">
+                                <div id="bar_p1" class="prog-fill" style="width:0%; background:var(--text-dim);"></div>
+                            </div>
+                        </div>
+
+                        <div class="prog-container" onclick="go('p2')">
+                            <div class="prog-label"><span>P2: SCALE AGENCY</span><span id="txt_p2">0%</span></div>
+                            <div class="prog-track">
+                                <div id="bar_p2" class="prog-fill" style="width:0%; background:var(--text-dim);"></div>
+                            </div>
+                        </div>
+
+                        <div class="prog-container" onclick="go('p3')">
+                            <div class="prog-label"><span>P3: SAAS EXIT</span><span id="txt_p3">0%</span></div>
+                            <div class="prog-track">
+                                <div id="bar_p3" class="prog-fill" style="width:0%; background:var(--text-dim);"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="finance" class="section">
-            <div class="phase-header-grid"><div class="phase-info"><h2>UNIFIED CALCULATOR</h2><h1>FINANCIAL ENGINE</h1></div></div>
-            <div class="calc-tabs">
-                <button class="c-tab active" onclick="ftab('f1')">PHASE 1 (FREELANCE)</button>
-                <button class="c-tab" onclick="ftab('f2')">PHASE 2 (AGENCY)</button>
-                <button class="c-tab" onclick="ftab('f3')">PHASE 3 (EXIT)</button>
+            <div class="phase-header-grid">
+                <div class="phase-info">
+                    <h2>UNIFIED CALCULATOR</h2>
+                    <h1>FINANCIAL ENGINE</h1>
+                </div>
             </div>
+
+            <div class="calc-tabs">
+                <button class="c-tab active" onclick="ftab(event, 'f1')">PHASE 1 (FREELANCE)</button>
+                <button class="c-tab" onclick="ftab(event, 'f2')">PHASE 2 (AGENCY)</button>
+                <button class="c-tab" onclick="ftab(event, 'f3')">PHASE 3 (EXIT)</button>
+            </div>
+
             <div id="f1" class="tab-content active">
                 <div class="calc-wrapper">
-                    <div class="calc-panel"><span class="stat-label" style="margin-bottom:20px;">VARIABLES</span>
-                        <div class="inp-group"><label class="inp-label">Hourly Rate ($)</label><input type="number" class="inp-field" id="in_f1_rate" value="75" oninput="c1()"></div>
-                        <div class="inp-group"><label class="inp-label">Billable Hours / Week</label><input type="number" class="inp-field" id="in_f1_hrs" value="30" oninput="c1()"></div>
+                    <div class="calc-panel">
+                        <span class="stat-label" style="margin-bottom:20px;">VARIABLES</span>
+                        <div class="inp-group">
+                            <label class="inp-label">Hourly Rate ($)</label>
+                            <input type="number" class="inp-field" id="in_f1_rate" value="75" oninput="c1()">
+                        </div>
+                        <div class="inp-group">
+                            <label class="inp-label">Billable Hours / Week</label>
+                            <input type="number" class="inp-field" id="in_f1_hrs" value="30" oninput="c1()">
+                        </div>
                     </div>
-                    <div class="calc-panel output"><span class="stat-label" style="margin-bottom:20px;">PROJECTIONS</span>
-                        <div class="out-group" style="margin-bottom:20px;"><span class="stat-label">WEEKLY GROSS</span><div class="stat-val green" id="out_f1_wk">$2,250</div></div>
-                        <div class="out-group" style="margin-bottom:20px;"><span class="stat-label">ANNUAL GROSS</span><div class="stat-val green" id="out_f1_yr">$108,000</div></div>
+                    <div class="calc-panel output">
+                        <span class="stat-label" style="margin-bottom:20px;">PROJECTIONS</span>
+                        <div class="out-group" style="margin-bottom:20px;">
+                            <span class="stat-label">WEEKLY GROSS</span>
+                            <div class="stat-val green" id="out_f1_wk">$2,250</div>
+                        </div>
+                        <div class="out-group" style="margin-bottom:20px;">
+                            <span class="stat-label">ANNUAL GROSS</span>
+                            <div class="stat-val green" id="out_f1_yr">$108,000</div>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div id="f2" class="tab-content hidden" style="display:none;">
                 <div class="calc-wrapper">
-                    <div class="calc-panel"><span class="stat-label" style="margin-bottom:20px;">REVENUE SOURCES</span>
+                    <div class="calc-panel">
+                        <span class="stat-label" style="margin-bottom:20px;">REVENUE SOURCES</span>
                         <div class="grid-2" style="margin-bottom:10px; gap:10px;">
-                            <div class="inp-group"><label class="inp-label">Retainer ($)</label><input type="number" class="inp-field" id="in_f2_ret" value="5000" oninput="c2()"></div>
-                            <div class="inp-group"><label class="inp-label">Clients (#)</label><input type="number" class="inp-field" id="in_f2_cli" value="10" oninput="c2()"></div>
+                            <div class="inp-group">
+                                <label class="inp-label">Retainer ($)</label>
+                                <input type="number" class="inp-field" id="in_f2_ret" value="5000" oninput="c2()">
+                            </div>
+                            <div class="inp-group">
+                                <label class="inp-label">Clients (#)</label>
+                                <input type="number" class="inp-field" id="in_f2_cli" value="10" oninput="c2()">
+                            </div>
                         </div>
                         <div class="grid-2" style="margin-bottom:20px; gap:10px;">
-                            <div class="inp-group"><label class="inp-label">Project Fee ($)</label><input type="number" class="inp-field" id="in_f2_proj" value="15000" oninput="c2()"></div>
-                            <div class="inp-group"><label class="inp-label">Proj/Mo (#)</label><input type="number" class="inp-field" id="in_f2_pcount" value="2" oninput="c2()"></div>
+                            <div class="inp-group">
+                                <label class="inp-label">Project Fee ($)</label>
+                                <input type="number" class="inp-field" id="in_f2_proj" value="15000" oninput="c2()">
+                            </div>
+                            <div class="inp-group">
+                                <label class="inp-label">Proj/Mo (#)</label>
+                                <input type="number" class="inp-field" id="in_f2_pcount" value="2" oninput="c2()">
+                            </div>
                         </div>
+                        
                         <span class="stat-label" style="margin-bottom:10px; border-top:1px solid var(--border); padding-top:20px;">TEAM COSTS</span>
-                        <div class="grid-2" style="margin-bottom:10px; gap:10px;">
-                            <div class="inp-group"><label class="inp-label">Staff Count</label><input type="number" class="inp-field" id="in_f2_staff" value="3" oninput="c2()"></div>
-                            <div class="inp-group"><label class="inp-label">Avg Salary/Mo</label><input type="number" class="inp-field" id="in_f2_sal" value="5000" oninput="c2()"></div>
+                         <div class="grid-2" style="margin-bottom:10px; gap:10px;">
+                            <div class="inp-group">
+                                <label class="inp-label">Staff Count</label>
+                                <input type="number" class="inp-field" id="in_f2_staff" value="3" oninput="c2()">
+                            </div>
+                            <div class="inp-group">
+                                <label class="inp-label">Avg Salary/Mo</label>
+                                <input type="number" class="inp-field" id="in_f2_sal" value="5000" oninput="c2()">
+                            </div>
                         </div>
                     </div>
-                    <div class="calc-panel output"><span class="stat-label" style="margin-bottom:20px;">AGENCY SCALE</span>
-                        <div class="out-group" style="margin-bottom:20px;"><span class="stat-label">MONTHLY REVENUE</span><div class="stat-val green" id="out_f2_rev">$80,000</div></div>
-                        <div class="out-group" style="margin-bottom:20px;"><span class="stat-label">STAFF COSTS</span><div class="stat-val" style="color:var(--red);" id="out_f2_cost">-$15,000</div></div>
-                        <div class="out-group" style="margin-bottom:20px; border-top:1px dashed var(--green); padding-top:10px;"><span class="stat-label">NET PROFIT (MO)</span><div class="stat-val green" id="out_f2_net">$65,000</div></div>
-                        <div class="out-group"><span class="stat-label">ANNUAL RUN RATE</span><div class="stat-val gold" id="out_f2_run">$960,000</div></div>
+                    
+                    <div class="calc-panel output">
+                        <span class="stat-label" style="margin-bottom:20px;">AGENCY SCALE</span>
+                        <div class="out-group" style="margin-bottom:20px;">
+                            <span class="stat-label">MONTHLY REVENUE</span>
+                            <div class="stat-val green" id="out_f2_rev">$80,000</div>
+                        </div>
+                        <div class="out-group" style="margin-bottom:20px;">
+                            <span class="stat-label">STAFF COSTS</span>
+                            <div class="stat-val" style="color:var(--red);" id="out_f2_cost">-$15,000</div>
+                        </div>
+                        <div class="out-group" style="margin-bottom:20px; border-top:1px dashed var(--green); padding-top:10px;">
+                            <span class="stat-label">NET PROFIT (MO)</span>
+                            <div class="stat-val green" id="out_f2_net">$65,000</div>
+                        </div>
+                        <div class="out-group">
+                            <span class="stat-label">ANNUAL RUN RATE</span>
+                            <div class="stat-val gold" id="out_f2_run">$960,000</div>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div id="f3" class="tab-content hidden" style="display:none;">
                 <div class="calc-wrapper">
-                    <div class="calc-panel"><span class="stat-label" style="margin-bottom:20px;">VARIABLES</span>
-                        <div class="inp-group"><label class="inp-label">App License ($ / Year)</label><input type="number" class="inp-field" id="in_f3_lic" value="3000" oninput="c3()"></div>
-                        <div class="inp-group"><label class="inp-label">Total Users</label><input type="number" class="inp-field" id="in_f3_users" value="350" oninput="c3()"></div>
-                        <div class="inp-group"><label class="inp-label">Exit Multiple (x Revenue)</label><input type="number" class="inp-field" id="in_f3_mult" value="5" oninput="c3()"></div>
+                    <div class="calc-panel">
+                        <span class="stat-label" style="margin-bottom:20px;">VARIABLES</span>
+                        <div class="inp-group">
+                            <label class="inp-label">App License ($ / Year)</label>
+                            <input type="number" class="inp-field" id="in_f3_lic" value="3000" oninput="c3()">
+                        </div>
+                        <div class="inp-group">
+                            <label class="inp-label">Total Users</label>
+                            <input type="number" class="inp-field" id="in_f3_users" value="350" oninput="c3()">
+                        </div>
+                        <div class="inp-group">
+                            <label class="inp-label">Exit Multiple (x Revenue)</label>
+                            <input type="number" class="inp-field" id="in_f3_mult" value="5" oninput="c3()">
+                        </div>
                     </div>
-                    <div class="calc-panel output"><span class="stat-label" style="margin-bottom:20px;">PROJECTIONS</span>
-                        <div class="out-group" style="margin-bottom:20px;"><span class="stat-label">ANNUAL REVENUE (ARR)</span><div class="stat-val green" id="out_f3_arr">$1.05M</div></div>
-                        <div class="out-group" style="margin-bottom:20px;"><span class="stat-label">EXIT VALUATION</span><div class="stat-val green" id="out_f3_exit">$5.25M</div></div>
+                    <div class="calc-panel output">
+                        <span class="stat-label" style="margin-bottom:20px;">PROJECTIONS</span>
+                        <div class="out-group" style="margin-bottom:20px;">
+                            <span class="stat-label">ANNUAL REVENUE (ARR)</span>
+                            <div class="stat-val green" id="out_f3_arr">$1.05M</div>
+                        </div>
+                        <div class="out-group" style="margin-bottom:20px;">
+                            <span class="stat-label">EXIT VALUATION</span>
+                            <div class="stat-val green" id="out_f3_exit">$5.25M</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div id="intel" class="section">
-            <div class="phase-header-grid"><div class="phase-info"><h2>DATABASE</h2><h1>INTEL & RESOURCES</h1></div></div>
+            <div class="phase-header-grid">
+                <div class="phase-info">
+                    <h2>DATABASE</h2>
+                    <h1>INTEL & RESOURCES</h1>
+                </div>
+            </div>
             <div class="grid-3">
                 <div class="card">
                     <span class="stat-label">CORE TRAINING</span>
@@ -261,67 +622,482 @@
         </div>
 
         <div id="p0" class="section">
-            <div class="phase-header-grid"><h1>GHOST PROTOCOL</h1><div style="text-align: right;"><span class="earning-badge">POTENTIAL: $0 / 6 MO</span></div></div>
-            <div class="task-item" id="t0_1"><div class="task-header" onclick="toggleAccordion('t0_1')"><div class="check-target" onclick="toggleCheck(event, 't0_1')"><div class="checkbox"></div></div><div class="task-title">1. Hardware & Environment (Day 1)</div></div><div class="task-details"><div class="target-box">TARGET: DEV ORG READY</div><div class="detail-block"><div class="detail-body">Purchase Dell Latitude. Sign up for Salesforce Dev Edition.</div></div></div></div>
-            <div class="task-item" id="t0_2"><div class="task-header" onclick="toggleAccordion('t0_2')"><div class="check-target" onclick="toggleCheck(event, 't0_2')"><div class="checkbox"></div></div><div class="task-title">2. Admin Certification (Weeks 1-8)</div></div><div class="task-details"><div class="target-box">TARGET: PASS EXAM</div><div class="detail-block"><div class="detail-body">Daily Routine: 90 Mins Trailhead, 30 Mins Focus on Force.</div></div></div></div>
-             <div class="task-item" id="t0_3"><div class="task-header" onclick="toggleAccordion('t0_3')"><div class="check-target" onclick="toggleCheck(event, 't0_3')"><div class="checkbox"></div></div><div class="task-title">3. Portfolio & Tools (Month 4)</div></div><div class="task-details"><div class="target-box">TARGET: DEMO VIDEO ASSET</div><div class="detail-block"><div class="detail-body">Build "WealthWise" Schema. Record Loom video.</div></div></div></div>
+            <span class="pill">PHASE 0 (MONTH 1-6)</span>
+            
+            <div class="phase-header-grid">
+                <h1>GHOST PROTOCOL</h1>
+                <div style="text-align: right;">
+                    <span class="earning-badge">POTENTIAL: $0 / 6 MO</span>
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <div class="card dense" style="border-left: 2px solid var(--gold);">
+                    <span class="stat-label">80/20 OPERATIONAL FOCUS</span>
+                    <h3 style="color:var(--gold); margin-bottom:5px;">FOUNDATION</h3>
+                    <p style="font-size:13px; color:var(--text-dim);">Spend 80% time on <strong>Data Modeling & Security</strong>. Ignore colors, logos, and advanced Apex code.</p>
+                </div>
+                <div class="card dense">
+                    <span class="stat-label">LEISURE PROTOCOL</span>
+                    <div style="display:flex; flex-direction: column; gap:8px; margin-top:10px;">
+                        <a href="https://www.youtube.com/watch?v=1-TZqOsVCNM" target="_blank" class="action-link"><div><span class="ico-txt">🎧</span> NAVAL RAVIKANT</div> <span>►</span></a>
+                        <a href="https://www.investopedia.com/financial-advisor-4427708" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> READ INVESTOPEDIA</div> <span>►</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="task-item" id="t0_1">
+                <div class="task-header" onclick="toggleAccordion('t0_1')">
+                    <div class="check-target" onclick="toggleCheck(event, 't0_1')"><div class="checkbox"></div></div>
+                    <div class="task-title">1. Hardware & Environment (Day 1)</div>
+                    <div class="task-meta">SETUP</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: DEV ORG READY</div>
+                    <div class="detail-block">
+                        <div class="detail-title">ACTION STEPS</div>
+                        <div class="detail-body">
+                            1. Purchase <strong>Dell Latitude 7490</strong> (i5/16GB). <br>
+                            2. Sign up for <strong>Salesforce Developer Edition</strong>. <br>
+                            3. Create a dedicated Chrome profile named "Capital OS".
+                        </div>
+                    </div>
+                    <a href="https://developer.salesforce.com/signup" target="_blank" class="action-link"><div>SIGNUP DEV ORG</div> <span>↗</span></a>
+                </div>
+            </div>
+
+            <div class="task-item" id="t0_2">
+                <div class="task-header" onclick="toggleAccordion('t0_2')">
+                    <div class="check-target" onclick="toggleCheck(event, 't0_2')"><div class="checkbox"></div></div>
+                    <div class="task-title">2. Admin Certification (Weeks 1-8)</div>
+                    <div class="task-meta">LEARNING</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: PASS EXAM</div>
+                    <div class="detail-block">
+                        <div class="detail-title">STUDY SOP (2 HRS/DAY)</div>
+                        <div class="detail-body">
+                            <strong>Daily Routine:</strong> <br>
+                            1. 90 Mins: <a href="https://trailhead.salesforce.com/content/learn/trails/force_com_admin_beginner" target="_blank" class="text-link">Trailhead Modules</a>. <br>
+                            2. 30 Mins: <a href="https://focusonforce.com/salesforce-administrator-certification/" target="_blank" class="text-link">Focus on Force</a> (Practice Exams). <br>
+                            <i>Do not book the exam until you score 80% consistently on FoF.</i>
+                        </div>
+                    </div>
+                    <a href="https://trailhead.salesforce.com/en/credentials/administrator" target="_blank" class="action-link"><div>BOOK EXAM</div> <span>↗</span></a>
+                </div>
+            </div>
+
+             <div class="task-item" id="t0_3">
+                <div class="task-header" onclick="toggleAccordion('t0_3')">
+                    <div class="check-target" onclick="toggleCheck(event, 't0_3')"><div class="checkbox"></div></div>
+                    <div class="task-title">3. Portfolio & Tools (Month 4)</div>
+                    <div class="task-meta">BUILD</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: DEMO VIDEO ASSET</div>
+                    <div class="detail-block">
+                        <div class="detail-title">BUILD SPEC: "WEALTHWISE"</div>
+                        <div class="detail-body">
+                            <strong>Schema Requirements (<a href="https://developer.salesforce.com/docs/atlas.en-us.financial_services_cloud_admin_guide.meta/financial_services_cloud_admin_guide/fsc_admin_guide_data_model.htm" target="_blank" class="text-link">Ref Guide</a>):</strong> <br>
+                            1. <code>Household__c</code> (Master) <br>
+                            2. <code>Financial_Account__c</code> (Detail). Fields: Balance, Type. <br>
+                            3. <strong>Roll-Up:</strong> "Total AUM" on Household. <br>
+                            4. <strong>Flow:</strong> If AUM > $1M, update Tier to "Gold".
+                        </div>
+                    </div>
+                    <div class="detail-block">
+                        <div class="detail-title">STEP 2: RECORD DEMO</div>
+                        <div class="detail-body">
+                            <strong>Setup Loom.</strong> Record a 3-minute video showing the Flow firing. <br>
+                            Script: "Watch how I automated the Gold Tier update for HNI clients."
+                        </div>
+                    </div>
+                    <a href="https://www.loom.com/" target="_blank" class="action-link"><div>GET LOOM FREE</div> <span>↗</span></a>
+                </div>
+            </div>
         </div>
 
         <div id="p1" class="section">
-            <div class="phase-header-grid"><h1>FREELANCE: THE HUNT</h1><div style="text-align: right;"><span class="earning-badge">POTENTIAL: $6.5K / MO</span></div></div>
-            <div class="task-item" id="t1_1"><div class="task-header" onclick="toggleAccordion('t1_1')"><div class="check-target" onclick="toggleCheck(event, 't1_1')"><div class="checkbox"></div></div><div class="task-title">1. Market Positioning</div></div><div class="task-details"><div class="target-box">TARGET: OPTIMIZED PROFILE</div><div class="detail-block"><div class="detail-body">Headline: Salesforce FSC Architect for Wealth Management.</div></div></div></div>
-            <div class="task-item" id="t1_6"><div class="task-header" onclick="toggleAccordion('t1_6')"><div class="check-target" onclick="toggleCheck(event, 't1_6')"><div class="checkbox"></div></div><div class="task-title">2. Portfolio Website (No-Code)</div></div><div class="task-details"><div class="target-box">TARGET: LIVE URL</div><div class="detail-block"><div class="detail-body">Use Carrd.co + Namecheap.</div></div><a href="https://carrd.co/" target="_blank" class="action-link"><div>START CARRD</div> <span>↗</span></a></div></div>
-            <div class="task-item" id="t1_2"><div class="task-header" onclick="toggleAccordion('t1_2')"><div class="check-target" onclick="toggleCheck(event, 't1_2')"><div class="checkbox"></div></div><div class="task-title">3. Multi-Channel Hunt</div></div><div class="task-details"><div class="target-box">TARGET: 5 PROPOSALS / DAY</div><div class="detail-block"><div class="detail-body">Sales Nav Search: "Operations Director" AND "RIA".</div></div></div></div>
-            <div class="task-item" id="t1_3"><div class="task-header" onclick="toggleAccordion('t1_3')"><div class="check-target" onclick="toggleCheck(event, 't1_3')"><div class="checkbox"></div></div><div class="task-title">4. Async Protocol Strategy</div></div><div class="task-details"><div class="target-box">TARGET: ZERO MEETINGS</div><div class="detail-block"><div class="detail-body">Send daily Loom updates.</div></div></div></div>
-            <div class="task-item" id="t1_4"><div class="task-header" onclick="toggleAccordion('t1_4')"><div class="check-target" onclick="toggleCheck(event, 't1_4')"><div class="checkbox"></div></div><div class="task-title">5. Enterprise Registration</div></div><div class="task-details"><div class="target-box">TARGET: 0% TAX SETUP</div><div class="detail-block"><div class="detail-body">Do this as soon as you get your first client payment.</div></div><a href="https://udyamregistration.gov.in/" target="_blank" class="action-link" style="margin-top:10px;"><div>REGISTER MSME (UDYAM)</div> <span>↗</span></a><a href="https://www.gst.gov.in/" target="_blank" class="action-link" style="margin-top:5px;"><div>APPLY GST + LUT</div> <span>↗</span></a></div></div>
-            <div class="task-item" id="t1_5"><div class="task-header" onclick="toggleAccordion('t1_5')"><div class="check-target" onclick="toggleCheck(event, 't1_5')"><div class="checkbox"></div></div><div class="task-title">6. Global Payment Rails</div></div><div class="task-details"><div class="target-box">TARGET: USD COLLECTION</div><div class="detail-block"><div class="detail-body">Open Wise Business.</div></div><a href="https://wise.com/in/business/" target="_blank" class="action-link"><div>OPEN WISE BUSINESS</div> <span>↗</span></a></div></div>
-        </div>
+            <span class="pill">PHASE 1 (MONTH 7-18)</span>
+            
+            <div class="phase-header-grid">
+                <h1>FREELANCE: THE HUNT</h1>
+                <div style="text-align: right;">
+                    <span class="earning-badge">POTENTIAL: $6.5K / MO</span>
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <div class="card dense" style="border-left: 2px solid var(--gold);">
+                    <span class="stat-label">80/20 OPERATIONAL FOCUS</span>
+                    <h3 style="color:var(--gold); margin-bottom:5px;">VOLUME</h3>
+                    <p style="font-size:13px; color:var(--text-dim);">Spend 80% time on <strong>Sending Proposals</strong>. Only 20% on delivery. You are a salesperson now.</p>
+                </div>
+                <div class="card dense">
+                    <span class="stat-label">LEISURE PROTOCOL</span>
+                    <div style="display:flex; flex-direction: column; gap:8px; margin-top:10px;">
+                        <a href="https://www.acquisition.com/training/leads" target="_blank" class="action-link"><div><span class="ico-txt">🎧</span> $100M LEADS (COURSE)</div> <span>►</span></a>
+                        <a href="https://www.coursera.org/specializations/sales-operations" target="_blank" class="action-link"><div><span class="ico-txt">🎓</span> COURSE: SALES OPS</div> <span>►</span></a>
+                    </div>
+                </div>
+            </div>
 
+            <br>
+
+            <div class="task-item" id="t1_1">
+                <div class="task-header" onclick="toggleAccordion('t1_1')">
+                    <div class="check-target" onclick="toggleCheck(event, 't1_1')"><div class="checkbox"></div></div>
+                    <div class="task-title">1. Market Positioning</div>
+                    <div class="task-meta">LINKEDIN</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: OPTIMIZED PROFILE</div>
+                    <div class="detail-block">
+                        <div class="detail-title">HEADLINE SCRIPT</div>
+                        <div class="detail-body">
+                            Copy Paste: <br>
+                            <strong>"Salesforce FSC Architect for Wealth Management | Helping RIAs Scale & Automate Compliance"</strong>
+                        </div>
+                    </div>
+                    <div class="detail-block">
+                        <div class="detail-title">FEATURED SECTION</div>
+                        <div class="detail-body">
+                            Upload the <strong>Loom Video</strong> from Phase 0. <br>
+                            Title: "How I Automate Household AUM Rollups in Salesforce".
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item" id="t1_6">
+                <div class="task-header" onclick="toggleAccordion('t1_6')">
+                    <div class="check-target" onclick="toggleCheck(event, 't1_6')"><div class="checkbox"></div></div>
+                    <div class="task-title">2. Portfolio Website (No-Code)</div>
+                    <div class="task-meta">MARKETING</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: LIVE URL</div>
+                    <div class="detail-block">
+                        <div class="detail-title">THE BUILD</div>
+                        <div class="detail-body">
+                            Don't code from scratch. Use <strong>Carrd.co</strong> ($19/yr). <br>
+                            1. Buy Domain: <code>wealthwise.io</code> on Namecheap. <br>
+                            2. Content: Embed Loom Demo + "Book Audit" Button. <br>
+                            3. Connect: Add A-Records from Carrd to Namecheap DNS.
+                        </div>
+                    </div>
+                    <a href="https://carrd.co/" target="_blank" class="action-link"><div>START CARRD</div> <span>↗</span></a>
+                </div>
+            </div>
+
+            <div class="task-item" id="t1_2">
+                <div class="task-header" onclick="toggleAccordion('t1_2')">
+                    <div class="check-target" onclick="toggleCheck(event, 't1_2')"><div class="checkbox"></div></div>
+                    <div class="task-title">3. Multi-Channel Hunt</div>
+                    <div class="task-meta">SALES</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: 5 PROPOSALS / DAY</div>
+                    <div class="detail-block">
+                        <div class="detail-title">LINKEDIN SALES NAV SOP</div>
+                        <div class="detail-body">
+                            <strong>Boolean Search String:</strong> <br>
+                            <code>("Operations Director" OR "COO") AND ("RIA" OR "Wealth Management") AND "Salesforce"</code> <br>
+                            <strong>Filter:</strong> Geography = United States. Headcount = 11-50.
+                        </div>
+                    </div>
+                    <a href="https://www.linkedin.com/sales" target="_blank" class="action-link"><div>OPEN SALES NAV</div> <span>↗</span></a>
+                </div>
+            </div>
+
+            <div class="task-item" id="t1_3">
+                <div class="task-header" onclick="toggleAccordion('t1_3')">
+                    <div class="check-target" onclick="toggleCheck(event, 't1_3')"><div class="checkbox"></div></div>
+                    <div class="task-title">4. Async Protocol Strategy</div>
+                    <div class="task-meta">OPS</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: ZERO MEETINGS</div>
+                    <div class="detail-block">
+                        <div class="detail-title">TIMEZONE MASTERY</div>
+                        <div class="detail-body">
+                            Use your Loom account to kill meetings. <br>
+                            <strong>The Rule:</strong> Never ask "When are you free?". <br>
+                            <strong>The Action:</strong> Send a video update every morning (their evening). "Here is what I built today."
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item" id="t1_4">
+                <div class="task-header" onclick="toggleAccordion('t1_4')">
+                    <div class="check-target" onclick="toggleCheck(event, 't1_4')"><div class="checkbox"></div></div>
+                    <div class="task-title">5. Enterprise Registration</div>
+                    <div class="task-meta">LEGAL</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: 0% TAX SETUP</div>
+                    <div class="detail-block">
+                        <div class="detail-title">INDIA STACK</div>
+                        <div class="detail-body">
+                            Do this as soon as you get your first client payment: <br>
+                            1. <strong><a href="https://udyamregistration.gov.in/" target="_blank" class="text-link">MSME (Udyam)</a>:</strong> Free registration. <br>
+                            2. <strong><a href="https://www.gst.gov.in/" target="_blank" class="text-link">GST + LUT</a>:</strong> Apply for "Letter of Undertaking" to pay <strong>0% GST</strong> on export services.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item" id="t1_5">
+                <div class="task-header" onclick="toggleAccordion('t1_5')">
+                    <div class="check-target" onclick="toggleCheck(event, 't1_5')"><div class="checkbox"></div></div>
+                    <div class="task-title">6. Global Payment Rails</div>
+                    <div class="task-meta">FINANCE</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: USD COLLECTION</div>
+                    <div class="detail-block">
+                        <div class="detail-title">GETTING PAID</div>
+                        <div class="detail-body">
+                            US Clients cannot transfer to your Indian savings account easily. <br>
+                            1. <strong>Open Wise Business:</strong> Get a US Account Number (ACH). <br>
+                            2. <strong>FIRC:</strong> Wise automatically provides the FIRC needed for 0% GST compliance.
+                        </div>
+                    </div>
+                    <a href="https://wise.com/in/business/" target="_blank" class="action-link"><div>OPEN WISE BUSINESS</div> <span>↗</span></a>
+                </div>
+            </div>
+        </div>
         <div id="p2" class="section">
-             <div class="phase-header-grid"><h1>AGENCY: SCALING</h1><div style="text-align: right;"><span class="earning-badge">POTENTIAL: $83K / MO</span></div></div>
-            <div class="task-item" id="t2_1"><div class="task-header" onclick="toggleAccordion('t2_1')"><div class="check-target" onclick="toggleCheck(event, 't2_1')"><div class="checkbox"></div></div><div class="task-title">1. Trust Infrastructure</div></div><div class="task-details"><div class="target-box">TARGET: INSURED ENTITY</div><div class="detail-block"><div class="detail-body">Get E&O Insurance.</div></div></div></div>
-            <div class="task-item" id="t2_2"><div class="task-header" onclick="toggleAccordion('t2_2')"><div class="check-target" onclick="toggleCheck(event, 't2_2')"><div class="checkbox"></div></div><div class="task-title">2. The Architect Model</div></div><div class="task-details"><div class="target-box">TARGET: 1ST HIRE</div><div class="detail-block"><div class="detail-body">Hire Junior Admin for "Clicks".</div></div></div></div>
-            <div class="task-item" id="t2_3"><div class="task-header" onclick="toggleAccordion('t2_3')"><div class="check-target" onclick="toggleCheck(event, 't2_3')"><div class="checkbox"></div></div><div class="task-title">3. Automated Onboarding</div></div><div class="task-details"><div class="target-box">TARGET: ZERO TOUCH</div><div class="detail-block"><div class="detail-body">Build Typeform automation.</div></div></div></div>
+            <span class="pill">PHASE 2 (YEAR 2-4)</span>
+            
+            <div class="phase-header-grid">
+                <h1>AGENCY: SCALING</h1>
+                <div style="text-align: right;">
+                    <span class="earning-badge">POTENTIAL: $83K / MO</span>
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <div class="card dense" style="border-left: 2px solid var(--gold);">
+                    <span class="stat-label">80/20 OPERATIONAL FOCUS</span>
+                    <h3 style="color:var(--gold); margin-bottom:5px;">ARCHITECTING</h3>
+                    <p style="font-size:13px; color:var(--text-dim);">You draw the map (Schema/Logic). Junior Admins lay the bricks (Clicks). Never abdicate architecture.</p>
+                </div>
+                 <div class="card dense">
+                    <span class="stat-label">LEISURE PROTOCOL</span>
+                    <div style="display:flex; flex-direction: column; gap:8px; margin-top:10px;">
+                        <a href="https://www.amazon.com/Myth-Revisited-Small-Businesses-About/dp/0887307280" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> READ: E-MYTH REVISITED</div> <span>►</span></a>
+                        <a href="https://www.amazon.com/Who-Not-How-Accelerating-Teamwork-ebook/dp/B0867ZJ7J1" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> READ: WHO NOT HOW</div> <span>►</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="task-item" id="t2_1">
+                <div class="task-header" onclick="toggleAccordion('t2_1')">
+                    <div class="check-target" onclick="toggleCheck(event, 't2_1')"><div class="checkbox"></div></div>
+                    <div class="task-title">1. Trust Infrastructure</div>
+                    <div class="task-meta">LEGAL</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: INSURED ENTITY</div>
+                    <div class="detail-block">
+                        <div class="detail-title">ENTERPRISE READY</div>
+                        <div class="detail-body">
+                            Wealth Managers are paranoid. You need: <br>
+                            1. <strong>E&O Insurance</strong> (Errors & Omissions). <br>
+                            2. <strong>Standard NDA</strong>. Have it ready <i>before</i> they ask.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item" id="t2_2">
+                <div class="task-header" onclick="toggleAccordion('t2_2')">
+                    <div class="check-target" onclick="toggleCheck(event, 't2_2')"><div class="checkbox"></div></div>
+                    <div class="task-title">2. The Architect Model</div>
+                    <div class="task-meta">HIRING</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: 1ST HIRE</div>
+                    <div class="detail-block">
+                        <div class="detail-title">THE FILTER QUESTION</div>
+                        <div class="detail-body">
+                            Weed out fake candidates with this task: <br>
+                            "Create a Validation Rule on Opportunity that prevents closing if the 'Amount' is blank. Send me the formula." <br>
+                            <strong>Correct:</strong> <code>AND(IsWon, ISBLANK(Amount))</code>. <br>
+                            <i>If they google it or hesitate, reject them.</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <div class="task-item" id="t2_3">
+                <div class="task-header" onclick="toggleAccordion('t2_3')">
+                    <div class="check-target" onclick="toggleCheck(event, 't2_3')"><div class="checkbox"></div></div>
+                    <div class="task-title">3. Automated Onboarding</div>
+                    <div class="task-meta">SYSTEMS</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: ZERO TOUCH</div>
+                    <div class="detail-block">
+                        <div class="detail-title">SETUP</div>
+                        <div class="detail-body">
+                            Build a Typeform connected to your own Salesforce org. <br>
+                            When a client signs, automatically generate their project record and Slack channel.
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="p3" class="section">
-            <div class="phase-header-grid"><h1>SAAS: THE EXIT</h1><div style="text-align: right;"><span class="earning-badge">POTENTIAL: $10M EXIT</span></div></div>
-            <div class="task-item" id="t3_1"><div class="task-header" onclick="toggleAccordion('t3_1')"><div class="check-target" onclick="toggleCheck(event, 't3_1')"><div class="checkbox"></div></div><div class="task-title">1. Market Validation</div></div><div class="task-details"><div class="target-box">TARGET: 10 PRE-ORDERS</div><div class="detail-block"><div class="detail-body">Run LinkedIn Ads.</div></div></div></div>
-            <div class="task-item" id="t3_2"><div class="task-header" onclick="toggleAccordion('t3_2')"><div class="check-target" onclick="toggleCheck(event, 't3_2')"><div class="checkbox"></div></div><div class="task-title">2. MVP Scoping & Stack</div></div><div class="task-details"><div class="target-box">TARGET: FEATURE LOCK</div><div class="detail-block"><div class="detail-body">LWC + Apex + Managed Package.</div></div></div></div>
-            <div class="task-item" id="t3_3"><div class="task-header" onclick="toggleAccordion('t3_3')"><div class="check-target" onclick="toggleCheck(event, 't3_3')"><div class="checkbox"></div></div><div class="task-title">3. Security & Compliance</div></div><div class="task-details"><div class="target-box">TARGET: APPEXCHANGE LIVE</div><div class="detail-block"><div class="detail-body">Pass Security Review.</div></div></div></div>
+            <span class="pill">PHASE 3 (YEAR 5+)</span>
+            
+            <div class="phase-header-grid">
+                <h1>SAAS: THE EXIT</h1>
+                <div style="text-align: right;">
+                    <span class="earning-badge">POTENTIAL: $10M EXIT</span>
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <div class="card dense" style="border-left: 2px solid var(--gold);">
+                    <span class="stat-label">80/20 OPERATIONAL FOCUS</span>
+                    <h3 style="color:var(--gold); margin-bottom:5px;">PRODUCT</h3>
+                    <p style="font-size:13px; color:var(--text-dim);">Spend 80% time defining the <strong>Product Roadmap</strong> based on client pain points.</p>
+                </div>
+                <div class="card dense">
+                    <span class="stat-label">LEISURE PROTOCOL</span>
+                    <div style="display:flex; flex-direction: column; gap:8px; margin-top:10px;">
+                        <a href="https://www.momtestbook.com/" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> READ: THE MOM TEST</div> <span>►</span></a>
+                        <a href="https://www.ycombinator.com/library" target="_blank" class="action-link"><div><span class="ico-txt">🎓</span> YC STARTUP SCHOOL</div> <span>►</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="task-item" id="t3_1">
+                <div class="task-header" onclick="toggleAccordion('t3_1')">
+                    <div class="check-target" onclick="toggleCheck(event, 't3_1')"><div class="checkbox"></div></div>
+                    <div class="task-title">1. Market Validation</div>
+                    <div class="task-meta">PRODUCT</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: 10 PRE-ORDERS</div>
+                    <div class="detail-block">
+                        <div class="detail-title">STRATEGY</div>
+                        <div class="detail-body">
+                            Before writing code, create a simple landing page describing the "Gap" plugin. <br>
+                            Run $500 of LinkedIn ads to wealth managers. Measure click-through rate.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item" id="t3_2">
+                <div class="task-header" onclick="toggleAccordion('t3_2')">
+                    <div class="check-target" onclick="toggleCheck(event, 't3_2')"><div class="checkbox"></div></div>
+                    <div class="task-title">2. MVP Scoping & Stack</div>
+                    <div class="task-meta">DEV</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: FEATURE LOCK</div>
+                    <div class="detail-block">
+                        <div class="detail-title">TECH STACK</div>
+                        <div class="detail-body">
+                            To survive the Security Review, you must use standard Salesforce tech: <br>
+                            1. <strong>LWC (Lightning Web Components)</strong> for UI. <br>
+                            2. <strong>Apex</strong> for backend logic. <br>
+                            3. <strong>Managed Package</strong> (1GP or 2GP) for distribution.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item" id="t3_3">
+                <div class="task-header" onclick="toggleAccordion('t3_3')">
+                    <div class="check-target" onclick="toggleCheck(event, 't3_3')"><div class="checkbox"></div></div>
+                    <div class="task-title">3. Security & Compliance</div>
+                    <div class="task-meta">LAUNCH</div>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: APPEXCHANGE LIVE</div>
+                    <div class="detail-block">
+                        <div class="detail-title">THE SECURITY TAX</div>
+                        <div class="detail-body">
+                            To list on AppExchange, you must pass the <strong>Salesforce Security Review</strong>. <br>
+                            1. Budget <strong>$2,550</strong> for the listing fee. <br>
+                            2. Run <strong>Checkmarx</strong> scans on your code weekly.
+                        </div>
+                    </div>
+                    <a href="https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/security_review_overview.htm" target="_blank" class="action-link"><div>VIEW SEC GUIDELINES</div> <span>↗</span></a>
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
 
 <script>
+    // --- NAVIGATION ---
     function go(id) {
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        
+        // Scroll to top animation
         document.querySelector('.scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
-        document.querySelectorAll('.nav-btn').forEach(btn => { if(btn.getAttribute('onclick').includes(id)) btn.classList.add('active'); });
-    }
-    
-    function toggleSidebar() { 
-        if(window.innerWidth <= 1100) document.getElementById('sidebar').classList.toggle('mobile-open'); 
+        
+        const btns = document.querySelectorAll('.nav-btn');
+        btns.forEach(btn => {
+            if(btn.getAttribute('onclick').includes(id)) btn.classList.add('active');
+        });
+
+        // Close sidebar on mobile when link clicked
+        if(window.innerWidth <= 1100) {
+            toggleSidebar();
+        }
     }
 
-    function ftab(id) {
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('active');
+    }
+
+    function ftab(e, id) {
         document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
         document.querySelectorAll('.c-tab').forEach(el => el.classList.remove('active'));
         document.getElementById(id).style.display = 'block';
-        event.target.classList.add('active');
+        if(e && e.target) e.target.classList.add('active');
     }
 
-    function toggleTheme() { document.body.classList.toggle('light-mode'); }
-    function toggleAccordion(id) { document.getElementById(id).classList.toggle('open'); }
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+    }
+
+    // --- ACCORDION & CHECKBOX ---
+    function toggleAccordion(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle('open');
+    }
+
     function toggleCheck(e, id) {
         e.stopPropagation();
-        document.getElementById(id).classList.toggle('completed');
-        saveState(); updateHUD();
+        const el = document.getElementById(id);
+        el.classList.toggle('completed');
+        saveState();
+        updateHUD();
     }
 
+    // --- STATE MANAGEMENT ---
     const allTasks = ['t0_1','t0_2','t0_3','t1_1','t1_6','t1_2','t1_3','t1_4','t1_5','t2_1','t2_2','t2_3','t3_1','t3_2','t3_3'];
+    
+    // Task Metadata for Intelligent HUD
     const taskMeta = {
         't0_1': { phase: 'PHASE 0', obj: 'ENVIRONMENT SETUP', btn: 'OPEN SETUP STEPS', go: 'p0' },
         't0_2': { phase: 'PHASE 0', obj: 'ADMIN CERTIFICATION', btn: 'OPEN STUDY GUIDE', go: 'p0' },
@@ -341,42 +1117,113 @@
     };
 
     function saveState() {
-        allTasks.forEach(id => { localStorage.setItem('capital_v99_' + id, document.getElementById(id).classList.contains('completed')); });
+        allTasks.forEach(id => {
+            const completed = document.getElementById(id).classList.contains('completed');
+            localStorage.setItem('capital_v99_' + id, completed);
+        });
+        if(!localStorage.getItem('capital_v99_start')) {
+            localStorage.setItem('capital_v99_start', new Date().toISOString());
+        }
     }
+
     function loadState() {
-        allTasks.forEach(id => { if(localStorage.getItem('capital_v99_' + id) === 'true') document.getElementById(id).classList.add('completed'); });
-        updateHUD(); startClocks();
+        allTasks.forEach(id => {
+            if(localStorage.getItem('capital_v99_' + id) === 'true') {
+                document.getElementById(id).classList.add('completed');
+            }
+        });
+        updateHUD();
+        startClocks();
     }
+
+    // --- INTELLIGENCE ENGINE ---
     function updateHUD() {
-        const p0 = ['t0_1','t0_2','t0_3'], p1 = ['t1_1','t1_6','t1_2','t1_3','t1_4','t1_5'], p2 = ['t2_1','t2_2','t2_3'], p3 = ['t3_1','t3_2','t3_3'];
-        const calc = (arr) => ({ pct: Math.round((arr.filter(id => document.getElementById(id).classList.contains('completed')).length / arr.length) * 100) });
-        const s0 = calc(p0), s1 = calc(p1), s2 = calc(p2), s3 = calc(p3);
+        // 1. Calculate Percentages
+        const p0 = ['t0_1','t0_2','t0_3'];
+        const p1 = ['t1_1','t1_6','t1_2','t1_3','t1_4','t1_5'];
+        const p2 = ['t2_1','t2_2','t2_3'];
+        const p3 = ['t3_1','t3_2','t3_3'];
         
+        const calc = (arr) => {
+            let done = arr.filter(id => document.getElementById(id).classList.contains('completed')).length;
+            return { pct: Math.round((done / arr.length) * 100) };
+        }
+
+        const s0 = calc(p0);
+        const s1 = calc(p1);
+        const s2 = calc(p2);
+        const s3 = calc(p3);
+
+        // Update Bars
         document.getElementById('bar_p0').style.width = s0.pct + '%'; document.getElementById('txt_p0').innerText = s0.pct + '%';
         document.getElementById('bar_p1').style.width = s1.pct + '%'; document.getElementById('txt_p1').innerText = s1.pct + '%';
         document.getElementById('bar_p2').style.width = s2.pct + '%'; document.getElementById('txt_p2').innerText = s2.pct + '%';
         document.getElementById('bar_p3').style.width = s3.pct + '%'; document.getElementById('txt_p3').innerText = s3.pct + '%';
         
+        // Update Sidebar Badges
         const updateBadge = (id, pct) => {
-            const el = document.getElementById(id); if(!el) return; el.innerText = pct + '%';
-            if(pct > 0) { el.style.color = 'var(--cyan)'; el.style.borderColor = 'var(--cyan)'; el.style.background = 'rgba(0, 240, 255, 0.1)'; }
-            else { el.style.color = 'var(--text-dim)'; el.style.borderColor = 'var(--border)'; el.style.background = 'transparent'; }
+            const el = document.getElementById(id);
+            el.innerText = pct + '%';
+            if(pct > 0) {
+                el.style.color = 'var(--cyan)';
+                el.style.borderColor = 'var(--cyan)';
+                el.style.background = 'rgba(0, 240, 255, 0.1)';
+            } else {
+                el.style.color = 'var(--text-dim)';
+                el.style.borderColor = 'var(--border)';
+                el.style.background = 'transparent';
+            }
         };
-        updateBadge('nav_p0', s0.pct); updateBadge('nav_p1', s1.pct); updateBadge('nav_p2', s2.pct); updateBadge('nav_p3', s3.pct);
-        document.getElementById('sys_integrity').innerText = Math.round((s0.pct + s1.pct + s2.pct + s3.pct) / 4) + '%';
-        
+
+        updateBadge('nav_p0', s0.pct);
+        updateBadge('nav_p1', s1.pct);
+        updateBadge('nav_p2', s2.pct);
+        updateBadge('nav_p3', s3.pct);
+
+        // System Integrity
+        const totalIntegrity = Math.round((s0.pct + s1.pct + s2.pct + s3.pct) / 4);
+        document.getElementById('sys_integrity').innerText = totalIntegrity + '%';
+
+        // 2. Intelligent Next Step Logic
         let nextTask = allTasks.find(id => !document.getElementById(id).classList.contains('completed'));
-        let fT="FOUNDATION", fS="80% DATA MODEL";
+        
+        // Default State
+        let hudPhase = "SYSTEM";
+        let hudObj = "MAINTENANCE MODE";
+        let hudBtn = "ALL SYSTEMS GO";
+        let hudAction = "console.log('Done')";
+        
+        let focusTitle = "FOUNDATION";
+        let focusSub = "80% DATA MODEL";
+
         if (nextTask) {
             const meta = taskMeta[nextTask];
-            document.getElementById('hud_obj_label').innerText = "OBJECTIVE // " + meta.phase;
-            document.getElementById('hud_obj_text').innerText = meta.obj;
-            document.getElementById('hud_action').innerText = meta.btn;
-            document.getElementById('hud_action').setAttribute('onclick', `go('${meta.go}'); setTimeout(() => { document.getElementById('${nextTask}').scrollIntoView({behavior: 'smooth', block: 'center'}); if(!document.getElementById('${nextTask}').classList.contains('open')) toggleAccordion('${nextTask}'); }, 300);`);
-            if(meta.go === 'p1') { fT="VOLUME"; fS="80% PROPOSALS"; } else if(meta.go === 'p2') { fT="ARCHITECTURE"; fS="0% CLICKING"; } else if(meta.go === 'p3') { fT="PRODUCT"; fS="80% ROADMAP"; }
+            hudPhase = meta.phase;
+            hudObj = meta.obj;
+            hudBtn = meta.btn;
+            hudAction = `go('${meta.go}'); setTimeout(() => { document.getElementById('${nextTask}').scrollIntoView({behavior: 'smooth', block: 'center'}); if(!document.getElementById('${nextTask}').classList.contains('open')) toggleAccordion('${nextTask}'); }, 300);`;
+            
+            if(meta.go === 'p1') { focusTitle = "VOLUME"; focusSub = "80% PROPOSALS"; }
+            else if(meta.go === 'p2') { focusTitle = "ARCHITECTURE"; focusSub = "0% CLICKING"; }
+            else if(meta.go === 'p3') { focusTitle = "PRODUCT"; focusSub = "80% ROADMAP"; }
+        } else {
+             hudPhase = "COMPLETE";
+             hudObj = "EXIT ACHIEVED";
+             hudBtn = "RESET SYSTEM";
+             hudAction = "localStorage.clear(); location.reload();";
+             focusTitle = "FREEDOM";
+             focusSub = "100% LIFE";
         }
-        document.getElementById('hud_focus_val').innerText = fT;
-        document.getElementById('hud_focus_sub').innerText = fS;
+        
+        document.getElementById('hud_obj_label').innerText = "OBJECTIVE // " + hudPhase;
+        document.getElementById('hud_obj_text').innerText = hudObj;
+        
+        const btnEl = document.getElementById('hud_action');
+        btnEl.innerText = hudBtn;
+        btnEl.setAttribute('onclick', hudAction);
+        
+        document.getElementById('hud_focus_val').innerText = focusTitle;
+        document.getElementById('hud_focus_sub').innerText = focusSub;
     }
 
     function startClocks() {
@@ -386,23 +1233,40 @@
         }, 1000);
     }
 
+    // --- CALCULATORS ---
     function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
     function t(id, txt) { document.getElementById(id).innerText = txt; }
+
     function c1() { 
         let wk = v('in_f1_rate') * v('in_f1_hrs');
-        t('out_f1_wk', '$' + wk.toLocaleString()); t('out_f1_yr', '$' + (wk * 48).toLocaleString()); 
+        t('out_f1_wk', '$' + wk.toLocaleString());
+        t('out_f1_yr', '$' + (wk * 48).toLocaleString()); 
     }
+    
     function c2() { 
-        let rev = (v('in_f2_ret')*v('in_f2_cli')) + (v('in_f2_proj')*v('in_f2_pcount'));
+        let ret = v('in_f2_ret') * v('in_f2_cli');
+        let proj = v('in_f2_proj') * v('in_f2_pcount');
+        let rev = ret + proj;
+        
         let cost = v('in_f2_staff') * v('in_f2_sal');
-        t('out_f2_rev', '$' + rev.toLocaleString()); t('out_f2_cost', '-$' + cost.toLocaleString());
-        t('out_f2_net', '$' + (rev-cost).toLocaleString()); t('out_f2_run', '$' + (rev * 12).toLocaleString());
+        let net = rev - cost;
+
+        t('out_f2_rev', '$' + rev.toLocaleString());
+        t('out_f2_cost', '-$' + cost.toLocaleString());
+        t('out_f2_net', '$' + net.toLocaleString());
+        t('out_f2_run', '$' + (rev * 12).toLocaleString());
     }
+    
     function c3() { 
         let arr = v('in_f3_lic') * v('in_f3_users');
-        t('out_f3_arr', '$' + (arr/1000000).toFixed(2) + 'M'); t('out_f3_exit', '$' + ((arr * v('in_f3_mult'))/1000000).toFixed(2) + 'M'); 
+        t('out_f3_arr', '$' + (arr/1000000).toFixed(2) + 'M');
+        t('out_f3_exit', '$' + ((arr * v('in_f3_mult'))/1000000).toFixed(2) + 'M'); 
     }
-    window.onload = function() { loadState(); c1(); c2(); c3(); }
+
+    window.onload = function() {
+        loadState();
+        c1(); c2(); c3();
+    }
 </script>
 </body>
 </html>
