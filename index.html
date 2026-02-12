@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CAPITAL // OS v10.0 [PATCHED]</title>
+    <title>CAPITAL // OS v11.0 [MASTER]</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;800&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -278,6 +278,13 @@
         .task-title { font-size: 16px; font-weight: 500; color: var(--text-main); flex: 1; transition: color 0.3s; }
         .task-meta { font-family: var(--font-code); font-size: 11px; color: var(--text-dim); background: var(--bg-panel); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); }
         
+        /* NEW: Time Estimate Tag */
+        .time-tag {
+            font-family: var(--font-code); font-size: 11px; color: var(--gold); 
+            background: var(--gold-dim); padding: 4px 8px; border-radius: 4px; 
+            border: 1px solid var(--gold); margin-left: 10px; font-weight: 700;
+        }
+        
         .task-details {
             display: none; padding: 0 25px 30px 67px; border-top: 1px solid var(--border);
             background: var(--bg-panel); animation: slideDown 0.3s ease-out;
@@ -438,9 +445,9 @@
                     <div class="stat-sub">LOCAL TIME</div>
                 </div>
                 <div class="card dense" style="border-left: 2px solid var(--gold);">
-                    <span class="stat-label">80/20 FOCUS (ACTIVE)</span>
-                    <div class="stat-val gold" style="font-size:20px;" id="hud_focus_val">FOUNDATION</div>
-                    <div class="stat-sub" id="hud_focus_sub">80% DATA MODEL</div>
+                    <span class="stat-label">MASTERY TRACKER</span>
+                    <div class="stat-val gold" style="font-size:20px;" id="hud_hours">0 / 1000 H</div>
+                    <div class="stat-sub">DEEP WORK LOGGED</div>
                 </div>
                 <div class="card dense">
                     <span class="stat-label">SYSTEM INTEGRITY</span>
@@ -634,16 +641,16 @@
                     <a href="https://trailhead.salesforce.com/en/credentials/administrator" target="_blank" class="action-link"><div>START TRAILHEAD</div> <span>↗</span></a>
                 </div>
                 <div class="card">
+                    <span class="stat-label">REAL WORLD EXP</span>
+                    <h3 style="color:var(--text-main); margin-bottom:10px;">SUPERBADGES</h3>
+                    <p style="font-size:13px; color:var(--text-dim); margin-bottom:15px;">Completing these = 6 months of actual work experience.</p>
+                    <a href="https://trailhead.salesforce.com/superbadges" target="_blank" class="action-link"><div>VIEW PROJECTS</div> <span>↗</span></a>
+                </div>
+                <div class="card">
                     <span class="stat-label">NICHE SPECIALTY</span>
                     <h3 style="color:var(--text-main); margin-bottom:10px;">FINANCIAL CLOUD</h3>
                     <p style="font-size:13px; color:var(--text-dim); margin-bottom:15px;">The money maker. Households & Financial Accounts.</p>
                     <a href="https://developer.salesforce.com/docs/atlas.en-us.financial_services_cloud_admin_guide.meta/financial_services_cloud_admin_guide/fsc_admin_guide_intro.htm" target="_blank" class="action-link"><div>DEV GUIDE</div> <span>↗</span></a>
-                </div>
-                <div class="card">
-                    <span class="stat-label">DOMAIN KNOWLEDGE</span>
-                    <h3 style="color:var(--text-main); margin-bottom:10px;">INVESTOPEDIA</h3>
-                    <p style="font-size:13px; color:var(--text-dim); margin-bottom:15px;">Learn the terms: RIA, Custodian, 401k, RMD.</p>
-                    <a href="https://www.investopedia.com/terms/w/wealthmanagement.asp" target="_blank" class="action-link"><div>READ DEFINITIONS</div> <span>↗</span></a>
                 </div>
                 <div class="card" style="border-color: var(--gold);">
                     <span class="stat-label" style="color:var(--gold);">COMPLIANCE PROTOCOL</span>
@@ -667,8 +674,8 @@
             <div class="grid-2">
                 <div class="card dense" style="border-left: 2px solid var(--gold);">
                     <span class="stat-label">80/20 OPERATIONAL FOCUS</span>
-                    <h3 style="color:var(--gold); margin-bottom:5px;">FOUNDATION & TRUST</h3>
-                    <p style="font-size:13px; color:var(--text-dim);">Spend 80% time on <strong>Data Modeling & Security</strong>. Do not sell until you are "Enterprise Ready".</p>
+                    <h3 style="color:var(--gold); margin-bottom:5px;">MASTERY & TRUST</h3>
+                    <p style="font-size:13px; color:var(--text-dim);">Spend 80% time on <strong>Superbadges</strong> and <strong>Security Setup</strong>. Do not sell until you are "Enterprise Ready".</p>
                 </div>
                 <div class="card dense">
                     <span class="stat-label">LEISURE PROTOCOL</span>
@@ -685,7 +692,7 @@
                 <div class="task-header" onclick="toggleAccordion('t0_1')">
                     <div class="check-target" onclick="toggleCheck(event, 't0_1')"><div class="checkbox"></div></div>
                     <div class="task-title">1. Hardware & Environment (Day 1)</div>
-                    <div class="task-meta">SETUP</div>
+                    <span class="time-tag">[5 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: SECURE WORKSTATION</div>
@@ -693,12 +700,12 @@
                         <div class="detail-title">ACTION STEPS</div>
                         <div class="detail-body">
                             1. Purchase <strong>Dell Latitude 7490</strong> (i5/16GB). <br>
-                            2. <strong>Security Layer (CRITICAL):</strong> Enable BitLocker encryption. <br>
+                            2. <strong>Security Layer (CRITICAL):</strong> Enable BitLocker encryption on Windows. <br>
                             3. Install <strong>LastPass/1Password</strong>. Never store client passwords in plain text. <br>
                             4. Create a dedicated Chrome profile named "Capital OS".
                         </div>
                     </div>
-                    <a href="https://developer.salesforce.com/signup" target="_blank" class="action-link"><div>SIGNUP DEV ORG</div> <span>↗</span></a>
+                    <a href="https://developer.salesforce.com/signup" target="_blank" class="action-link"><div>SIGNUP FSC TRIAL</div> <span>↗</span></a>
                 </div>
             </div>
 
@@ -706,10 +713,10 @@
                 <div class="task-header" onclick="toggleAccordion('t0_2')">
                     <div class="check-target" onclick="toggleCheck(event, 't0_2')"><div class="checkbox"></div></div>
                     <div class="task-title">2. Admin Certification (Weeks 1-8)</div>
-                    <div class="task-meta">LEARNING</div>
+                    <span class="time-tag">[150 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: PASS EXAM</div>
+                    <div class="target-box">TARGET: PASS EXAM (ADM-201)</div>
                     <div class="detail-block">
                         <div class="detail-title">STUDY SOP (2 HRS/DAY)</div>
                         <div class="detail-body">
@@ -722,12 +729,31 @@
                     <a href="https://trailhead.salesforce.com/en/credentials/administrator" target="_blank" class="action-link"><div>BOOK EXAM</div> <span>↗</span></a>
                 </div>
             </div>
-
+            
             <div class="task-item" id="t0_3">
                 <div class="task-header" onclick="toggleAccordion('t0_3')">
                     <div class="check-target" onclick="toggleCheck(event, 't0_3')"><div class="checkbox"></div></div>
-                    <div class="task-title">3. Trust Infrastructure (Month 3)</div>
-                    <div class="task-meta" style="color:var(--gold); border-color:var(--gold);">CRITICAL</div>
+                    <div class="task-title">3. Practical WorkEx: Superbadges</div>
+                    <span class="time-tag">[40 H]</span>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: 2 SUPERBADGES</div>
+                    <div class="detail-block">
+                        <div class="detail-title">THE SIMULATION</div>
+                        <div class="detail-body">
+                            This is how you get "Experience" without a job. Complete these to prove you can build logic. <br>
+                            1. <strong><a href="https://trailhead.salesforce.com/content/learn/superbadges/superbadge_security_specialist" target="_blank" class="text-link">Security Specialist</a>:</strong> Essential for Finance. <br>
+                            2. <strong><a href="https://trailhead.salesforce.com/content/learn/superbadges/superbadge_business_specialist" target="_blank" class="text-link">Business Admin Specialist</a>:</strong> Proves you can automate.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item" id="t0_4">
+                <div class="task-header" onclick="toggleAccordion('t0_4')">
+                    <div class="check-target" onclick="toggleCheck(event, 't0_4')"><div class="checkbox"></div></div>
+                    <div class="task-title">4. Trust Infrastructure (Month 3)</div>
+                    <span class="time-tag">[10 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: INSTITUTIONAL LEGITIMACY</div>
@@ -743,11 +769,11 @@
                 </div>
             </div>
 
-             <div class="task-item" id="t0_4">
-                <div class="task-header" onclick="toggleAccordion('t0_4')">
-                    <div class="check-target" onclick="toggleCheck(event, 't0_4')"><div class="checkbox"></div></div>
-                    <div class="task-title">4. Portfolio & Tools (Month 4)</div>
-                    <div class="task-meta">BUILD</div>
+             <div class="task-item" id="t0_5">
+                <div class="task-header" onclick="toggleAccordion('t0_5')">
+                    <div class="check-target" onclick="toggleCheck(event, 't0_5')"><div class="checkbox"></div></div>
+                    <div class="task-title">5. Portfolio & Tools (Month 4)</div>
+                    <span class="time-tag">[30 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: DEMO VIDEO ASSET</div>
@@ -803,7 +829,7 @@
                 <div class="task-header" onclick="toggleAccordion('t1_1')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_1')"><div class="checkbox"></div></div>
                     <div class="task-title">1. Market Positioning</div>
-                    <div class="task-meta">LINKEDIN</div>
+                    <span class="time-tag">[5 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: OPTIMIZED PROFILE</div>
@@ -828,7 +854,7 @@
                 <div class="task-header" onclick="toggleAccordion('t1_2')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_2')"><div class="checkbox"></div></div>
                     <div class="task-title">2. Portfolio Website (No-Code)</div>
-                    <div class="task-meta">MARKETING</div>
+                    <span class="time-tag">[10 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: LIVE URL</div>
@@ -849,7 +875,7 @@
                 <div class="task-header" onclick="toggleAccordion('t1_3')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_3')"><div class="checkbox"></div></div>
                     <div class="task-title">3. Multi-Channel Hunt</div>
-                    <div class="task-meta">SALES</div>
+                    <span class="time-tag">[300 H+]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: 5 PROPOSALS / DAY</div>
@@ -869,7 +895,7 @@
                 <div class="task-header" onclick="toggleAccordion('t1_4')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_4')"><div class="checkbox"></div></div>
                     <div class="task-title">4. Async Protocol Strategy</div>
-                    <div class="task-meta">OPS</div>
+                    <span class="time-tag">[Ongoing]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: ZERO MEETINGS</div>
@@ -888,7 +914,7 @@
                 <div class="task-header" onclick="toggleAccordion('t1_5')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_5')"><div class="checkbox"></div></div>
                     <div class="task-title">5. Enterprise Registration</div>
-                    <div class="task-meta">LEGAL</div>
+                    <span class="time-tag">[5 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: 0% TAX SETUP</div>
@@ -907,7 +933,7 @@
                 <div class="task-header" onclick="toggleAccordion('t1_6')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_6')"><div class="checkbox"></div></div>
                     <div class="task-title">6. Global Payment Rails</div>
-                    <div class="task-meta">FINANCE</div>
+                    <span class="time-tag">[2 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: USD COLLECTION</div>
@@ -954,7 +980,7 @@
                 <div class="task-header" onclick="toggleAccordion('t2_1')">
                     <div class="check-target" onclick="toggleCheck(event, 't2_1')"><div class="checkbox"></div></div>
                     <div class="task-title">1. Trust Infrastructure (Expanded)</div>
-                    <div class="task-meta">LEGAL</div>
+                    <span class="time-tag">[5 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: INSURED ENTITY</div>
@@ -973,7 +999,7 @@
                 <div class="task-header" onclick="toggleAccordion('t2_2')">
                     <div class="check-target" onclick="toggleCheck(event, 't2_2')"><div class="checkbox"></div></div>
                     <div class="task-title">2. The Architect Model</div>
-                    <div class="task-meta">HIRING</div>
+                    <span class="time-tag">[50 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: 1ST HIRE</div>
@@ -993,7 +1019,7 @@
                 <div class="task-header" onclick="toggleAccordion('t2_3')">
                     <div class="check-target" onclick="toggleCheck(event, 't2_3')"><div class="checkbox"></div></div>
                     <div class="task-title">3. Automated Onboarding</div>
-                    <div class="task-meta">SYSTEMS</div>
+                    <span class="time-tag">[20 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: ZERO TOUCH</div>
@@ -1039,7 +1065,7 @@
                 <div class="task-header" onclick="toggleAccordion('t3_1')">
                     <div class="check-target" onclick="toggleCheck(event, 't3_1')"><div class="checkbox"></div></div>
                     <div class="task-title">1. Market Validation</div>
-                    <div class="task-meta">PRODUCT</div>
+                    <span class="time-tag">[20 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: 10 PRE-ORDERS</div>
@@ -1057,7 +1083,7 @@
                 <div class="task-header" onclick="toggleAccordion('t3_2')">
                     <div class="check-target" onclick="toggleCheck(event, 't3_2')"><div class="checkbox"></div></div>
                     <div class="task-title">2. MVP Scoping & Stack</div>
-                    <div class="task-meta">DEV</div>
+                    <span class="time-tag">[500 H+]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: FEATURE LOCK</div>
@@ -1077,7 +1103,7 @@
                 <div class="task-header" onclick="toggleAccordion('t3_3')">
                     <div class="check-target" onclick="toggleCheck(event, 't3_3')"><div class="checkbox"></div></div>
                     <div class="task-title">3. Security & Compliance</div>
-                    <div class="task-meta">LAUNCH</div>
+                    <span class="time-tag">[100 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: APPEXCHANGE LIVE</div>
@@ -1146,41 +1172,46 @@
     }
 
     // --- STATE MANAGEMENT ---
-    const allTasks = ['t0_1','t0_2','t0_3','t0_4','t1_1','t1_2','t1_3','t1_4','t1_5','t1_6','t2_1','t2_2','t2_3','t3_1','t3_2','t3_3'];
+    const allTasks = ['t0_1','t0_2','t0_3','t0_4','t0_5','t1_1','t1_2','t1_3','t1_4','t1_5','t1_6','t2_1','t2_2','t2_3','t3_1','t3_2','t3_3'];
     
-    // Updated Task Metadata for PATCH v10.0
+    // Updated Task Metadata for PATCH v11.0
+    // hrs = Estimated hours to complete
     const taskMeta = {
-        't0_1': { phase: 'PHASE 0', obj: 'SECURE WORKSTATION', btn: 'OPEN STEPS', go: 'p0' },
-        't0_2': { phase: 'PHASE 0', obj: 'ADMIN CERTIFICATION', btn: 'OPEN STUDY GUIDE', go: 'p0' },
-        't0_3': { phase: 'PHASE 0', obj: 'TRUST PROTOCOLS', btn: 'SETUP LEGAL', go: 'p0' },
-        't0_4': { phase: 'PHASE 0', obj: 'BUILD DEMO', btn: 'VIEW SPECS', go: 'p0' },
-        't1_1': { phase: 'PHASE 1', obj: 'LINKEDIN POSITIONING', btn: 'EDIT PROFILE', go: 'p1' },
-        't1_2': { phase: 'PHASE 1', obj: 'PORTFOLIO SITE', btn: 'BUILD CARRD', go: 'p1' },
-        't1_3': { phase: 'PHASE 1', obj: 'CLIENT HUNTING', btn: 'OPEN SALES NAV', go: 'p1' },
-        't1_4': { phase: 'PHASE 1', obj: 'ASYNC OPS', btn: 'VIEW STRATEGY', go: 'p1' },
-        't1_5': { phase: 'PHASE 1', obj: 'LEGAL SETUP', btn: 'VIEW INDIA STACK', go: 'p1' },
-        't1_6': { phase: 'PHASE 1', obj: 'PAYMENT RAILS', btn: 'SETUP WISE', go: 'p1' },
-        't2_1': { phase: 'PHASE 2', obj: 'TRUST INFRASTRUCTURE', btn: 'GET INSURANCE', go: 'p2' },
-        't2_2': { phase: 'PHASE 2', obj: 'HIRE BUILDER', btn: 'POST JOB', go: 'p2' },
-        't2_3': { phase: 'PHASE 2', obj: 'AUTOMATE ONBOARDING', btn: 'BUILD FORM', go: 'p2' },
-        't3_1': { phase: 'PHASE 3', obj: 'MARKET VALIDATION', btn: 'RUN ADS', go: 'p3' },
-        't3_2': { phase: 'PHASE 3', obj: 'MVP SCOPING', btn: 'DEFINE FEATURES', go: 'p3' },
-        't3_3': { phase: 'PHASE 3', obj: 'SECURITY REVIEW', btn: 'RUN CHECKMARX', go: 'p3' }
+        't0_1': { phase: 'PHASE 0', obj: 'SECURE WORKSTATION', btn: 'OPEN STEPS', go: 'p0', hrs: 5 },
+        't0_2': { phase: 'PHASE 0', obj: 'ADMIN CERTIFICATION', btn: 'OPEN STUDY GUIDE', go: 'p0', hrs: 150 },
+        't0_3': { phase: 'PHASE 0', obj: 'SUPERBADGES (EXP)', btn: 'OPEN TRAILHEAD', go: 'p0', hrs: 40 },
+        't0_4': { phase: 'PHASE 0', obj: 'TRUST PROTOCOLS', btn: 'SETUP LEGAL', go: 'p0', hrs: 10 },
+        't0_5': { phase: 'PHASE 0', obj: 'BUILD DEMO', btn: 'VIEW SPECS', go: 'p0', hrs: 30 },
+        
+        't1_1': { phase: 'PHASE 1', obj: 'LINKEDIN POSITIONING', btn: 'EDIT PROFILE', go: 'p1', hrs: 5 },
+        't1_2': { phase: 'PHASE 1', obj: 'PORTFOLIO SITE', btn: 'BUILD CARRD', go: 'p1', hrs: 10 },
+        't1_3': { phase: 'PHASE 1', obj: 'CLIENT HUNTING', btn: 'OPEN SALES NAV', go: 'p1', hrs: 300 },
+        't1_4': { phase: 'PHASE 1', obj: 'ASYNC OPS', btn: 'VIEW STRATEGY', go: 'p1', hrs: 5 },
+        't1_5': { phase: 'PHASE 1', obj: 'LEGAL SETUP', btn: 'VIEW INDIA STACK', go: 'p1', hrs: 5 },
+        't1_6': { phase: 'PHASE 1', obj: 'PAYMENT RAILS', btn: 'SETUP WISE', go: 'p1', hrs: 2 },
+        
+        't2_1': { phase: 'PHASE 2', obj: 'TRUST INFRASTRUCTURE', btn: 'GET INSURANCE', go: 'p2', hrs: 5 },
+        't2_2': { phase: 'PHASE 2', obj: 'HIRE BUILDER', btn: 'POST JOB', go: 'p2', hrs: 50 },
+        't2_3': { phase: 'PHASE 2', obj: 'AUTOMATE ONBOARDING', btn: 'BUILD FORM', go: 'p2', hrs: 20 },
+        
+        't3_1': { phase: 'PHASE 3', obj: 'MARKET VALIDATION', btn: 'RUN ADS', go: 'p3', hrs: 20 },
+        't3_2': { phase: 'PHASE 3', obj: 'MVP SCOPING', btn: 'DEFINE FEATURES', go: 'p3', hrs: 500 },
+        't3_3': { phase: 'PHASE 3', obj: 'SECURITY REVIEW', btn: 'RUN CHECKMARX', go: 'p3', hrs: 100 }
     };
 
     function saveState() {
         allTasks.forEach(id => {
             const completed = document.getElementById(id).classList.contains('completed');
-            localStorage.setItem('capital_v10_' + id, completed);
+            localStorage.setItem('capital_v11_' + id, completed);
         });
-        if(!localStorage.getItem('capital_v10_start')) {
-            localStorage.setItem('capital_v10_start', new Date().toISOString());
+        if(!localStorage.getItem('capital_v11_start')) {
+            localStorage.setItem('capital_v11_start', new Date().toISOString());
         }
     }
 
     function loadState() {
         allTasks.forEach(id => {
-            if(localStorage.getItem('capital_v10_' + id) === 'true') {
+            if(localStorage.getItem('capital_v11_' + id) === 'true') {
                 document.getElementById(id).classList.add('completed');
             }
         });
@@ -1190,21 +1221,30 @@
 
     // --- INTELLIGENCE ENGINE ---
     function updateHUD() {
-        // 1. Calculate Percentages
-        const p0 = ['t0_1','t0_2','t0_3','t0_4'];
+        // 1. Calculate Percentages & Hours
+        const p0 = ['t0_1','t0_2','t0_3','t0_4','t0_5'];
         const p1 = ['t1_1','t1_2','t1_3','t1_4','t1_5','t1_6'];
         const p2 = ['t2_1','t2_2','t2_3'];
         const p3 = ['t3_1','t3_2','t3_3'];
         
         const calc = (arr) => {
-            let done = arr.filter(id => document.getElementById(id).classList.contains('completed')).length;
-            return { pct: Math.round((done / arr.length) * 100) };
+            let doneCount = 0;
+            let doneHrs = 0;
+            arr.forEach(id => {
+                if(document.getElementById(id).classList.contains('completed')) {
+                    doneCount++;
+                    doneHrs += taskMeta[id].hrs;
+                }
+            });
+            return { pct: Math.round((doneCount / arr.length) * 100), hrs: doneHrs };
         }
 
         const s0 = calc(p0);
         const s1 = calc(p1);
         const s2 = calc(p2);
         const s3 = calc(p3);
+
+        const totalHrs = s0.hrs + s1.hrs + s2.hrs + s3.hrs;
 
         // Update Bars
         document.getElementById('bar_p0').style.width = s0.pct + '%'; document.getElementById('txt_p0').innerText = s0.pct + '%';
@@ -1229,6 +1269,9 @@
         // System Integrity
         const totalIntegrity = Math.round((s0.pct + s1.pct + s2.pct + s3.pct) / 4);
         document.getElementById('sys_integrity').innerText = totalIntegrity + '%';
+        
+        // Mastery Tracker
+        document.getElementById('hud_hours').innerText = totalHrs + " / 1000 H";
 
         // 2. Intelligent Next Step Logic
         let nextTask = allTasks.find(id => !document.getElementById(id).classList.contains('completed'));
