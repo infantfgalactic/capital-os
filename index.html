@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CAPITAL // OS v15.9 [FINAL]</title>
+    <title>CAPITAL // OS v16.0 [SYSTEM UPDATE]</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;800&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -27,9 +27,13 @@
             --gold: #ffd700;  /* MASTERY / HUMAN INPUT */
             --gold-dim: rgba(255, 215, 0, 0.05);
             
-            --green: #00FF7F; /* STOCK MARKET GAIN (SpringGreen) */
-            --red: #ff2a6d;   /* LOCKS / ERRORS */
+            --green: #00FF7F; /* GROWTH / REVENUE */
+            --green-dim: rgba(0, 255, 127, 0.1);
+
+            /* EMERGENCY PROTOCOL COLORS */
+            --red: #ff2a6d;   /* FAILURE / CRITICAL / LOCKED */
             --red-dim: rgba(255, 42, 109, 0.1);
+            --red-glow: rgba(255, 42, 109, 0.4);
             
             --font-head: 'Space Grotesk', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
@@ -53,9 +57,12 @@
             --cyan-dim: rgba(0, 102, 255, 0.1);
             --gold: #d4a000;
             --gold-dim: rgba(212, 160, 0, 0.05);
-            --green: #00c853; 
+            --green: #00c853;
+            --green-dim: rgba(0, 200, 83, 0.1);
+            
             --red: #d50000;
             --red-dim: rgba(213, 0, 0, 0.05);
+            --red-glow: rgba(213, 0, 0, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -153,6 +160,25 @@
         .nav-btn.active { 
             color: var(--cyan); background: var(--cyan-dim); 
             border-left-color: var(--cyan); font-weight: 700;
+        }
+        
+        /* Specific Styles for Failsafe Button */
+        .nav-btn.failsafe-btn {
+            color: var(--red);
+            border-left-color: var(--red-dim);
+            opacity: 0.7;
+        }
+        .nav-btn.failsafe-btn:hover {
+            opacity: 1;
+            background: var(--red-dim);
+            padding-left: 30px;
+            text-shadow: 0 0 10px var(--red);
+        }
+        .nav-btn.failsafe-btn.active {
+            background: var(--red-dim);
+            border-left-color: var(--red);
+            color: var(--red);
+            box-shadow: inset 5px 0 15px -5px var(--red);
         }
         
         .prog-tag {
@@ -292,11 +318,10 @@
         
         .earning-badge {
             font-family: var(--font-code); font-size: 14px; color: var(--green);
-            background: rgba(0, 255, 127, 0.1); padding: 12px 24px; border-radius: 4px;
+            background: var(--green-dim); padding: 12px 24px; border-radius: 4px;
             border: 1px solid var(--green); display: inline-block; font-weight: 800;
             letter-spacing: 0.5px; box-shadow: 0 0 20px rgba(0, 255, 127, 0.1); 
         }
-
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px; }
@@ -324,6 +349,8 @@
         .stat-val.gold { color: var(--gold); }
         .stat-val.cyan { color: var(--cyan); }
         .stat-val.green { color: var(--green); }
+        .stat-val.red { color: var(--red); text-shadow: 0 0 15px var(--red-dim); }
+        
         .stat-sub { font-family: var(--font-code); font-size: 13px; color: var(--text-dim); font-weight: 600; letter-spacing: 0.5px;}
 
         .clock-split { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 10px; }
@@ -357,13 +384,14 @@
         }
         .exec-btn:hover { background: var(--text-main); color: var(--bg-void); box-shadow: 0 0 25px var(--cyan); }
 
-        /* FAILSAFE / GATEKEEPER STYLES */
+        /* ─── FAILSAFE / GATEKEEPER STYLES ─── */
         .gatekeeper-panel {
             border: 1px solid var(--red);
             background: rgba(255, 42, 109, 0.02);
             padding: 30px;
             margin-top: 20px;
             text-align: left;
+            transition: all 0.3s ease;
         }
         .gatekeeper-title {
             color: var(--red);
@@ -385,6 +413,7 @@
         }
         .gatekeeper-check:hover { background: var(--bg-hover); }
         .gatekeeper-check label { cursor: pointer; font-size: 13px; color: var(--text-main); flex: 1; margin-left: 15px; }
+        .gatekeeper-check input[type="checkbox"] { accent-color: var(--red); transform: scale(1.2); cursor: pointer; }
         
         /* The Actual Locked Content (Hidden by default) */
         .failsafe-content {
@@ -555,7 +584,7 @@
         <button class="nav-btn" onclick="go('p3')">P3 // SAAS EXIT <span class="prog-tag" id="nav_p3">0%</span></button>
         
         <div class="nav-label" style="color:var(--red); margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">CONTINGENCY</div>
-        <button class="nav-btn" onclick="go('failsafe')" style="color:var(--red); border-left-color:var(--red-dim);">⚠ // FAILSAFE MODE</button>
+        <button class="nav-btn failsafe-btn" onclick="go('failsafe')">⚠ // FAILSAFE MODE</button>
     </div>
 </nav>
 
@@ -1029,16 +1058,19 @@
             <div class="task-item locked" id="t1_1" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_1')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_1')"><div class="checkbox"></div></div>
-                    <div class="task-title">1. Content Ledger & Case Studies</div>
+                    <div class="task-title">1. Case Study Framework</div>
                     <span class="time-tag">[40 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: 3 ARTICLES + 1 TEMPLATE</div>
+                    <div class="target-box">TARGET: 3 "PROBLEMS" DOCUMENTED</div>
                     <div class="detail-block">
                         <div class="detail-title">PROOF OF WORK</div>
                         <div class="detail-body">
-                            1. <strong>Write 3 Tech Articles (1500w):</strong> Topic example: "Automating RMD Tasks in Salesforce FSC using Flows".<br>
-                            2. <strong>Create Win Template:</strong> Build a 1-page PDF template to document "Problem > Solution > Outcome" for every ticket you solve. This builds your portfolio from Day 1.
+                            Before pitching, you need evidence. Create 3 PDF one-pagers based on your Demo Org.<br>
+                            <strong>Structure:</strong><br>
+                            1. <strong>Problem:</strong> "Advisors wasting 2hrs/week on RMD checks."<br>
+                            2. <strong>Solution:</strong> "Automated Flow with Task Assignment."<br>
+                            3. <strong>Result:</strong> "100% Compliance, 0 manual hours."
                         </div>
                     </div>
                 </div>
@@ -1047,37 +1079,34 @@
             <div class="task-item locked" id="t1_2" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_2')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_2')"><div class="checkbox"></div></div>
-                    <div class="task-title">2. Partner Mapping</div>
-                    <span class="time-tag">[20 H]</span>
+                    <div class="task-title">2. "First 10" Acquisition: Authority Seeding</div>
+                    <span class="time-tag">[Ongoing]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: 50 PARTNERS IN SHEET</div>
+                    <div class="target-box">TARGET: 3 COMMENTS / DAY</div>
                     <div class="detail-block">
-                        <div class="detail-title">THE HUNTING GROUNDS</div>
+                        <div class="detail-title">BECOME VISIBLE</div>
                         <div class="detail-body">
-                            Use the <strong>AppExchange Consultant Finder</strong>.<br>
-                            1. Filter: "Financial Services".<br>
-                            2. Size: Look for boutiques (10-50 employees). Avoid the Big 4.<br>
-                            3. Identify the "Practice Lead" or "Delivery Director" on LinkedIn.
+                            1. Find 20 "Practice Leads" at Boutique Salesforce Partners on LinkedIn.<br>
+                            2. <strong>Comment Strategy:</strong> Do not say "Great post." Add value. "Interesting point on Custodian integrations. We found that using the FSC Data Model for households actually simplifies this by..."<br>
+                            3. Do this daily for 2 weeks before DMing.
                         </div>
                     </div>
-                    <a href="https://appexchange.salesforce.com/consulting" target="_blank" class="action-link"><div>START MAPPING</div> <span>↗</span></a>
                 </div>
             </div>
 
             <div class="task-item locked" id="t1_3" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_3')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_3')"><div class="checkbox"></div></div>
-                    <div class="task-title">3. Channel Outreach (First 10)</div>
+                    <div class="task-title">3. "First 10" Acquisition: Direct Offer</div>
                     <span class="time-tag">[Ongoing]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: 5 PARTNERS / DAY</div>
+                    <div class="target-box">TARGET: 5 AUDIT OFFERS / DAY</div>
                     <div class="detail-block">
-                        <div class="detail-title">THE ACQUISITION STRATEGY</div>
+                        <div class="detail-title">THE SCRIPT</div>
                         <div class="detail-body">
-                            <strong>Goal:</strong> Get your first 5 Partners (who bring the clients).<br>
-                            <strong>Script:</strong> "Hi [Name], I noticed [Firm] is growing its Wealth practice. I'm an FSC-specialized Admin. I just wrote a technical guide on RMD Automation [Link] that might help your juniors. If you need white-label overflow capacity, I have 25hrs/week open."
+                            <strong>DM Script:</strong> "Hi [Name], I saw your team is handling a lot of Wealth implementations. I'm an FSC-specialized Admin (just wrote a case study on RMD automation here: [Link]). If you ever have overflow backlog on the Wealth side, I have 15hrs/week capacity for white-label work. Happy to do a free Audit on one of your tricky tickets to prove the fit."
                         </div>
                     </div>
                 </div>
@@ -1106,17 +1135,19 @@
             <div class="task-item locked" id="t1_5" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_5')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_5')"><div class="checkbox"></div></div>
-                    <div class="task-title">5. First "Associate" Contract</div>
+                    <div class="task-title">5. The Partnership Agreement</div>
                     <span class="time-tag">[Milestone]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: SIGNED MSA</div>
+                    <div class="target-box">TARGET: SIGNED SUBCONTRACTOR MSA</div>
                     <div class="detail-block">
                         <div class="detail-title">EXECUTION</div>
                         <div class="detail-body">
-                            Your goal is a <strong>Retainer</strong>, not hourly.<br>
-                            "I will handle all Ticket Level 1 & 2 config for your Wealth clients for $4,000/month."<br>
-                            This gives them predictability, and you stability.
+                            Have a standard "White Label Agreement" ready.<br>
+                            • <strong>Non-Solicit:</strong> Explicitly state you will NEVER touch their clients.<br>
+                            • <strong>IP Rights:</strong> All work belongs to them.<br>
+                            • <strong>Payment:</strong> Net-15 terms.<br>
+                            <i>This document makes you look like a pro, not a risk.</i>
                         </div>
                     </div>
                 </div>
@@ -1140,7 +1171,7 @@
                     <a href="https://wise.com/in/business/" target="_blank" class="action-link"><div>OPEN WISE BUSINESS</div> <span>↗</span></a>
                 </div>
             </div>
-
+            
             <div class="task-item locked" id="t1_7" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_7')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_7')"><div class="checkbox"></div></div>
@@ -1159,6 +1190,7 @@
                 </div>
             </div>
         </div>
+
         <div id="p2" class="section" data-phase="2">
             <div class="phase-header-grid">
                 <span class="pill">PHASE 2 (YEAR 2-4)</span>
@@ -1208,20 +1240,18 @@
             <div class="task-item locked" id="t2_2" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t2_2')">
                     <div class="check-target" onclick="toggleCheck(event, 't2_2')"><div class="checkbox"></div></div>
-                    <div class="task-title">2. Asynchronous Delivery</div>
+                    <div class="task-title">2. Retention Protocol: The Health Dashboard</div>
                     <span class="time-tag">[10 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: 100% CLIENT RETENTION</div>
                     <div class="detail-block">
-                        <div class="detail-title">CLIENT RETENTION PROTOCOL</div>
+                        <div class="detail-title">CHURN PREVENTION</div>
                         <div class="detail-body">
-                            Churn happens when clients feel ignored. Setup Loom and draft your update template.<br>
-                            <strong>The Fix:</strong> Friday Video Updates.<br>
-                            Send a 2-minute Loom video every Friday to the Partner Lead summarizing:<br>
-                            1. What was done this week.<br>
-                            2. Any blockers.<br>
-                            3. Next week's plan.
+                            Churn happens when clients feel ignored.<br>
+                            1. <strong>Create Dashboard:</strong> Simple Sheet tracking "Last Touchpoint" for every partner.<br>
+                            2. <strong>The "Friday Loom":</strong> Every Friday, send a 2-min Loom video to your Partner Lead. "Here's what we shipped, here's the plan for next week."<br>
+                            3. <strong>Alert System:</strong> If no contact > 14 days, auto-trigger a "Strategy Check-in" email.
                         </div>
                     </div>
                 </div>
@@ -1230,15 +1260,16 @@
              <div class="task-item locked" id="t2_3" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t2_3')">
                     <div class="check-target" onclick="toggleCheck(event, 't2_3')"><div class="checkbox"></div></div>
-                    <div class="task-title">3. The Junior Clone (Hiring SOP)</div>
+                    <div class="task-title">3. The Hiring SOP (Technical Screen)</div>
                     <span class="time-tag">[10 H]</span>
                 </div>
                 <div class="task-details">
                     <div class="target-box">TARGET: 10 HOURS DELEGATED/WEEK</div>
                     <div class="detail-block">
-                        <div class="detail-title">SCREENING FILTER</div>
+                        <div class="detail-title">FILTERING FOR TALENT</div>
                         <div class="detail-body">
-                            <strong>The Test:</strong> "I need you to build a Flow that updates the 'AUM Tier' field based on the 'Total Household Value' Rollup. Send me a Loom of it working in your Dev Org."<br>
+                            <strong>The Test:</strong> Do not rely on interviews. Give them a task.<br>
+                            "I need you to build a Flow that updates the 'AUM Tier' field based on the 'Total Household Value' Rollup. Send me a Loom of it working in your Dev Org."<br>
                             <strong>Pass Criteria:</strong> They must handle NULL values in the formula. If they miss this, do not hire.
                         </div>
                     </div>
@@ -1291,7 +1322,7 @@
             <div class="task-item locked" id="t3_1" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t3_1')">
                     <div class="check-target" onclick="toggleCheck(event, 't3_1')"><div class="checkbox"></div></div>
-                    <div class="task-title">1. Market Validation</div>
+                    <div class="task-title">1. Market Validation (The Mom Test)</div>
                     <span class="time-tag">[20 H]</span>
                 </div>
                 <div class="task-details">
@@ -1302,7 +1333,7 @@
                             Do not write code yet.<br>
                             1. Identify the "Gap" plugin you manually built 50 times in Phase 2.<br>
                             2. Call your 10 best Partner contacts.<br>
-                            3. Ask: "If I built this as a plugin for $3k/year, would you buy it?"<br>
+                            3. <strong>The Question:</strong> "If I productized that RMD script we use, would you pay $3k/year for it?"<br>
                             4. Get a non-binding <strong>Letter of Intent (LOI)</strong>.
                         </div>
                     </div>
@@ -1368,12 +1399,11 @@
                 </div>
             </div>
         </div>
-
         <div id="failsafe" class="section">
             <div class="phase-header-grid" style="border-bottom-color:var(--red);">
                 <span class="pill" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">EMERGENCY MODE</span>
                 <h1 style="color:var(--red);">PROTOCOL: PIVOT</h1>
-                <span class="earning-badge" style="border-color:var(--red); background:rgba(255,42,109,0.05); color:var(--red);">TARGET: $100K SALARY</span>
+                <span class="earning-badge" style="border-color:var(--red); background:rgba(255,42,109,0.05); color:var(--red);">TARGET: $100K SALARY (REMOTE)</span>
             </div>
 
             <div class="alert-box" style="border-left-color:var(--red); background: linear-gradient(90deg, rgba(255,42,109,0.05) 0%, rgba(0,0,0,0) 100%);">
@@ -1389,10 +1419,11 @@
                 <div class="gatekeeper-check"><input type="checkbox" onchange="checkGatekeeper()"><label>I have exhausted the $500/mo ad budget for 3 months.</label></div>
                 <div class="gatekeeper-check"><input type="checkbox" onchange="checkGatekeeper()"><label>I have completed 3 Case Studies/Technical Articles.</label></div>
                 <div class="gatekeeper-check"><input type="checkbox" onchange="checkGatekeeper()"><label>I have 0 billable clients after 12 months.</label></div>
+                <div class="gatekeeper-check"><input type="checkbox" onchange="checkGatekeeper()"><label>I accept that "Founder" is a liability on a resume.</label></div>
             </div>
 
             <div class="failsafe-content" id="failsafe_content">
-                <h2 style="color:var(--red); border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:25px;">CAREER CAPITAL DEPLOYMENT</h2>
+                <h2 style="color:var(--red); border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:25px;">PHASE 4: IDENTITY SCRUB</h2>
                 
                 <div class="task-item" id="tf_1">
                     <div class="task-header" onclick="toggleAccordion('tf_1')">
@@ -1405,7 +1436,8 @@
                         <div class="detail-block">
                             <div class="detail-title">REFRAMING FAILURE</div>
                             <div class="detail-body">
-                                <strong>Role Title:</strong> "Independent Salesforce Consultant" (Not "Founder").<br>
+                                <strong>The Trap:</strong> Recruiters hate "Founders" (too independent, hard to manage).<br>
+                                <strong>The Fix:</strong> Change your title on LinkedIn/Resume to "Principal Consultant".<br>
                                 <strong>Strategy:</strong> Convert your Agency "Attempts" into "Project Experience".<br>
                                 • "Architected FSC data model for Wealth Management workflows."<br>
                                 • "Implemented automated RMD compliance tracking using Flow."<br>
@@ -1418,58 +1450,110 @@
                 <div class="task-item" id="tf_2">
                     <div class="task-header" onclick="toggleAccordion('tf_2')">
                         <div class="check-target" onclick="toggleCheck(event, 'tf_2')"><div class="checkbox" style="border-color:var(--red);"></div></div>
-                        <div class="task-title">2. Interview Defense Prep</div>
+                        <div class="task-title">2. LinkedIn Algorithm Reset</div>
                         <span class="time-tag" style="color:var(--red); border-color:var(--red);">[DAY 2]</span>
                     </div>
                     <div class="task-details">
-                        <div class="target-box" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">TARGET: STORY SCRIPTED</div>
+                        <div class="target-box" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">TARGET: RECRUITER INBOUND</div>
                         <div class="detail-block">
-                            <div class="detail-title">STAR METHOD</div>
+                            <div class="detail-title">SIGNAL CHANGE</div>
                             <div class="detail-body">
-                                Prepare for: "Tell me about a time you failed."<br>
-                                <strong>Answer Script:</strong> "I operated a niche consultancy. While we built a robust technical foundation (FSC/Wealth), I realized I prefer the architecture/build phase over the sales cycle. I want to bring that technical rigor to [Company Name] where I can focus on delivery."
+                                1. <strong>Headline:</strong> Remove "Helping Agencies Scale". Change to "Salesforce FSC Architect | Wealth Management Specialist | 3x Certified".<br>
+                                2. <strong>Open to Work:</strong> Enable for "Remote" + "Contract". Set location preferences to "United States" (if platform allows) or "Remote (India)".
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <br>
+                <h2 style="color:var(--red); border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:25px; margin-top:20px;">PHASE 5: THE GLOBAL HUNT</h2>
+
                 <div class="task-item" id="tf_3">
                     <div class="task-header" onclick="toggleAccordion('tf_3')">
                         <div class="check-target" onclick="toggleCheck(event, 'tf_3')"><div class="checkbox" style="border-color:var(--red);"></div></div>
-                        <div class="task-title">3. Aggressive Application Cycle</div>
-                        <span class="time-tag" style="color:var(--red); border-color:var(--red);">[DAY 3+]</span>
+                        <div class="task-title">3. The "Middleman" Application Strategy</div>
+                        <span class="time-tag" style="color:var(--red); border-color:var(--red);">[WEEK 1]</span>
                     </div>
                     <div class="task-details">
-                        <div class="target-box" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">TARGET: 10 APPS / DAY</div>
+                        <div class="target-box" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">TARGET: 50 APPS / WEEK</div>
                         <div class="detail-block">
-                            <div class="detail-title">NUMBERS GAME</div>
+                            <div class="detail-title">WHERE TO LOOK</div>
                             <div class="detail-body">
-                                1. <strong>LinkedIn Jobs:</strong> Filter for "Salesforce Consultant" + "Remote".<br>
-                                2. <strong>Consultancies:</strong> Apply directly to the Partners you mapped in Phase 1. You already know their stack.<br>
-                                3. <strong>Msg Recruiters:</strong> "I am an FSC-certified Admin with specific experience in Wealth Management data migration. Available immediately."
+                                Do not apply to "Indian Service Based Companies" (TCS/Infosys) yet. Aim for Global EORs.<br>
+                                1. <strong>Toptal / Turing:</strong> Apply specifically for Salesforce roles. Pass their coding vet.<br>
+                                2. <strong>Crossover:</strong> High intensity, high pay ($100k/yr). Look for "Software Architect".<br>
+                                3. <strong>Wellfound (AngelList):</strong> Filter by "US Remote" + "Willing to hire contractors".
+                            </div>
+                        </div>
+                        <a href="https://wellfound.com/jobs" target="_blank" class="action-link"><div>OPEN WELLFOUND</div> <span>↗</span></a>
+                    </div>
+                </div>
+
+                <div class="task-item" id="tf_4">
+                    <div class="task-header" onclick="toggleAccordion('tf_4')">
+                        <div class="check-target" onclick="toggleCheck(event, 'tf_4')"><div class="checkbox" style="border-color:var(--red);"></div></div>
+                        <div class="task-title">4. Compliance Pre-Check (De-Risking)</div>
+                        <span class="time-tag" style="color:var(--red); border-color:var(--red);">[DAY 3]</span>
+                    </div>
+                    <div class="task-details">
+                        <div class="target-box" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">TARGET: DEEL/ONTOP ACCOUNT</div>
+                        <div class="detail-block">
+                            <div class="detail-title">REMOVE FRICTION</div>
+                            <div class="detail-body">
+                                US Companies fear "International Compliance". Solve it for them.<br>
+                                <strong>The Pitch:</strong> "I already have a profile on Deel/Ontop. You can hire me as a contractor with one click, and I handle my own taxes in India. No visa sponsorship needed."
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <br>
+                <h2 style="color:var(--red); border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:25px; margin-top:20px;">PHASE 6: INTERVIEW DEFENSE</h2>
+
+                <div class="task-item" id="tf_5">
+                    <div class="task-header" onclick="toggleAccordion('tf_5')">
+                        <div class="check-target" onclick="toggleCheck(event, 'tf_5')"><div class="checkbox" style="border-color:var(--red);"></div></div>
+                        <div class="task-title">5. The "Failure Narrative" Script</div>
+                        <span class="time-tag" style="color:var(--red); border-color:var(--red);">[CRITICAL]</span>
+                    </div>
+                    <div class="task-details">
+                        <div class="target-box" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">TARGET: MEMORIZE SCRIPT</div>
+                        <div class="detail-block">
+                            <div class="detail-title">STAR METHOD</div>
+                            <div class="detail-body">
+                                <strong>Question:</strong> "Why did you close your agency?"<br>
+                                <strong>Bad Answer:</strong> "I couldn't find clients."<br>
+                                <strong>Winning Answer:</strong> "I successfully built the technical foundation (SOPs, FSC Compliance, Wealth Models). However, I realized I am a Builder/Architect at heart, not a Salesman. I spent 80% of my time chasing leads rather than solving complex data problems. I want to join [Company] to get back to 100% technical execution."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
     </div>
 </div>
-
 <script>
-    // --- STATE & METADATA ---
+    // ─── SYSTEM CONFIGURATION & DATA ───
+    
+    // Total Execution Order (Used for Progress Calculation)
     const taskOrder = [
+        // P0: Genesis
         't0_1','t0_2','t0_3','t0_4','t0_5','t0_6',
+        // P1: Partner Channel
         't1_1','t1_2','t1_3','t1_4','t1_5','t1_6','t1_7',
+        // P2: Delivery OS
         't2_1','t2_2','t2_3','t2_4',
+        // P3: SaaS Exit
         't3_1','t3_2','t3_3','t3_4',
-        'tf_1', 'tf_2', 'tf_3' // Failsafe
+        // Failsafe (Independent Track)
+        'tf_1', 'tf_2', 'tf_3', 'tf_4', 'tf_5'
     ];
     
-    // Updated Logic Mapping
+    // HUD Metadata: Maps Task IDs to "Mission Control" Display Text
     const taskMeta = {
-        // Phase 0: Genesis
+        // --- PHASE 0 ---
         't0_1': { phase: 0, obj: 'SECURE WORKSTATION', btn: 'OPEN STEPS', go: 'p0', hrs: 5 },
         't0_2': { phase: 0, obj: 'ADMIN CERTIFICATION', btn: 'OPEN STUDY GUIDE', go: 'p0', hrs: 150 },
         't0_3': { phase: 0, obj: 'SUPERBADGES (EXP)', btn: 'OPEN TRAILHEAD', go: 'p0', hrs: 40 },
@@ -1477,33 +1561,36 @@
         't0_5': { phase: 0, obj: 'BUILD DEMO ORG', btn: 'VIEW SPECS', go: 'p0', hrs: 40 },
         't0_6': { phase: 0, obj: 'SYSTEMS & MINDSET', btn: 'READ ATOMIC', go: 'p0', hrs: 15 },
         
-        // Phase 1: Partner Channel
-        't1_1': { phase: 1, obj: 'CONTENT LEDGER', btn: 'WRITE ARTICLES', go: 'p1', hrs: 40 },
-        't1_2': { phase: 1, obj: 'PARTNER MAPPING', btn: 'OPEN FINDER', go: 'p1', hrs: 20 },
-        't1_3': { phase: 1, obj: 'CHANNEL OUTREACH', btn: 'VIEW SCRIPT', go: 'p1', hrs: 100 },
+        // --- PHASE 1 ---
+        't1_1': { phase: 1, obj: 'CASE STUDY FRAMEWORK', btn: 'WRITE PDF', go: 'p1', hrs: 40 },
+        't1_2': { phase: 1, obj: 'AUTHORITY SEEDING', btn: 'OPEN LINKEDIN', go: 'p1', hrs: 20 }, // Updated
+        't1_3': { phase: 1, obj: 'DIRECT AUDIT OFFERS', btn: 'VIEW SCRIPT', go: 'p1', hrs: 100 }, // Updated
         't1_4': { phase: 1, obj: 'LEGAL INFRA', btn: 'SETUP LLC', go: 'p1', hrs: 10 },
-        't1_5': { phase: 1, obj: 'ASSOCIATE CONTRACT', btn: 'NEGOTIATE', go: 'p1', hrs: 20 },
+        't1_5': { phase: 1, obj: 'PARTNER AGREEMENT', btn: 'DRAFT MSA', go: 'p1', hrs: 20 },
         't1_6': { phase: 1, obj: 'PAYMENT RAILS', btn: 'SETUP WISE', go: 'p1', hrs: 2 },
         't1_7': { phase: 1, obj: 'SALES ENGINEERING', btn: 'RESEARCH', go: 'p1', hrs: 10 },
         
-        // Phase 2: Delivery OS
+        // --- PHASE 2 ---
         't2_1': { phase: 2, obj: 'SOP LIBRARY', btn: 'OPEN NOTION', go: 'p2', hrs: 20 },
-        't2_2': { phase: 2, obj: 'ASYNC DELIVERY', btn: 'RECORD LOOM', go: 'p2', hrs: 10 },
+        't2_2': { phase: 2, obj: 'RETENTION DASHBOARD', btn: 'SETUP SHEET', go: 'p2', hrs: 10 }, // Updated
         't2_3': { phase: 2, obj: 'HIRE JUNIOR', btn: 'POST JOB', go: 'p2', hrs: 10 },
         't2_4': { phase: 2, obj: 'SYSTEMS ENGINEERING', btn: 'STUDY GITLAB', go: 'p2', hrs: 10 },
         
-        // Phase 3: SaaS Exit
-        't3_1': { phase: 3, obj: 'MARKET VALIDATION', btn: 'ASK PARTNERS', go: 'p3', hrs: 20 },
+        // --- PHASE 3 ---
+        't3_1': { phase: 3, obj: 'MOM TEST VALIDATION', btn: 'CALL PARTNERS', go: 'p3', hrs: 20 }, // Updated
         't3_2': { phase: 3, obj: 'MVP SCOPING', btn: 'DEFINE FEATURES', go: 'p3', hrs: 500 },
         't3_3': { phase: 3, obj: 'SECURITY REVIEW', btn: 'RUN CHECKMARX', go: 'p3', hrs: 100 },
-        't3_4': { phase: 3, obj: 'FOUNDER MINDSET', btn: 'READ MOM TEST', go: 'p3', hrs: 20 },
+        't3_4': { phase: 3, obj: 'FOUNDER MINDSET', btn: 'READ YC LIB', go: 'p3', hrs: 20 },
 
-        // Failsafe
-        'tf_1': { phase: 4, obj: 'RESUME REWRITE', btn: 'OPEN TEMPLATE', go: 'failsafe', hrs: 5 },
-        'tf_2': { phase: 4, obj: 'INTERVIEW PREP', btn: 'PRACTICE STAR', go: 'failsafe', hrs: 10 },
-        'tf_3': { phase: 4, obj: 'JOB HUNT', btn: 'APPLY NOW', go: 'failsafe', hrs: 50 }
+        // --- FAILSAFE (EMERGENCY) ---
+        'tf_1': { phase: 4, obj: 'IDENTITY SCRUB', btn: 'FIX RESUME', go: 'failsafe', hrs: 5 },
+        'tf_2': { phase: 4, obj: 'LINKEDIN RESET', btn: 'UPDATE PROFILE', go: 'failsafe', hrs: 2 },
+        'tf_3': { phase: 4, obj: 'GLOBAL APPLICATIONS', btn: 'OPEN WELLFOUND', go: 'failsafe', hrs: 40 },
+        'tf_4': { phase: 4, obj: 'COMPLIANCE SETUP', btn: 'OPEN DEEL', go: 'failsafe', hrs: 2 },
+        'tf_5': { phase: 4, obj: 'INTERVIEW DEFENSE', btn: 'MEMORIZE SCRIPT', go: 'failsafe', hrs: 10 }
     };
 
+    // Dashboard "Focus Mode" Settings
     const phaseConfig = {
         0: { title: 'MASTERY & DOMAIN', sub: '80% SUPERBADGES' },
         1: { title: 'PARTNER CHANNEL', sub: '80% OUTREACH' },
@@ -1512,19 +1599,47 @@
         4: { title: 'CAREER PIVOT', sub: 'EMERGENCY PROTOCOL' }
     };
 
-    // --- NAVIGATION ---
+    // ─── NAVIGATION LOGIC ───
+
     function go(id, closeMenu = true) {
+        // 1. Hide all sections
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
         
+        // 2. Show target section
+        const target = document.getElementById(id);
+        if(target) target.classList.add('active');
+        
+        // 3. Update Sidebar Active State
         document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
         const btns = document.querySelectorAll('.nav-btn');
         btns.forEach(btn => {
-            if(btn.getAttribute('onclick').includes(id)) btn.classList.add('active');
+            if(btn.getAttribute('onclick').includes(`'${id}'`)) {
+                btn.classList.add('active');
+            }
         });
 
+        // 4. Scroll to top
         document.querySelector('.scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
 
+        // 5. Update Top Bar Title
+        const titleMap = {
+            'dashboard': 'MISSION CONTROL',
+            'finance': 'FINANCIAL ENGINE',
+            'p0': 'P0 // GENESIS',
+            'p1': 'P1 // PARTNER CHANNEL',
+            'p2': 'P2 // DELIVERY OS',
+            'p3': 'P3 // SAAS EXIT',
+            'failsafe': '⚠ // FAILSAFE PROTOCOL'
+        };
+        const titleEl = document.getElementById('current_phase_title');
+        if(titleEl && titleMap[id]) {
+            titleEl.innerText = titleMap[id];
+            // Change title color to red if in failsafe
+            if(id === 'failsafe') titleEl.style.color = 'var(--red)';
+            else titleEl.style.color = 'var(--cyan)';
+        }
+
+        // 6. Mobile Sidebar Handling
         if(closeMenu) {
             document.getElementById('sidebar').classList.remove('active');
             const overlay = document.getElementById('sidebar_overlay');
@@ -1538,10 +1653,19 @@
         if(overlay) overlay.classList.toggle('active');
     }
 
-    function toggleTheme() { document.body.classList.toggle('light-mode'); }
-    function toggleAccordion(id) { document.getElementById(id).classList.toggle('open'); }
+    function toggleTheme() { 
+        document.body.classList.toggle('light-mode'); 
+    }
+    
+    function toggleAccordion(id) { 
+        // Only toggle if not locked (Visual feedback only, logic is in checkLocks)
+        const el = document.getElementById(id);
+        if(!el.classList.contains('locked')) {
+            el.classList.toggle('open'); 
+        }
+    }
+    // ─── GATEKEEPER LOGIC (STRICT MODE) ───
 
-    // --- FAILSAFE GATEKEEPER LOGIC ---
     function checkGatekeeper() {
         const checks = document.querySelectorAll('#failsafe_gatekeeper input[type="checkbox"]');
         const allChecked = Array.from(checks).every(c => c.checked);
@@ -1549,34 +1673,50 @@
         const gatekeeper = document.getElementById('failsafe_gatekeeper');
         
         if (allChecked) {
+            // Unlock Protocol
             content.classList.add('unlocked');
             gatekeeper.style.borderColor = 'var(--green)';
             gatekeeper.style.background = 'rgba(0, 255, 127, 0.05)';
-            saveState(); // Save checkbox state
         } else {
+            // LOCK PROTOCOL & WIPE PROGRESS (The "Failsafe" constraint)
             content.classList.remove('unlocked');
             gatekeeper.style.borderColor = 'var(--red)';
             gatekeeper.style.background = 'rgba(255, 42, 109, 0.02)';
+            
+            // Wipe Failsafe Progress if user backs out
+            const failsafeTasks = ['tf_1', 'tf_2', 'tf_3', 'tf_4', 'tf_5'];
+            let wiped = false;
+            failsafeTasks.forEach(id => {
+                const el = document.getElementById(id);
+                if(el && el.classList.contains('completed')) {
+                    el.classList.remove('completed');
+                    localStorage.setItem('capital_v16_' + id, 'false');
+                    wiped = true;
+                }
+            });
+            if(wiped) updateHUD(); // Refresh HUD to remove progress
         }
+        
+        // Save Gatekeeper State
+        checks.forEach((c, index) => {
+            localStorage.setItem('capital_v16_gate_' + index, c.checked);
+        });
     }
 
-    // --- INTELLIGENT LOCKING ENGINE ---
+    // ─── DEPENDENCY LOCKING SYSTEM ───
+
     function checkLocks() {
         let isPreviousComplete = true; 
         
-        for (let i = 0; i < taskOrder.length; i++) {
-            const taskId = taskOrder[i];
+        // 1. Check Main Phase Tasks
+        const mainTasks = taskOrder.filter(id => !id.startsWith('tf_'));
+        for (let i = 0; i < mainTasks.length; i++) {
+            const taskId = mainTasks[i];
             const el = document.getElementById(taskId);
             
-            // Failsafe tasks (tf_*) are never locked by previous main tasks
-            if(taskId.startsWith('tf_')) {
-                el.classList.remove('locked');
-                continue; 
-            }
-
             if (!isPreviousComplete) {
                 el.classList.add('locked');
-                const prevId = taskOrder[i-1];
+                const prevId = mainTasks[i-1];
                 if (prevId) {
                     const prevTaskEl = document.querySelector(`#${prevId} .task-title`);
                     const prevTaskTitle = prevTaskEl ? prevTaskEl.innerText : "Previous Task";
@@ -1591,12 +1731,31 @@
                 isPreviousComplete = false;
             }
         }
+
+        // 2. Check Failsafe Tasks (Independent Track)
+        let isFailSafePrevComplete = true;
+        const failTasks = taskOrder.filter(id => id.startsWith('tf_'));
+        for (let i = 0; i < failTasks.length; i++) {
+            const taskId = failTasks[i];
+            const el = document.getElementById(taskId);
+            
+            if (!isFailSafePrevComplete) {
+                el.classList.add('locked');
+            } else {
+                el.classList.remove('locked');
+            }
+            
+            if (!el.classList.contains('completed')) {
+                isFailSafePrevComplete = false;
+            }
+        }
     }
 
     function toggleCheck(e, id) {
         e.stopPropagation();
         const el = document.getElementById(id);
         
+        // Prevent clicking locked items
         if(el.classList.contains('locked')) {
             el.style.borderColor = 'var(--red)';
             setTimeout(() => el.style.borderColor = 'var(--border)', 300);
@@ -1605,12 +1764,14 @@
 
         el.classList.toggle('completed');
         
+        // Logic: If you uncheck a task, lock all subsequent tasks
         if (!el.classList.contains('completed')) {
-            const index = taskOrder.indexOf(id);
-            for(let i = index + 1; i < taskOrder.length; i++) {
-                if(!taskOrder[i].startsWith('tf_')) {
-                    document.getElementById(taskOrder[i]).classList.remove('completed');
-                }
+            const isFailsafe = id.startsWith('tf_');
+            const targetList = isFailsafe ? taskOrder.filter(t => t.startsWith('tf_')) : taskOrder.filter(t => !t.startsWith('tf_'));
+            
+            const index = targetList.indexOf(id);
+            for(let i = index + 1; i < targetList.length; i++) {
+                document.getElementById(targetList[i]).classList.remove('completed');
             }
         }
 
@@ -1619,27 +1780,43 @@
         checkLocks();
     }
 
-    // --- SYSTEM INTEGRITY CALCULATION ---
+    // ─── MISSION CONTROL (HUD) ───
+
     function updateIntegrity() {
-        const mainTasks = taskOrder.filter(id => !id.startsWith('tf_'));
-        const total = mainTasks.length;
+        // Only count Main Phase tasks for Integrity, unless Failsafe is active
+        const gateChecks = document.querySelectorAll('#failsafe_gatekeeper input[type="checkbox"]');
+        const isFailsafeActive = Array.from(gateChecks).every(c => c.checked);
+
+        const trackTasks = isFailsafeActive 
+            ? taskOrder.filter(id => id.startsWith('tf_')) 
+            : taskOrder.filter(id => !id.startsWith('tf_'));
+
+        const total = trackTasks.length;
         let completed = 0;
-        mainTasks.forEach(id => {
-            if(document.getElementById(id).classList.contains('completed')) {
-                completed++;
-            }
+        trackTasks.forEach(id => {
+            if(document.getElementById(id).classList.contains('completed')) completed++;
         });
-        const percent = Math.round((completed / total) * 100);
-        document.getElementById('sys_integrity').innerText = percent + "%";
+        
+        const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+        
+        const sysInt = document.getElementById('sys_integrity');
+        sysInt.innerText = percent + "%";
+        
+        if(isFailsafeActive) {
+            sysInt.style.color = 'var(--red)';
+            sysInt.nextElementSibling.innerText = "FAILSAFE COMPLETION";
+        } else {
+            sysInt.style.color = 'var(--green)';
+            sysInt.nextElementSibling.innerText = "TOTAL COMPLETION";
+        }
     }
 
-    // --- HUD INTELLIGENCE ---
     function updateHUD() {
         let totalHrs = 0;
         let activePhase = 0;
         let foundActive = false;
 
-        // Calc progress per phase
+        // 1. Calculate Phase Progress Bars
         for(let i=0; i<=3; i++) {
             const tasks = Object.keys(taskMeta).filter(k => taskMeta[k].phase === i);
             let done = 0;
@@ -1671,76 +1848,118 @@
         
         if(!foundActive) activePhase = 3;
 
-        if(document.getElementById('failsafe').classList.contains('active')) {
+        // 2. Check Failsafe Status
+        const gateChecks = document.querySelectorAll('#failsafe_gatekeeper input[type="checkbox"]');
+        const isFailsafeMode = Array.from(gateChecks).every(c => c.checked);
+
+        if(isFailsafeMode) {
              activePhase = 4;
+             document.getElementById('hud_hours').style.color = 'var(--red)';
+        } else {
+             document.getElementById('hud_hours').style.color = 'var(--gold)';
         }
 
+        // 3. Update HUD Cards
         const focusData = phaseConfig[activePhase];
         if(focusData) {
             document.getElementById('hud_focus_val').innerText = focusData.title;
             document.getElementById('hud_focus_sub').innerText = focusData.sub;
+            
+            if(activePhase === 4) {
+                document.getElementById('hud_focus_val').style.color = 'var(--red)';
+            } else {
+                document.getElementById('hud_focus_val').style.color = 'var(--cyan)';
+            }
         }
 
         document.getElementById('hud_hours').innerText = totalHrs + " / 1000 H";
-        
         updateIntegrity();
 
-        let nextTask = taskOrder.find(id => !document.getElementById(id).classList.contains('completed') && !id.startsWith('tf_'));
-        
+        // 4. Update "Next Objective" Box
+        // Find first incomplete task in current mode
+        let nextTask = null;
         if (activePhase === 4) {
-             document.getElementById('hud_obj_label').innerText = "SYSTEM ALERT";
-             document.getElementById('hud_obj_text').innerText = "EMERGENCY PROTOCOL";
-             document.getElementById('hud_action').innerText = "VIEW TASKS";
-             document.getElementById('hud_action').setAttribute('onclick', "");
-        } else if (nextTask) {
-            const meta = taskMeta[nextTask];
-            document.getElementById('hud_obj_label').innerText = "OBJECTIVE // " + (meta.phase === 0 ? "GENESIS" : "EXECUTION");
-            document.getElementById('hud_obj_text').innerText = meta.obj;
-            const btn = document.getElementById('hud_action');
-            btn.innerText = meta.btn;
-            btn.setAttribute('onclick', `go('${meta.go}', false); setTimeout(() => { document.getElementById('${nextTask}').scrollIntoView({behavior:'smooth', block:'center'}); if(!document.getElementById('${nextTask}').classList.contains('open')) toggleAccordion('${nextTask}'); }, 300);`);
+             nextTask = taskOrder.find(id => id.startsWith('tf_') && !document.getElementById(id).classList.contains('completed'));
         } else {
-             document.getElementById('hud_obj_label').innerText = "SYSTEM STATUS";
-             document.getElementById('hud_obj_text').innerText = "ALL SYSTEMS GO";
-             document.getElementById('hud_action').innerText = "RESET SYSTEM";
-             document.getElementById('hud_action').setAttribute('onclick', "if(confirm('Reset all progress?')) { localStorage.clear(); location.reload(); }");
+             nextTask = taskOrder.find(id => !id.startsWith('tf_') && !document.getElementById(id).classList.contains('completed'));
+        }
+        
+        const objLabel = document.getElementById('hud_obj_label');
+        const objText = document.getElementById('hud_obj_text');
+        const objBtn = document.getElementById('hud_action');
+
+        if (nextTask) {
+            const meta = taskMeta[nextTask];
+            objLabel.innerText = "OBJECTIVE // " + (activePhase === 4 ? "FAILSAFE" : (meta.phase === 0 ? "GENESIS" : "EXECUTION"));
+            objText.innerText = meta.obj;
+            objBtn.innerText = meta.btn;
+            
+            // Auto-scroll logic
+            objBtn.setAttribute('onclick', `go('${meta.go}', false); setTimeout(() => { document.getElementById('${nextTask}').scrollIntoView({behavior:'smooth', block:'center'}); if(!document.getElementById('${nextTask}').classList.contains('open')) toggleAccordion('${nextTask}'); }, 300);`);
+            
+            if(activePhase === 4) {
+                objLabel.style.color = 'var(--red)';
+                objBtn.style.background = 'var(--red)';
+                objBtn.style.color = 'white';
+            } else {
+                objLabel.style.color = 'var(--cyan)';
+                objBtn.style.background = 'var(--cyan)';
+                objBtn.style.color = 'var(--bg-void)';
+            }
+
+        } else {
+             objLabel.innerText = "SYSTEM STATUS";
+             objText.innerText = "ALL SYSTEMS GO";
+             objBtn.innerText = "RESET SYSTEM";
+             objBtn.setAttribute('onclick', "if(confirm('Reset all progress?')) { localStorage.clear(); location.reload(); }");
         }
     }
 
-    // --- SYSTEM CORE ---
+    // ─── DATA PERSISTENCE ───
+
     function saveState() {
+        // Save Tasks
         taskOrder.forEach(id => {
             const completed = document.getElementById(id).classList.contains('completed');
-            localStorage.setItem('capital_v15_9_' + id, completed); 
+            localStorage.setItem('capital_v16_' + id, completed); 
         });
         
-        // Save Gatekeeper state
-        const checks = document.querySelectorAll('#failsafe_gatekeeper input[type="checkbox"]');
-        checks.forEach((c, index) => {
-            localStorage.setItem('capital_v15_9_failcheck_' + index, c.checked);
+        // Save Financial Inputs
+        const inputs = document.querySelectorAll('input[type="number"]');
+        inputs.forEach(inp => {
+            localStorage.setItem('capital_v16_' + inp.id, inp.value);
         });
     }
 
     function loadState() {
+        // Load Tasks
         taskOrder.forEach(id => {
-            if(localStorage.getItem('capital_v15_9_' + id) === 'true') {
+            if(localStorage.getItem('capital_v16_' + id) === 'true') {
                 document.getElementById(id).classList.add('completed');
             }
         });
         
-        // Load Gatekeeper state
+        // Load Gatekeeper
         const checks = document.querySelectorAll('#failsafe_gatekeeper input[type="checkbox"]');
         checks.forEach((c, index) => {
-            if(localStorage.getItem('capital_v15_9_failcheck_' + index) === 'true') {
+            if(localStorage.getItem('capital_v16_gate_' + index) === 'true') {
                 c.checked = true;
             }
         });
-        // Run check to open gate if previously unlocked
-        checkGatekeeper();
 
+        // Load Financial Inputs
+        const inputs = document.querySelectorAll('input[type="number"]');
+        inputs.forEach(inp => {
+            const val = localStorage.getItem('capital_v16_' + inp.id);
+            if(val) inp.value = val;
+        });
+
+        checkGatekeeper(); // Set initial UI state for Failsafe
         checkLocks();
         updateHUD();
     }
+
+    // ─── CALCULATORS ───
 
     function ftab(e, id) {
         document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
@@ -1749,7 +1968,6 @@
         if(e && e.target) e.target.classList.add('active');
     }
     
-    // Calculators
     function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
     function t(id, txt) { document.getElementById(id).innerText = txt; }
     
@@ -1759,6 +1977,7 @@
         t('out_f1_wk', '$' + wk.toLocaleString()); 
         t('out_f1_mo', '$' + mo.toLocaleString());
         t('out_f1_yr', '$' + (wk * 48).toLocaleString()); 
+        saveState();
     }
     
     function c2() { 
@@ -1766,21 +1985,26 @@
         let cost = (v('in_f2_staff') * v('in_f2_sal')) + v('in_f2_ads');
         t('out_f2_rev', '$' + rev.toLocaleString()); t('out_f2_cost', '-$' + cost.toLocaleString());
         t('out_f2_net', '$' + (rev - cost).toLocaleString()); t('out_f2_run', '$' + (rev * 12).toLocaleString());
+        saveState();
     }
     
     function c3() { 
         let arr = v('in_f3_lic') * v('in_f3_users');
         t('out_f3_arr', '$' + (arr/1000000).toFixed(2) + 'M'); t('out_f3_exit', '$' + ((arr * v('in_f3_mult'))/1000000).toFixed(2) + 'M'); 
+        saveState();
     }
 
-    // --- INIT ---
+    // ─── INITIALIZATION ───
+
     window.onload = function() {
         loadState();
         c1(); c2(); c3();
         
+        // Live Clock
         setInterval(() => {
-            document.getElementById('clock_nyc').innerText = new Date().toLocaleTimeString('en-US', {timeZone:'America/Los_Angeles', hour12: false, hour: '2-digit', minute:'2-digit', second:'2-digit'});
-            document.getElementById('clock_ist').innerText = new Date().toLocaleTimeString('en-US', {timeZone:'Asia/Kolkata', hour12: false, hour: '2-digit', minute:'2-digit', second:'2-digit'});
+            const now = new Date();
+            document.getElementById('clock_nyc').innerText = now.toLocaleTimeString('en-US', {timeZone:'America/Los_Angeles', hour12: false, hour: '2-digit', minute:'2-digit'});
+            document.getElementById('clock_ist').innerText = now.toLocaleTimeString('en-US', {timeZone:'Asia/Kolkata', hour12: false, hour: '2-digit', minute:'2-digit'});
         }, 1000);
     }
 </script>
