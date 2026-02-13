@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CAPITAL // OS v17.2 [FAILSAFE FIX]</title>
+    <title>CAPITAL // OS v17.3 [FAILSAFE FIX]</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;800&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -64,6 +64,47 @@
         ::-webkit-scrollbar-thumb { background: var(--border-active); border-radius: 2px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
 
+        /* ─── CONFIRMATION MODAL ─── */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 999;
+            display: none; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        
+        .modal-box {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            width: 90%; max-width: 450px; padding: 30px; text-align: center;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5); transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border-left: 4px solid var(--cyan);
+        }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        
+        .modal-box.danger { border-left-color: var(--red); border-color: var(--red); box-shadow: 0 0 30px var(--red-dim); }
+        
+        .modal-title { font-family: var(--font-code); font-size: 18px; font-weight: 800; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; }
+        .modal-box.danger .modal-title { color: var(--red); }
+        .modal-box.standard .modal-title { color: var(--cyan); }
+        
+        .modal-txt { color: var(--text-dim); font-size: 14px; margin-bottom: 25px; line-height: 1.6; }
+        
+        .modal-actions { display: flex; gap: 10px; justify-content: center; }
+        
+        .modal-btn {
+            font-family: var(--font-code); font-size: 12px; font-weight: 700; padding: 10px 20px;
+            border: 1px solid var(--border); background: transparent; color: var(--text-dim);
+            cursor: pointer; text-transform: uppercase; transition: 0.2s;
+        }
+        .modal-btn:hover { color: var(--text-main); border-color: var(--text-main); }
+        
+        .modal-btn.confirm-danger { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+        .modal-btn.confirm-danger:hover { background: var(--red); color: #fff; }
+        
+        .modal-btn.confirm-standard { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-dim); }
+        .modal-btn.confirm-standard:hover { background: var(--cyan); color: #000; }
+
         /* ─── SIDEBAR ─── */
         .sidebar {
             width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border);
@@ -90,7 +131,6 @@
             margin-right: 12px; box-shadow: 0 0 10px var(--green); animation: blink 2s infinite;
         }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-
         .nav-list { flex: 1; overflow-y: auto; padding: 25px 0; }
         .nav-label {
             padding: 0 25px 8px; font-family: var(--font-code); font-size: 10px; color: var(--text-dim);
@@ -107,13 +147,22 @@
         .nav-btn:hover { color: var(--text-main); background: var(--bg-hover); padding-left: 30px; }
         .nav-btn.active { color: var(--cyan); background: var(--cyan-dim); border-left-color: var(--cyan); font-weight: 700; }
         
-        /* ─── FAILSAFE TOGGLE STYLES (STRICT OVERRIDES) ─── */
+        /* ─── FAILSAFE TOGGLE STYLES (STRICT CONTAINMENT) ─── */
+        /* Only sidebar border turns red */
         body.failsafe-active .sidebar { border-right-color: var(--red); }
-        body.failsafe-active .nav-btn.active { color: var(--red) !important; background: var(--red-dim) !important; border-left-color: var(--red) !important; }
+        
+        /* The specific failsafe button logic */
+        body.failsafe-active .nav-btn.failsafe-trigger { 
+            color: var(--red) !important; 
+            background: var(--red-dim) !important; 
+            border-left-color: var(--red) !important;
+            font-weight: 800;
+        }
+        
         body.failsafe-active .brand span { color: var(--red); }
         body.failsafe-active .live-dot { background: var(--red); box-shadow: 0 0 10px var(--red); }
         
-        /* Force Red Scrollbar in Failsafe */
+        /* Force Red Scrollbar ONLY in Failsafe Mode */
         body.failsafe-active ::-webkit-scrollbar-thumb { background: var(--red); }
 
         .prog-tag {
@@ -136,22 +185,44 @@
         
         .top-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; }
 
+        /* ─── MISSION CONTROL BUTTON (UPDATED LOGIC) ─── */
         .db-btn {
-            background: var(--cyan-dim); border: 2px solid var(--cyan); color: var(--cyan);
-            font-family: var(--font-code); font-size: 14px; font-weight: 800;
-            padding: 12px 35px; text-transform: uppercase; letter-spacing: 1.5px;
+            /* Base State: Visible, outlined, but quiet */
+            background: transparent; 
+            border: 1px solid var(--border-active); 
+            color: var(--text-dim);
+            font-family: var(--font-code); font-size: 14px; font-weight: 700;
+            padding: 10px 30px; text-transform: uppercase; letter-spacing: 1.5px;
             cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 12px;
-            border-radius: 100px; box-shadow: 0 0 15px var(--cyan-dim);
+            border-radius: 100px; 
         }
-        .db-btn:hover { box-shadow: 0 0 30px var(--cyan); transform: scale(1.02); background: rgba(0, 240, 255, 0.15); }
-        .db-btn span { color: var(--green); font-size: 18px; animation: pulse 2s infinite; }
         
-        /* STRICT FAILSAFE BUTTON OVERRIDE */
-        body.failsafe-active .db-btn {
-            background: var(--red-dim) !important; border-color: var(--red) !important; color: var(--red) !important;
+        .db-btn:hover {
+            border-color: var(--cyan); color: var(--cyan); background: var(--bg-hover);
+            transform: translateY(-1px);
+        }
+        
+        /* Active State: The "Permanent Glow" requested, only when on Dashboard */
+        .db-btn.active {
+            background: var(--cyan-dim); 
+            border: 2px solid var(--cyan); 
+            color: var(--cyan);
+            font-weight: 800;
+            padding: 12px 35px; /* Slight resize for emphasis */
+            box-shadow: 0 0 15px var(--cyan-dim);
+        }
+        
+        /* Strict Red Override only if Failsafe is active AND user is looking at dashboard/failsafe header */
+        body.failsafe-active .db-btn.active {
+            background: var(--red-dim) !important; 
+            border-color: var(--red) !important; 
+            color: var(--red) !important;
             box-shadow: 0 0 15px var(--red-dim) !important;
         }
-        body.failsafe-active .db-btn span { color: var(--red) !important; }
+
+        .db-btn span { font-size: 18px; transition: color 0.3s; }
+        .db-btn.active span { color: var(--green); animation: pulse 2s infinite; }
+        body.failsafe-active .db-btn.active span { color: var(--red) !important; }
 
         .mini-db-btn {
             background: transparent; border: 1px solid var(--border); color: var(--text-dim);
@@ -165,6 +236,8 @@
         .mobile-live-dot { display: none; }
 
         .top-title { font-family: var(--font-code); font-size: 12px; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+        
+        /* Only override title color if in Failsafe mode */
         body.failsafe-active .top-title { color: var(--red) !important; }
 
         .theme-btn {
@@ -175,7 +248,6 @@
         .theme-btn:hover { background: var(--bg-hover); border-color: var(--text-dim); }
 
         .scroll-area { flex: 1; overflow-y: auto; padding: 40px; -webkit-overflow-scrolling: touch; position: relative; }
-
         /* ─── ANIMATION ENGINE ─── */
         .section { 
             display: none; width: 100%;
@@ -247,12 +319,24 @@
         .alert-content h4 { color: var(--cyan); font-family: var(--font-code); font-size: 13px; margin-bottom: 10px; letter-spacing: 2px; }
         .alert-content p { font-size: 28px; font-weight: 700; color: var(--text-main); line-height: 1.1; letter-spacing: -1px; }
         
+        /* Failsafe overrides for Alert Box */
+        body.failsafe-active .alert-box {
+            border-left-color: var(--red);
+            background: linear-gradient(90deg, rgba(255,42,109,0.05) 0%, rgba(0,0,0,0) 100%);
+        }
+        body.failsafe-active .alert-box:hover { border-color: var(--red); }
+        body.failsafe-active .alert-content h4 { color: var(--red); }
+        
         .exec-btn {
             background: var(--cyan); color: var(--text-inv); border: none; padding: 18px 36px;
             font-family: var(--font-code); font-weight: 800; font-size: 14px; cursor: pointer;
             text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; 
         }
         .exec-btn:hover { background: var(--text-main); color: var(--bg-void); box-shadow: 0 0 25px var(--cyan); }
+        
+        /* Failsafe override for Action Button */
+        body.failsafe-active .exec-btn { background: var(--red) !important; box-shadow: none !important; }
+        body.failsafe-active .exec-btn:hover { background: #fff !important; color: var(--red) !important; box-shadow: 0 0 25px var(--red) !important; }
 
         /* FAILSAFE COMPONENTS */
         .gatekeeper-panel {
@@ -272,7 +356,6 @@
         }
         .gatekeeper-panel.minimized:hover::after { content: 'WARNING: RESETTING WIPES PROGRESS'; color: var(--red); }
         .gatekeeper-panel.minimized:hover { border-color: var(--red); }
-
         .gatekeeper-title {
             color: var(--red); font-family: var(--font-code); font-size: 16px; font-weight: 800;
             margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;
@@ -294,6 +377,8 @@
         .task-item:hover { border-color: var(--border-active); background: var(--bg-hover); }
         .task-item.locked { opacity: 0.6; border-color: var(--border); filter: grayscale(100%); }
         .task-item.locked:hover { border-color: var(--red); background: rgba(255, 42, 109, 0.05); cursor: not-allowed; }
+        .task-item.locked.failsafe-task:hover { border-color: var(--red); }
+        
         .task-header { padding: 20px 25px; display: flex; align-items: center; gap: 20px; cursor: pointer; user-select: none; }
         
         .checkbox {
@@ -389,6 +474,17 @@
 </head>
 <body>
 
+<div class="modal-overlay" id="modal_overlay">
+    <div class="modal-box" id="modal_box">
+        <div class="modal-title" id="modal_title">CONFIRMATION</div>
+        <div class="modal-txt" id="modal_txt">Are you sure?</div>
+        <div class="modal-actions">
+            <button class="modal-btn" onclick="closeModal()">CANCEL</button>
+            <button class="modal-btn" id="modal_confirm_btn">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
 <div class="sidebar-overlay" id="sidebar_overlay" onclick="toggleSidebar()"></div>
 <nav class="sidebar" id="sidebar">
     <div class="brand">
@@ -409,7 +505,7 @@
         <button class="nav-btn" onclick="go('p3')">P3 // SAAS EXIT <span class="prog-tag" id="nav_p3">0%</span></button>
         
         <div class="nav-label" style="color:var(--red); margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">CONTINGENCY</div>
-        <button class="nav-btn" onclick="toggleFailsafe()" style="color:var(--red); border-left-color:var(--red-dim);">⚠ // FAILSAFE PROTOCOL</button>
+        <button class="nav-btn failsafe-trigger" onclick="requestFailsafeToggle()" style="color:var(--red); border-left-color:transparent;">⚠ // FAILSAFE PROTOCOL</button>
     </div>
 </nav>
 
@@ -420,7 +516,6 @@
             <div class="live-dot mobile-live-dot"></div>
             <div class="top-title" id="current_phase_title">SYSTEM ACTIVE</div>
         </div>
-        
         <div class="top-center">
             <button class="db-btn" onclick="go('dashboard')">
                 <span>◉</span> MISSION CONTROL
@@ -1225,7 +1320,7 @@
         </div>
         <div id="failsafe" class="section">
             <div class="phase-header-grid" style="border-bottom-color:var(--red);">
-                <span class="pill" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">EMERGENCY MODE</span>
+                <span class="pill" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">EMERGENCY PROTOCOL</span>
                 <h1 style="color:var(--red);">PROTOCOL: PIVOT</h1>
                 <span class="earning-badge" style="border-color:var(--red); background:rgba(255,42,109,0.05); color:var(--red);">TARGET: $100K/YR REMOTE</span>
             </div>
@@ -1372,9 +1467,8 @@
         </div>
     </div>
 </div>
-
 <script>
-    // --- METADATA ---
+    // --- METADATA & CONFIG ---
     const taskOrder = [
         't0_1','t0_2','t0_3','t0_4','t0_5','t0_6',
         't1_1','t1_2','t1_3','t1_4','t1_5','t1_6','t1_7',
@@ -1421,33 +1515,70 @@
         4: { title: 'CAREER PIVOT', sub: 'EMERGENCY PROTOCOL' }
     };
 
-    // --- NAVIGATION LOGIC ---
+    // --- NAVIGATION & INTERCEPTION ---
+    let pendingDestination = null;
+
     function go(id, closeMenu = true) {
-        // 1. Determine Animation Direction
-        // If we are entering 'failsafe', slide right.
-        // If we are leaving 'failsafe' (going to 'dashboard' etc), slide left.
-        // Otherwise (switching between p0/p1/p2), standard fade.
+        const isFailsafeActive = document.body.classList.contains('failsafe-active');
+        const targetIsFailsafe = (id === 'failsafe');
+
+        // 1. INTERCEPTION LOGIC
+        if (isFailsafeActive && !targetIsFailsafe) {
+            // Trying to LEAVE Failsafe -> Confirm First
+            pendingDestination = id;
+            showModal('exit');
+            if(closeMenu) toggleSidebar(false);
+            return; // STOP execution
+        } 
         
+        if (!isFailsafeActive && targetIsFailsafe) {
+            // Trying to ENTER Failsafe -> Confirm First
+            pendingDestination = id;
+            showModal('enter');
+            if(closeMenu) toggleSidebar(false);
+            return; // STOP execution
+        }
+        
+        // 2. STANDARD NAVIGATION (If checks pass)
+        executeNavigation(id, closeMenu);
+    }
+
+    // Called strictly via the Sidebar "FAILSAFE" button
+    function requestFailsafeToggle() {
+        const isFailsafeActive = document.body.classList.contains('failsafe-active');
+        
+        if (isFailsafeActive) {
+            // User clicked Failsafe button while IN Failsafe -> Just close menu, do nothing else
+            toggleSidebar(false);
+        } else {
+            // User wants to ENTER Failsafe -> Trigger Confirmation
+            pendingDestination = 'failsafe';
+            showModal('enter');
+            toggleSidebar(false);
+        }
+    }
+
+    function executeNavigation(id, closeMenu) {
         const isFailsafeTarget = (id === 'failsafe');
         const wasFailsafeActive = document.body.classList.contains('failsafe-active');
         
+        // Animation Direction
         let animClass = 'fade-in';
         if (isFailsafeTarget) animClass = 'slide-enter-right';
         else if (wasFailsafeActive && !isFailsafeTarget) animClass = 'slide-enter-left';
 
-        // 2. Hide all sections & reset animations
+        // Hide all sections
         document.querySelectorAll('.section').forEach(el => {
             el.classList.remove('active', 'slide-enter-right', 'slide-enter-left', 'fade-in');
         });
         
-        // 3. Activate Target
+        // Activate Target
         const target = document.getElementById(id);
         target.classList.add(animClass);
-        // Force reflow
-        void target.offsetWidth;
+        void target.offsetWidth; // Force Reflow
         target.classList.add('active');
         
-        // 4. Update Sidebar Highlights
+        // Sidebar Highlights
         document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
         if (!isFailsafeTarget) {
              const btns = document.querySelectorAll('.nav-btn');
@@ -1457,13 +1588,19 @@
             });
         }
 
+        // Mission Control Button Glow Logic
+        const dbBtns = document.querySelectorAll('.db-btn');
+        if (id === 'dashboard') {
+            dbBtns.forEach(btn => btn.classList.add('active'));
+        } else {
+            dbBtns.forEach(btn => btn.classList.remove('active'));
+        }
+
         document.querySelector('.scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
 
-        // 5. Title & Theme Handling handled by toggleFailsafeWrapper mostly, but ensured here
+        // Phase Title Update
         const phaseTitle = isFailsafeTarget ? "EMERGENCY PROTOCOL" : "SYSTEM ACTIVE";
-        const titleEl = document.getElementById('current_phase_title');
-        titleEl.innerText = phaseTitle;
-        // Color is handled by CSS body.failsafe-active logic now
+        document.getElementById('current_phase_title').innerText = phaseTitle;
 
         if(closeMenu) {
             document.getElementById('sidebar').classList.remove('active');
@@ -1473,23 +1610,64 @@
         updateHUD();
     }
 
-    function toggleFailsafe() {
-        const body = document.body;
+    // --- MODAL LOGIC ---
+    function showModal(type) {
+        const modal = document.getElementById('modal_overlay');
+        const box = document.getElementById('modal_box');
+        const title = document.getElementById('modal_title');
+        const txt = document.getElementById('modal_txt');
+        const btn = document.getElementById('modal_confirm_btn');
+
+        modal.classList.add('active');
         
-        if (body.classList.contains('failsafe-active')) {
-            // EXIT FAILSAFE
-            body.classList.remove('failsafe-active');
-            go('dashboard');
+        // Reset classes
+        box.classList.remove('danger', 'standard');
+        btn.classList.remove('confirm-danger', 'confirm-standard');
+
+        if (type === 'enter') {
+            // ENTERING FAILSAFE (Red Warning)
+            box.classList.add('danger');
+            title.innerText = "WARNING: PROTOCOL PIVOT";
+            txt.innerHTML = "You are activating <strong>FAILSAFE MODE</strong>.<br>This assumes the primary mission has failed.<br>Do you wish to proceed?";
+            btn.innerText = "ACTIVATE FAILSAFE";
+            btn.classList.add('confirm-danger');
+            btn.onclick = function() {
+                document.body.classList.add('failsafe-active'); // Enable Red
+                executeNavigation('failsafe', false);
+                closeModal();
+            };
         } else {
-            // ENTER FAILSAFE
-            body.classList.add('failsafe-active');
-            go('failsafe');
+            // LEAVING FAILSAFE (Standard Return)
+            box.classList.add('standard');
+            title.innerText = "SECURITY ALERT";
+            txt.innerHTML = "You are exiting Emergency Protocol.<br>Returning to <strong>MISSION CONTROL</strong>.<br>Confirm restore?";
+            btn.innerText = "RESTORE SYSTEMS";
+            btn.classList.add('confirm-standard');
+            btn.onclick = function() {
+                document.body.classList.remove('failsafe-active'); // Disable Red
+                executeNavigation(pendingDestination, false);
+                closeModal();
+            };
         }
     }
 
-    function toggleSidebar() { 
-        document.getElementById('sidebar').classList.toggle('active'); 
-        document.getElementById('sidebar_overlay').classList.toggle('active');
+    function closeModal() {
+        document.getElementById('modal_overlay').classList.remove('active');
+        pendingDestination = null;
+    }
+
+    // --- CORE UI ---
+    function toggleSidebar(forceState) { 
+        const sb = document.getElementById('sidebar');
+        const ov = document.getElementById('sidebar_overlay');
+        
+        if (forceState === false) {
+            sb.classList.remove('active');
+            ov.classList.remove('active');
+        } else {
+            sb.classList.toggle('active'); 
+            ov.classList.toggle('active');
+        }
     }
 
     function toggleTheme() { document.body.classList.toggle('light-mode'); }
@@ -1649,7 +1827,7 @@
             valEl.innerText = focusData.title;
             subEl.innerText = focusData.sub;
             
-            // STRICT COLOR RESET: If not failsafe, force Cyan
+            // STRICT COLOR RESET
             if(activePhase === 4) {
                  valEl.style.color = 'var(--red)';
             } else {
@@ -1681,24 +1859,39 @@
             hudLbl.innerText = "OBJECTIVE // " + (activePhase === 4 ? "EMERGENCY" : (meta.phase === 0 ? "GENESIS" : "EXECUTION"));
             hudTxt.innerText = meta.obj;
             hudBtn.innerText = meta.btn;
+            
+            // Strict Button Assignment
             hudBtn.onclick = function() {
-                if(activePhase === 4 && !isFailsafeMode) toggleFailsafe();
-                else if(activePhase !== 4) go(meta.go, false); 
-                
-                setTimeout(() => { 
-                    const el = document.getElementById(nextTask);
-                    el.scrollIntoView({behavior:'smooth', block:'center'}); 
-                    if(!el.classList.contains('open')) toggleAccordion(nextTask); 
-                }, 300);
+                // If in Failsafe, but objective is NOT failsafe (rare state bug), force exit
+                if(activePhase === 4 && !meta.go.includes('failsafe')) {
+                     go(meta.go, false); // This triggers modal
+                } 
+                // If NOT in Failsafe, but objective IS failsafe (user failed everything), force enter
+                else if(activePhase !== 4 && meta.go === 'failsafe') {
+                     pendingDestination = 'failsafe'; showModal('enter');
+                }
+                else {
+                    // Normal nav within same context
+                    go(meta.go, false); 
+                    setTimeout(() => { 
+                        const el = document.getElementById(nextTask);
+                        if(el) {
+                            el.scrollIntoView({behavior:'smooth', block:'center'}); 
+                            if(!el.classList.contains('open')) toggleAccordion(nextTask);
+                        }
+                    }, 300);
+                }
             };
             
             // STRICT COLOR RESET
             if(activePhase === 4) {
                 hudLbl.style.color = 'var(--red)';
                 hudBtn.style.background = 'var(--red)';
+                hudBtn.style.color = '#fff';
             } else {
                 hudLbl.style.color = 'var(--cyan)';
                 hudBtn.style.background = 'var(--cyan)';
+                hudBtn.style.color = '#000';
             }
 
         } else if (activePhase === 4) {
@@ -1730,6 +1923,9 @@
         }
         checkLocks();
         updateHUD();
+        
+        // Initialize Dashboard Button State
+        document.querySelectorAll('.db-btn').forEach(btn => btn.classList.add('active'));
     }
 
     function ftab(e, id) {
