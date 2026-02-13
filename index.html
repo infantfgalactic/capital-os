@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CAPITAL // OS v17.1 [FINAL]</title>
+    <title>CAPITAL // OS v17.2 [FAILSAFE FIX]</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;800&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -27,7 +27,7 @@
             --gold: #ffd700;  /* MASTERY / HUMAN INPUT */
             --gold-dim: rgba(255, 215, 0, 0.05);
             
-            --green: #00FF7F; /* STOCK MARKET GAIN (SpringGreen) */
+            --green: #00FF7F; /* GAIN */
             
             /* FAILSAFE / EMERGENCY VARS */
             --red: #ff2a6d;   
@@ -40,40 +40,21 @@
 
         /* ─── DAY MODE ─── */
         body.light-mode {
-            --bg-void: #e0e0e0;
-            --bg-panel: #f0f0f0;
-            --bg-card: #ffffff;
-            --bg-hover: #e5e5e5;
-            
-            --border: #ccc;
-            --border-active: #999;
-            
-            --text-main: #111;
-            --text-dim: #555;
-            --text-inv: #fff;
-
-            --cyan: #0066ff; 
-            --cyan-dim: rgba(0, 102, 255, 0.1);
-            --gold: #d4a000;
-            --gold-dim: rgba(212, 160, 0, 0.05);
+            --bg-void: #e0e0e0; --bg-panel: #f0f0f0; --bg-card: #ffffff; --bg-hover: #e5e5e5;
+            --border: #ccc; --border-active: #999;
+            --text-main: #111; --text-dim: #555; --text-inv: #fff;
+            --cyan: #0066ff; --cyan-dim: rgba(0, 102, 255, 0.1);
+            --gold: #d4a000; --gold-dim: rgba(212, 160, 0, 0.05);
             --green: #00c853; 
-            --red: #d50000;
-            --red-dim: rgba(213, 0, 0, 0.05);
-            --red-glow: rgba(213, 0, 0, 0.2);
+            --red: #d50000; --red-dim: rgba(213, 0, 0, 0.05); --red-glow: rgba(213, 0, 0, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         
         body {
-            background-color: var(--bg-void);
-            color: var(--text-main);
-            font-family: var(--font-head);
-            font-size: 15px;
-            line-height: 1.5;
-            height: 100vh;
-            height: 100dvh; 
-            display: flex;
-            overflow: hidden;
+            background-color: var(--bg-void); color: var(--text-main);
+            font-family: var(--font-head); font-size: 15px; line-height: 1.5;
+            height: 100vh; height: 100dvh; display: flex; overflow: hidden;
             transition: background 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.4s;
         }
 
@@ -85,63 +66,35 @@
 
         /* ─── SIDEBAR ─── */
         .sidebar {
-            width: 260px;
-            background: var(--bg-panel);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            z-index: 100;
+            width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; flex-shrink: 0; z-index: 100;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .sidebar-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(2px);
-            z-index: 90;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 90;
+            display: none; opacity: 0; transition: opacity 0.3s ease;
         }
         .sidebar-overlay.active { display: block; opacity: 1; }
 
         .brand {
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 25px;
-            border-bottom: 1px solid var(--border);
-            font-family: var(--font-code);
-            font-weight: 800;
-            font-size: 14px;
-            letter-spacing: 1px;
-            color: var(--text-main);
-            white-space: pre; 
+            height: 70px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 25px; border-bottom: 1px solid var(--border); font-family: var(--font-code);
+            font-weight: 800; font-size: 14px; letter-spacing: 1px; color: var(--text-main); white-space: pre; 
         }
         .brand span { color: var(--gold); }
         
         .live-dot {
-            width: 8px; height: 8px; background: var(--green);
-            border-radius: 50%; margin-right: 12px;
-            box-shadow: 0 0 10px var(--green);
-            animation: blink 2s infinite;
+            width: 8px; height: 8px; background: var(--green); border-radius: 50%; 
+            margin-right: 12px; box-shadow: 0 0 10px var(--green); animation: blink 2s infinite;
         }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
         .nav-list { flex: 1; overflow-y: auto; padding: 25px 0; }
-        
         .nav-label {
-            padding: 0 25px 8px;
-            font-family: var(--font-code);
-            font-size: 10px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 25px;
-            font-weight: 700;
+            padding: 0 25px 8px; font-family: var(--font-code); font-size: 10px; color: var(--text-dim);
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 25px; font-weight: 700;
         }
 
         .nav-btn {
@@ -152,16 +105,16 @@
             transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .nav-btn:hover { color: var(--text-main); background: var(--bg-hover); padding-left: 30px; }
-        .nav-btn.active { 
-            color: var(--cyan); background: var(--cyan-dim); 
-            border-left-color: var(--cyan); font-weight: 700;
-        }
+        .nav-btn.active { color: var(--cyan); background: var(--cyan-dim); border-left-color: var(--cyan); font-weight: 700; }
         
-        /* ─── FAILSAFE TOGGLE STYLES ─── */
-        .failsafe-active .sidebar { border-right-color: var(--red); }
-        .failsafe-active .nav-btn.active { color: var(--red); background: var(--red-dim); border-left-color: var(--red); }
-        .failsafe-active .brand span { color: var(--red); }
-        .failsafe-active .live-dot { background: var(--red); box-shadow: 0 0 10px var(--red); }
+        /* ─── FAILSAFE TOGGLE STYLES (STRICT OVERRIDES) ─── */
+        body.failsafe-active .sidebar { border-right-color: var(--red); }
+        body.failsafe-active .nav-btn.active { color: var(--red) !important; background: var(--red-dim) !important; border-left-color: var(--red) !important; }
+        body.failsafe-active .brand span { color: var(--red); }
+        body.failsafe-active .live-dot { background: var(--red); box-shadow: 0 0 10px var(--red); }
+        
+        /* Force Red Scrollbar in Failsafe */
+        body.failsafe-active ::-webkit-scrollbar-thumb { background: var(--red); }
 
         .prog-tag {
             font-family: var(--font-code); font-size: 11px; padding: 2px 8px;
@@ -170,37 +123,19 @@
         }
 
         /* ─── MAIN AREA & ANIMATIONS ─── */
-        .main {
-            flex: 1; display: flex; flex-direction: column; overflow: hidden;
-            position: relative;
-        }
+        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
         
-        /* HEADER (TOP BAR) */
         .top-bar {
-            height: 70px;
-            border-bottom: 1px solid var(--border); 
-            display: flex;
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 0 30px;
-            background: var(--bg-panel); 
-            flex-shrink: 0; 
-            z-index: 10;
-            position: relative;
+            height: 70px; border-bottom: 1px solid var(--border); display: flex;
+            justify-content: space-between; align-items: center; padding: 0 30px;
+            background: var(--bg-panel); flex-shrink: 0; z-index: 10; position: relative;
         }
         
         .top-left-group { display: flex; align-items: center; gap: 15px; width: 200px; }
         .top-right-group { display: flex; align-items: center; gap: 15px; }
         
-        .top-center {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-        }
+        .top-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; }
 
-        /* DB BUTTON */
         .db-btn {
             background: var(--cyan-dim); border: 2px solid var(--cyan); color: var(--cyan);
             font-family: var(--font-code); font-size: 14px; font-weight: 800;
@@ -211,13 +146,12 @@
         .db-btn:hover { box-shadow: 0 0 30px var(--cyan); transform: scale(1.02); background: rgba(0, 240, 255, 0.15); }
         .db-btn span { color: var(--green); font-size: 18px; animation: pulse 2s infinite; }
         
-        /* FAILSAFE DB BUTTON OVERRIDE */
-        .failsafe-active .db-btn {
-            background: var(--red-dim); border-color: var(--red); color: var(--red);
-            box-shadow: 0 0 15px var(--red-dim);
+        /* STRICT FAILSAFE BUTTON OVERRIDE */
+        body.failsafe-active .db-btn {
+            background: var(--red-dim) !important; border-color: var(--red) !important; color: var(--red) !important;
+            box-shadow: 0 0 15px var(--red-dim) !important;
         }
-        .failsafe-active .db-btn:hover { box-shadow: 0 0 30px var(--red); background: rgba(255,42,109,0.15); }
-        .failsafe-active .db-btn span { color: var(--red); }
+        body.failsafe-active .db-btn span { color: var(--red) !important; }
 
         .mini-db-btn {
             background: transparent; border: 1px solid var(--border); color: var(--text-dim);
@@ -226,15 +160,12 @@
         }
         .mini-db-btn:hover { border-color: var(--cyan); color: var(--cyan); background: var(--bg-hover); }
 
-        .menu-toggle, .close-sidebar {
-            display: none; background: transparent; border: none; 
-            color: var(--text-main); font-size: 20px; cursor: pointer; 
-        }
+        .menu-toggle, .close-sidebar { display: none; background: transparent; border: none; color: var(--text-main); font-size: 20px; cursor: pointer; }
         .menu-toggle { padding: 5px; margin-right: 5px; }
         .mobile-live-dot { display: none; }
 
         .top-title { font-family: var(--font-code); font-size: 12px; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-        .failsafe-active .top-title { color: var(--red); }
+        body.failsafe-active .top-title { color: var(--red) !important; }
 
         .theme-btn {
             background: transparent; border: 1px solid var(--border); color: var(--text-main);
@@ -245,25 +176,24 @@
 
         .scroll-area { flex: 1; overflow-y: auto; padding: 40px; -webkit-overflow-scrolling: touch; position: relative; }
 
-        /* SLIDE ANIMATION CLASSES */
+        /* ─── ANIMATION ENGINE ─── */
         .section { 
-            display: none; 
-            width: 100%;
-            animation-duration: 0.4s;
-            animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: none; width: 100%;
+            animation-duration: 0.4s; animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
             animation-fill-mode: forwards;
         }
-        
         .section.active { display: block; }
         
-        /* Default Entry (Fade Up) */
+        /* Standard Entry */
         .section.fade-in { animation-name: slideUpFade; }
-        
-        /* Failsafe Entry (Slide In From Right) */
+        /* Failsafe Entry (Slide Right) */
         .section.slide-enter-right { animation-name: slideInRight; }
+        /* Dashboard Return (Slide Left) */
+        .section.slide-enter-left { animation-name: slideInLeft; }
         
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
 
         /* Typography & Cards */
         h1 { font-size: 64px; color: var(--text-main); margin-bottom: 5px; text-transform: uppercase; letter-spacing: -3px; line-height: 0.9; font-weight: 800; text-shadow: 0 0 30px rgba(255,255,255,0.05); }
@@ -460,7 +390,6 @@
 <body>
 
 <div class="sidebar-overlay" id="sidebar_overlay" onclick="toggleSidebar()"></div>
-
 <nav class="sidebar" id="sidebar">
     <div class="brand">
         <div class="brand-inner"><div class="live-dot"></div>CAPITAL  //  <span>OS</span></div>
@@ -503,6 +432,7 @@
             <button class="theme-btn" onclick="toggleTheme()" title="Toggle Theme">☀ / ●</button>
         </div>
     </div>
+    
     <div class="scroll-area">
         <div id="dashboard" class="section active fade-in">
             <div class="phase-header-grid">
@@ -1491,38 +1421,49 @@
         4: { title: 'CAREER PIVOT', sub: 'EMERGENCY PROTOCOL' }
     };
 
-    // --- NAVIGATION ---
+    // --- NAVIGATION LOGIC ---
     function go(id, closeMenu = true) {
-        // Animation Logic
-        const isFailsafe = id === 'failsafe';
-        const animClass = isFailsafe ? 'slide-enter-right' : 'fade-in';
+        // 1. Determine Animation Direction
+        // If we are entering 'failsafe', slide right.
+        // If we are leaving 'failsafe' (going to 'dashboard' etc), slide left.
+        // Otherwise (switching between p0/p1/p2), standard fade.
         
+        const isFailsafeTarget = (id === 'failsafe');
+        const wasFailsafeActive = document.body.classList.contains('failsafe-active');
+        
+        let animClass = 'fade-in';
+        if (isFailsafeTarget) animClass = 'slide-enter-right';
+        else if (wasFailsafeActive && !isFailsafeTarget) animClass = 'slide-enter-left';
+
+        // 2. Hide all sections & reset animations
         document.querySelectorAll('.section').forEach(el => {
-            el.classList.remove('active', 'slide-enter-right', 'fade-in');
+            el.classList.remove('active', 'slide-enter-right', 'slide-enter-left', 'fade-in');
         });
         
+        // 3. Activate Target
         const target = document.getElementById(id);
         target.classList.add(animClass);
-        // Small delay to trigger reflow/active state logic if needed by browser, but direct add works
+        // Force reflow
+        void target.offsetWidth;
         target.classList.add('active');
         
-        // Navigation Buttons
+        // 4. Update Sidebar Highlights
         document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-        // Special case for failsafe toggle button highlighting
-        if (!isFailsafe) {
+        if (!isFailsafeTarget) {
              const btns = document.querySelectorAll('.nav-btn');
              btns.forEach(btn => {
-                if(btn.getAttribute('onclick').includes(`go('${id}')`)) btn.classList.add('active');
+                const attr = btn.getAttribute('onclick');
+                if(attr && attr.includes(`go('${id}')`)) btn.classList.add('active');
             });
         }
 
         document.querySelector('.scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
 
-        // HUD & Title Updates
-        const phaseTitle = isFailsafe ? "EMERGENCY PROTOCOL" : "SYSTEM ACTIVE";
+        // 5. Title & Theme Handling handled by toggleFailsafeWrapper mostly, but ensured here
+        const phaseTitle = isFailsafeTarget ? "EMERGENCY PROTOCOL" : "SYSTEM ACTIVE";
         const titleEl = document.getElementById('current_phase_title');
         titleEl.innerText = phaseTitle;
-        titleEl.style.color = isFailsafe ? 'var(--red)' : 'var(--cyan)';
+        // Color is handled by CSS body.failsafe-active logic now
 
         if(closeMenu) {
             document.getElementById('sidebar').classList.remove('active');
@@ -1534,10 +1475,9 @@
 
     function toggleFailsafe() {
         const body = document.body;
-        const isActive = body.classList.contains('failsafe-active');
         
-        if (isActive) {
-            // EXIT FAILSAFE -> GO TO DASHBOARD
+        if (body.classList.contains('failsafe-active')) {
+            // EXIT FAILSAFE
             body.classList.remove('failsafe-active');
             go('dashboard');
         } else {
@@ -1555,7 +1495,7 @@
     function toggleTheme() { document.body.classList.toggle('light-mode'); }
     function toggleAccordion(id) { document.getElementById(id).classList.toggle('open'); }
 
-    // --- GATEKEEPER & AUTO-ADVANCE ---
+    // --- GATEKEEPER & DATA ---
     function checkGatekeeper() {
         const checks = document.querySelectorAll('#failsafe_gatekeeper input[type="checkbox"]');
         const allChecked = Array.from(checks).every(c => c.checked);
@@ -1581,7 +1521,6 @@
         saveState();
     }
     
-    // Expand gatekeeper if minimized
     document.getElementById('failsafe_gatekeeper').addEventListener('click', function(e) {
         if(this.classList.contains('minimized') && e.target.type !== 'checkbox') {
              if(confirm("WARNING: Re-verifying constraints will WIPE Failsafe progress. Proceed?")) {
@@ -1592,7 +1531,7 @@
         }
     });
 
-    // --- CORE LOGIC: LOCKS & PROGRESS ---
+    // --- LOGIC & AUTO-ADVANCE ---
     function checkLocks() {
         let isPreviousComplete = true; 
         for (let i = 0; i < taskOrder.length; i++) {
@@ -1634,25 +1573,22 @@
 
         const isComplete = el.classList.toggle('completed');
         
-        // AUTO-COLLAPSE & ADVANCE LOGIC
+        // AUTO-COLLAPSE & ADVANCE
         if (isComplete) {
-            // Collapse current
             el.classList.remove('open');
             
-            // Find next task
-            const allTasks = taskOrder;
-            const idx = allTasks.indexOf(id);
-            if(idx > -1 && idx < allTasks.length - 1) {
-                const nextId = allTasks[idx + 1];
-                // Check if next task is in same context (Failsafe vs Normal)
+            // Wait for DOM update then find next
+            const idx = taskOrder.indexOf(id);
+            if(idx > -1 && idx < taskOrder.length - 1) {
+                const nextId = taskOrder[idx + 1];
+                // Only auto-open if in same context
                 const currentIsFailsafe = id.startsWith('tf_');
                 const nextIsFailsafe = nextId.startsWith('tf_');
                 
                 if (currentIsFailsafe === nextIsFailsafe) {
-                    const nextEl = document.getElementById(nextId);
-                    // Short timeout to allow lock check to process
                     setTimeout(() => {
-                        checkLocks(); // Update locks based on new completion
+                        checkLocks();
+                        const nextEl = document.getElementById(nextId);
                         if(!nextEl.classList.contains('locked')) {
                             nextEl.classList.add('open');
                             nextEl.scrollIntoView({behavior:'smooth', block:'center'});
@@ -1661,7 +1597,7 @@
                 }
             }
         } else {
-            // Unchecking logic (Lock Reset)
+            // Uncheck Logic
             const index = taskOrder.indexOf(id);
             for(let i = index + 1; i < taskOrder.length; i++) {
                 if(id.startsWith('tf_') && taskOrder[i].startsWith('tf_')) {
@@ -1675,14 +1611,6 @@
         saveState();
         updateHUD();
         checkLocks();
-    }
-
-    function updateIntegrity() {
-        const mainTasks = taskOrder.filter(id => !id.startsWith('tf_'));
-        const total = mainTasks.length;
-        let completed = 0;
-        mainTasks.forEach(id => { if(document.getElementById(id).classList.contains('completed')) completed++; });
-        document.getElementById('sys_integrity').innerText = Math.round((completed / total) * 100) + "%";
     }
 
     function updateHUD() {
@@ -1709,7 +1637,10 @@
         }
         
         if(!foundActive) activePhase = 3;
-        if(document.body.classList.contains('failsafe-active')) activePhase = 4;
+        
+        // Check real body class for failsafe state
+        const isFailsafeMode = document.body.classList.contains('failsafe-active');
+        if(isFailsafeMode) activePhase = 4;
 
         const focusData = phaseConfig[activePhase];
         if(focusData) {
@@ -1717,11 +1648,22 @@
             const subEl = document.getElementById('hud_focus_sub');
             valEl.innerText = focusData.title;
             subEl.innerText = focusData.sub;
-            valEl.style.color = activePhase === 4 ? 'var(--red)' : 'var(--cyan)';
+            
+            // STRICT COLOR RESET: If not failsafe, force Cyan
+            if(activePhase === 4) {
+                 valEl.style.color = 'var(--red)';
+            } else {
+                 valEl.style.color = 'var(--cyan)';
+            }
         }
 
+        // Integrity
+        const mainTasks = taskOrder.filter(id => !id.startsWith('tf_'));
+        let completed = 0;
+        mainTasks.forEach(id => { if(document.getElementById(id).classList.contains('completed')) completed++; });
+        document.getElementById('sys_integrity').innerText = Math.round((completed / mainTasks.length) * 100) + "%";
+
         document.getElementById('hud_hours').innerText = totalHrs + " / 1000 H";
-        updateIntegrity();
 
         let nextTask;
         if (activePhase === 4) {
@@ -1740,7 +1682,7 @@
             hudTxt.innerText = meta.obj;
             hudBtn.innerText = meta.btn;
             hudBtn.onclick = function() {
-                if(activePhase === 4 && !document.body.classList.contains('failsafe-active')) toggleFailsafe();
+                if(activePhase === 4 && !isFailsafeMode) toggleFailsafe();
                 else if(activePhase !== 4) go(meta.go, false); 
                 
                 setTimeout(() => { 
@@ -1750,13 +1692,22 @@
                 }, 300);
             };
             
-            hudLbl.style.color = activePhase === 4 ? 'var(--red)' : 'var(--cyan)';
-            hudBtn.style.background = activePhase === 4 ? 'var(--red)' : 'var(--cyan)';
+            // STRICT COLOR RESET
+            if(activePhase === 4) {
+                hudLbl.style.color = 'var(--red)';
+                hudBtn.style.background = 'var(--red)';
+            } else {
+                hudLbl.style.color = 'var(--cyan)';
+                hudBtn.style.background = 'var(--cyan)';
+            }
+
         } else if (activePhase === 4) {
              hudLbl.innerText = "STATUS"; hudTxt.innerText = "PIVOT COMPLETE"; hudBtn.innerText = "GOOD LUCK";
         } else {
              hudLbl.innerText = "SYSTEM STATUS"; hudTxt.innerText = "ALL SYSTEMS GO"; hudBtn.innerText = "RESET SYSTEM";
              hudBtn.onclick = function() { if(confirm('Reset all progress?')) { localStorage.clear(); location.reload(); }};
+             hudLbl.style.color = 'var(--cyan)';
+             hudBtn.style.background = 'var(--cyan)';
         }
     }
 
@@ -1773,7 +1724,7 @@
         checks.forEach((c, i) => {
             if(localStorage.getItem('capital_v17_failcheck_' + i) === 'true') c.checked = true;
         });
-        if (Array.from(checks).every(c => c.checked)) {
+        if (Array.from(checks).every(c => c.checked) && checks.length > 0) {
              document.getElementById('failsafe_content').classList.add('unlocked');
              document.getElementById('failsafe_gatekeeper').classList.add('minimized');
         }
