@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CAPITAL // OS v15.7 [FINAL]</title>
+    <title>CAPITAL // OS v15.8 [FINAL]</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;800&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -28,7 +28,8 @@
             --gold-dim: rgba(255, 215, 0, 0.05);
             
             --green: #00FF7F; /* STOCK MARKET GAIN (SpringGreen) */
-            --red: #ff2a6d;   /* LOCKS / ERRORS */
+            --red: #ff2a6d;   /* LOCKS / ERRORS / FALLBACK */
+            --red-dim: rgba(255, 42, 109, 0.1);
             
             --font-head: 'Space Grotesk', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
@@ -52,7 +53,9 @@
             --cyan-dim: rgba(0, 102, 255, 0.1);
             --gold: #d4a000;
             --gold-dim: rgba(212, 160, 0, 0.05);
-            --green: #00c853; /* Darker green for light mode visibility */
+            --green: #00c853; 
+            --red: #d50000;
+            --red-dim: rgba(213, 0, 0, 0.05);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -189,7 +192,6 @@
             align-items: center;
         }
 
-        /* DASHBOARD BUTTON - PERMANENT CYAN */
         .db-btn {
             background: var(--cyan-dim);
             border: 2px solid var(--cyan);
@@ -204,7 +206,7 @@
             transition: all 0.3s ease;
             display: flex; align-items: center; gap: 12px;
             border-radius: 100px;
-            box-shadow: 0 0 15px var(--cyan-dim); /* Permanent Glow */
+            box-shadow: 0 0 15px var(--cyan-dim);
         }
         .db-btn:hover {
             box-shadow: 0 0 30px var(--cyan);
@@ -308,7 +310,6 @@
         .card:hover { border-color: var(--border-active); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .card.dense { padding: 30px 20px; }
         
-        /* DASHBOARD METRICS */
         .stat-label { 
             font-family: var(--font-code); font-size: 13px;
             color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; 
@@ -325,7 +326,6 @@
         .stat-val.green { color: var(--green); }
         .stat-sub { font-family: var(--font-code); font-size: 13px; color: var(--text-dim); font-weight: 600; letter-spacing: 0.5px;}
 
-        /* CLOCKS */
         .clock-split { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 10px; }
         .clock-col { display: flex; flex-direction: column; align-items: center; width: 48%; }
         .clock-big { 
@@ -338,7 +338,6 @@
             color: var(--cyan); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px;
         }
 
-        /* ALERT BOX */
         .alert-box {
             background: linear-gradient(90deg, rgba(0,240,255,0.05) 0%, rgba(0,0,0,0) 100%); 
             border: 1px solid var(--border-active);
@@ -358,7 +357,37 @@
         }
         .exec-btn:hover { background: var(--text-main); color: var(--bg-void); box-shadow: 0 0 25px var(--cyan); }
 
-        /* TASKS */
+        /* FALLBACK MODE BUTTON */
+        .fallback-btn {
+            margin-top: 50px;
+            background: rgba(255, 42, 109, 0.05);
+            border: 1px solid var(--red);
+            color: var(--red);
+            font-family: var(--font-code);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 15px;
+            width: 100%;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .fallback-btn:hover { background: var(--red); color: #000; box-shadow: 0 0 20px var(--red); }
+        
+        .fallback-section {
+            display: none; /* Hidden by default */
+            border: 1px solid var(--red);
+            background: var(--bg-card);
+            padding: 30px;
+            margin-top: 20px;
+            border-left: 4px solid var(--red);
+            animation: flashRed 0.5s ease-out;
+        }
+        .fallback-section.active { display: block; }
+        @keyframes flashRed { from { box-shadow: 0 0 50px var(--red); } to { box-shadow: none; } }
+
         .task-item {
             background: var(--bg-card); border: 1px solid var(--border);
             margin-bottom: 15px; transition: all 0.3s ease;
@@ -463,9 +492,7 @@
 
         /* ─── MOBILE / RESPONSIVE (FIXED) ─── */
         @media(max-width: 1100px) { 
-            /* Fix Grid Collapse */
             .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); gap: 15px; } 
-            
             .calc-wrapper { flex-direction: column; } 
             .sidebar { position: fixed; left: -270px; top: 0; bottom: 0; width: 260px; box-shadow: 50px 0 100px rgba(0,0,0,0.5); }
             .sidebar.active { transform: translateX(270px); }
@@ -477,7 +504,6 @@
             .scroll-area { padding: 25px 20px; }
             .phase-header-grid { padding-bottom: 30px; margin-bottom: 30px; }
             
-            /* Fix Massive Fonts on Mobile */
             h1 { font-size: 42px; word-wrap: break-word; }
             .stat-val { font-size: 36px; }
             .clock-big { font-size: 32px; }
@@ -487,7 +513,6 @@
             .card { padding: 20px; }
             .task-header { padding: 15px 20px; }
             .task-details { padding: 0 20px 25px 20px; } 
-            
             .top-center { display: none; } 
         }
         
@@ -519,6 +544,9 @@
         <button class="nav-btn" onclick="go('p1')">P1 // PARTNER CHANNEL <span class="prog-tag" id="nav_p1">0%</span></button>
         <button class="nav-btn" onclick="go('p2')">P2 // DELIVERY OS <span class="prog-tag" id="nav_p2">0%</span></button>
         <button class="nav-btn" onclick="go('p3')">P3 // SAAS EXIT <span class="prog-tag" id="nav_p3">0%</span></button>
+        
+        <div class="nav-label" style="color:var(--red); margin-top:40px;">EMERGENCY</div>
+        <button class="nav-btn" onclick="go('failsafe')" style="color:var(--red); border-left-color:var(--red-dim);">⚠ // FAILSAFE</button>
     </div>
 </nav>
 
@@ -701,15 +729,19 @@
                             </div>
                         </div>
                         
-                        <span class="stat-label" style="margin-bottom:10px; border-top:1px solid var(--border); padding-top:20px; text-align:left;">TEAM COSTS (INDIA STACK)</span>
-                         <div class="grid-2" style="margin-bottom:10px; gap:10px;">
+                        <span class="stat-label" style="margin-bottom:10px; border-top:1px solid var(--border); padding-top:20px; text-align:left;">COSTS & ADS (REALITY CHECK)</span>
+                         <div class="grid-3" style="margin-bottom:10px; gap:10px;">
                             <div class="inp-group">
                                 <label class="inp-label">Staff Count</label>
                                 <input type="number" class="inp-field" id="in_f2_staff" value="3" oninput="c2()">
                             </div>
                             <div class="inp-group">
-                                <label class="inp-label">Avg Salary/Mo ($)</label>
+                                <label class="inp-label">Avg Salary ($)</label>
                                 <input type="number" class="inp-field" id="in_f2_sal" value="1500" oninput="c2()">
+                            </div>
+                            <div class="inp-group">
+                                <label class="inp-label" style="color:var(--cyan);">Ad Budget ($)</label>
+                                <input type="number" class="inp-field" style="border-color:var(--cyan);" id="in_f2_ads" value="1000" oninput="c2()">
                             </div>
                         </div>
                     </div>
@@ -721,12 +753,12 @@
                             <div class="stat-val green" id="out_f2_rev">$80,000</div>
                         </div>
                         <div class="out-group" style="margin-bottom:20px;">
-                            <span class="stat-label">STAFF COSTS</span>
-                            <div class="stat-val" style="color:var(--red);" id="out_f2_cost">-$4,500</div>
+                            <span class="stat-label">OPEX (STAFF + ADS)</span>
+                            <div class="stat-val" style="color:var(--red);" id="out_f2_cost">-$5,500</div>
                         </div>
                         <div class="out-group" style="margin-bottom:20px; border-top:1px dashed var(--green); padding-top:10px;">
                             <span class="stat-label">NET PROFIT (MO)</span>
-                            <div class="stat-val green" id="out_f2_net">$75,500</div>
+                            <div class="stat-val green" id="out_f2_net">$74,500</div>
                         </div>
                         <div class="out-group">
                             <span class="stat-label">ANNUAL RECURRING REVENUE (ARR)</span>
@@ -784,7 +816,7 @@
                     <span class="stat-label">HIGH-LEVERAGE ABSORB [15 H]</span>
                     <div style="display:flex; flex-direction: column; gap:8px; margin-top:10px;">
                         <a href="https://jamesclear.com/atomic-habits-summary" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> ATOMIC HABITS (5H)</div> <span>►</span></a>
-                        <a href="https://www.investopedia.com/articles/financial-advisors/121815/financial-advisor-vs-wealth-manager.asp" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> RIA VS BROKER (10H)</div> <span>►</span></a>
+                        <a href="https://www.cfp.net/get-certified/certification-process/exam-requirement/exam-preparation" target="_blank" class="action-link"><div><span class="ico-txt">🎓</span> CFP EXAM PREP (10H)</div> <span>►</span></a>
                     </div>
                 </div>
             </div>
@@ -880,7 +912,7 @@
                     <div class="detail-block">
                         <div class="detail-title">THE SIMULATION</div>
                         <div class="detail-body">
-                            Complete these to prove you can build logic. Use the <strong>Admin Super Set</strong> to access both.<br>
+                            Complete these to prove you can build logic. Use the <strong>Admin Super Set</strong>.<br>
                             1. <strong>Security Specialist:</strong> Essential for Finance.<br>
                             2. <strong>Business Admin Specialist:</strong> Process automation proof.
                         </div>
@@ -900,10 +932,9 @@
                     <div class="detail-block">
                         <div class="detail-title">VOCABULARY IS TRUST</div>
                         <div class="detail-body">
-                            You cannot sell to partners if you don't know their clients' business.<br>
-                            1. <strong>Read:</strong> NASAA Investment Adviser Guide (Cover to Cover).<br>
-                            2. <strong>Define:</strong> Write 1-page summary on AUM (Assets Under Management) Fees.<br>
-                            3. <strong>Define:</strong> Write 1-page summary on "Household" vs "Client" data models.
+                            1. <strong>CFP Concepts:</strong> Study the "Investment Planning" module of the CFP curriculum. You don't need the cert, you need the knowledge.<br>
+                            2. <strong>Define:</strong> AUM Fees vs Retainer Fees.<br>
+                            3. <strong>Define:</strong> "Household" vs "Client" data models in FSC.
                         </div>
                     </div>
                 </div>
@@ -965,8 +996,8 @@
                 <div class="card dense">
                     <span class="stat-label">HIGH-LEVERAGE ABSORB [10 H]</span>
                     <div style="display:flex; flex-direction: column; gap:8px; margin-top:10px;">
-                        <a href="https://medium.com/engineering-management/how-to-write-a-good-engineering-blog-post-6c8430635489" target="_blank" class="action-link"><div><span class="ico-txt">✍️</span> GUIDE: TECH WRITING (5H)</div> <span>►</span></a>
-                        <a href="https://appexchange.salesforce.com/consulting" target="_blank" class="action-link"><div><span class="ico-txt">🔍</span> APPEXCHANGE FINDER (5H)</div> <span>►</span></a>
+                        <a href="https://www.kitces.com/blog/" target="_blank" class="action-link"><div><span class="ico-txt">📈</span> KITCES.COM (SALES INTEL)</div> <span>►</span></a>
+                        <a href="https://appexchange.salesforce.com/consulting" target="_blank" class="action-link"><div><span class="ico-txt">🔍</span> APPEXCHANGE FINDER</div> <span>►</span></a>
                     </div>
                 </div>
             </div>
@@ -988,18 +1019,16 @@
             <div class="task-item locked" id="t1_1" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_1')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_1')"><div class="checkbox"></div></div>
-                    <div class="task-title">1. The Content Ledger</div>
+                    <div class="task-title">1. Content Ledger & Case Studies</div>
                     <span class="time-tag">[40 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: 3 ARTICLES (1,500 WORDS EACH)</div>
+                    <div class="target-box">TARGET: 3 ARTICLES + 1 TEMPLATE</div>
                     <div class="detail-block">
                         <div class="detail-title">PROOF OF WORK</div>
                         <div class="detail-body">
-                            Partners don't read resumes. They read solutions. Write 3 articles on Medium/LinkedIn (min 1,500 words each):<br>
-                            1. "Automating RMD Tasks in Salesforce FSC using Flows".<br>
-                            2. "Handling Household-Level Security in Wealth Management".<br>
-                            3. "FSC vs Sales Cloud: A Data Model Comparison".
+                            1. <strong>Write 3 Tech Articles (1500w):</strong> Topic example: "Automating RMD Tasks in FSC".<br>
+                            2. <strong>Create Win Template:</strong> Build a 1-page PDF template to document "Problem > Solution > Outcome" for every ticket you solve. This builds your portfolio from Day 1.
                         </div>
                     </div>
                 </div>
@@ -1019,8 +1048,7 @@
                             Use the <strong>AppExchange Consultant Finder</strong>.<br>
                             1. Filter: "Financial Services".<br>
                             2. Size: Look for boutiques (10-50 employees). Avoid the Big 4.<br>
-                            3. Identify the "Practice Lead" or "Delivery Director" on LinkedIn.<br>
-                            4. Log 50 qualified firms in a spreadsheet.
+                            3. Identify the "Practice Lead" or "Delivery Director" on LinkedIn.
                         </div>
                     </div>
                     <a href="https://appexchange.salesforce.com/consulting" target="_blank" class="action-link"><div>START MAPPING</div> <span>↗</span></a>
@@ -1030,16 +1058,16 @@
             <div class="task-item locked" id="t1_3" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_3')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_3')"><div class="checkbox"></div></div>
-                    <div class="task-title">3. The Channel Outreach</div>
+                    <div class="task-title">3. Channel Outreach (First 10)</div>
                     <span class="time-tag">[Ongoing]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: 5 OUTREACHES / DAY</div>
+                    <div class="target-box">TARGET: 5 PARTNERS / DAY</div>
                     <div class="detail-block">
-                        <div class="detail-title">THE SCRIPT</div>
+                        <div class="detail-title">THE ACQUISITION STRATEGY</div>
                         <div class="detail-body">
-                            "Hi [Name], I noticed [Firm] is growing its Wealth practice. I'm an FSC-specialized Admin (Certified + Superbadges). I just wrote a guide on [Link to Article] that might help your juniors.<br><br>
-                            If you ever need overflow capacity for configuration work, I have 30hrs/week open. White-label ready."
+                            <strong>Goal:</strong> Get your first 5 Partners (who bring the clients).<br>
+                            <strong>Script:</strong> "Hi [Name], I noticed [Firm] is growing its Wealth practice. I'm an FSC-specialized Admin. I just wrote a technical guide on RMD Automation [Link] that might help your juniors. If you need white-label overflow capacity, I have 25hrs/week open."
                         </div>
                     </div>
                 </div>
@@ -1077,7 +1105,7 @@
                         <div class="detail-title">EXECUTION</div>
                         <div class="detail-body">
                             Your goal is a <strong>Retainer</strong>, not hourly.<br>
-                            "I will handle all Ticket Level 1 & 2 config for your Wealth clients for $4,000/month (up to 80 hours)."<br>
+                            "I will handle all Ticket Level 1 & 2 config for your Wealth clients for $4,000/month."<br>
                             This gives them predictability, and you stability.
                         </div>
                     </div>
@@ -1114,7 +1142,7 @@
                     <div class="detail-block">
                         <div class="detail-title">REQUIRED STUDY</div>
                         <div class="detail-body">
-                            1. <strong>Tech Writing Guide:</strong> Read the Medium guide. Analyze 3 successful engineering blogs.<br>
+                            1. <strong>Michael Kitces Blog:</strong> Read top 5 articles on RIA technology stacks.<br>
                             2. <strong>Consulting Finder:</strong> Spend 5 hours strictly filtering and analyzing competitor offerings on AppExchange.
                         </div>
                     </div>
@@ -1332,20 +1360,94 @@
             </div>
         </div>
 
+        <div id="failsafe" class="section">
+            <div class="phase-header-grid" style="border-bottom-color:var(--red);">
+                <span class="pill" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">EMERGENCY MODE</span>
+                <h1 style="color:var(--red);">PROTOCOL: PIVOT</h1>
+                <span class="earning-badge" style="border-color:var(--red); background:rgba(255,42,109,0.05); color:var(--red);">TARGET: $100K SALARY</span>
+            </div>
+
+            <div class="alert-box" style="border-left-color:var(--red); background: linear-gradient(90deg, rgba(255,42,109,0.05) 0%, rgba(0,0,0,0) 100%);">
+                <div class="alert-content">
+                    <h4 style="color:var(--red);">STATUS: AGENCY FAILURE</h4>
+                    <p style="color:var(--text-main); font-size:18px; font-weight:400;">The entrepreneurial path is high risk. If you have reached this point without revenue, we execute the <strong>Career Capital Pivot</strong>. You are now a "Senior FSC Consultant" on the job market.</p>
+                </div>
+            </div>
+
+            <div class="task-item" id="tf_1">
+                <div class="task-header" onclick="toggleAccordion('tf_1')">
+                    <div class="check-target" onclick="toggleCheck(event, 'tf_1')"><div class="checkbox" style="border-color:var(--red);"></div></div>
+                    <div class="task-title">1. The "Experience" Rewrite</div>
+                    <span class="time-tag" style="color:var(--red); border-color:var(--red);">[DAY 1]</span>
+                </div>
+                <div class="task-details">
+                    <div class="target-box" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">TARGET: RESUME V2.0</div>
+                    <div class="detail-block">
+                        <div class="detail-title">REFRAMING FAILURE</div>
+                        <div class="detail-body">
+                            Do not list "Failed Agency Owner". Refrain from using "Founder".<br>
+                            <strong>Role Title:</strong> "Independent Salesforce Consultant".<br>
+                            <strong>Bullet Points:</strong> Focus on the projects you built (even internal ones).<br>
+                            • "Architected FSC data model for Wealth Management workflows..."<br>
+                            • "Implemented automated RMD compliance tracking using Flow..."
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item" id="tf_2">
+                <div class="task-header" onclick="toggleAccordion('tf_2')">
+                    <div class="check-target" onclick="toggleCheck(event, 'tf_2')"><div class="checkbox" style="border-color:var(--red);"></div></div>
+                    <div class="task-title">2. Interview Defense Prep</div>
+                    <span class="time-tag" style="color:var(--red); border-color:var(--red);">[DAY 2]</span>
+                </div>
+                <div class="task-details">
+                    <div class="target-box" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">TARGET: STORY SCRIPTED</div>
+                    <div class="detail-block">
+                        <div class="detail-title">STAR METHOD</div>
+                        <div class="detail-body">
+                            Prepare for: "Tell me about a time you failed."<br>
+                            <strong>Answer Script:</strong> "I attempted to launch a niche consultancy. While we built a robust technical foundation (FSC/Wealth), customer acquisition cost was too high. I realized I prefer the architecture/build phase over sales, which is why I want to join [Company Name]."
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item" id="tf_3">
+                <div class="task-header" onclick="toggleAccordion('tf_3')">
+                    <div class="check-target" onclick="toggleCheck(event, 'tf_3')"><div class="checkbox" style="border-color:var(--red);"></div></div>
+                    <div class="task-title">3. Aggressive Application Cycle</div>
+                    <span class="time-tag" style="color:var(--red); border-color:var(--red);">[DAY 3+]</span>
+                </div>
+                <div class="task-details">
+                    <div class="target-box" style="border-color:var(--red); color:var(--red); background:rgba(255,42,109,0.05);">TARGET: 10 APPS / DAY</div>
+                    <div class="detail-block">
+                        <div class="detail-title">NUMBERS GAME</div>
+                        <div class="detail-body">
+                            1. <strong>LinkedIn Jobs:</strong> Filter for "Salesforce Consultant" + "Remote".<br>
+                            2. <strong>Consultancies:</strong> Apply directly to the Partners you mapped in Phase 1.<br>
+                            3. <strong>Msg Recruiters:</strong> "I am an FSC-certified Admin with specific experience in Wealth Management data migration. Available immediately."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <script>
     // --- STATE & METADATA ---
-    // Updated to include new Absorb tasks (t0_6, t1_7, t2_4, t3_4)
+    // Updated Task Order including Absorb tasks & Failsafe tasks
     const taskOrder = [
         't0_1','t0_2','t0_3','t0_4','t0_5','t0_6',
         't1_1','t1_2','t1_3','t1_4','t1_5','t1_6','t1_7',
         't2_1','t2_2','t2_3','t2_4',
-        't3_1','t3_2','t3_3','t3_4'
+        't3_1','t3_2','t3_3','t3_4',
+        'tf_1', 'tf_2', 'tf_3' // Failsafe Tasks
     ];
     
-    // Config defines the Dashboard Focus & Buttons
+    // Updated Logic Mapping
     const taskMeta = {
         // Phase 0: Genesis
         't0_1': { phase: 0, obj: 'SECURE WORKSTATION', btn: 'OPEN STEPS', go: 'p0', hrs: 5 },
@@ -1374,14 +1476,20 @@
         't3_1': { phase: 3, obj: 'MARKET VALIDATION', btn: 'ASK PARTNERS', go: 'p3', hrs: 20 },
         't3_2': { phase: 3, obj: 'MVP SCOPING', btn: 'DEFINE FEATURES', go: 'p3', hrs: 500 },
         't3_3': { phase: 3, obj: 'SECURITY REVIEW', btn: 'RUN CHECKMARX', go: 'p3', hrs: 100 },
-        't3_4': { phase: 3, obj: 'FOUNDER MINDSET', btn: 'READ MOM TEST', go: 'p3', hrs: 20 }
+        't3_4': { phase: 3, obj: 'FOUNDER MINDSET', btn: 'READ MOM TEST', go: 'p3', hrs: 20 },
+
+        // Failsafe
+        'tf_1': { phase: 4, obj: 'RESUME REWRITE', btn: 'OPEN TEMPLATE', go: 'failsafe', hrs: 5 },
+        'tf_2': { phase: 4, obj: 'INTERVIEW PREP', btn: 'PRACTICE STAR', go: 'failsafe', hrs: 10 },
+        'tf_3': { phase: 4, obj: 'JOB HUNT', btn: 'APPLY NOW', go: 'failsafe', hrs: 50 }
     };
 
     const phaseConfig = {
         0: { title: 'MASTERY & DOMAIN', sub: '80% SUPERBADGES' },
         1: { title: 'PARTNER CHANNEL', sub: '80% OUTREACH' },
         2: { title: 'DELIVERY OS', sub: '0% CHAOS' },
-        3: { title: 'PRODUCT', sub: '80% ROADMAP' }
+        3: { title: 'PRODUCT', sub: '80% ROADMAP' },
+        4: { title: 'CAREER PIVOT', sub: 'EMERGENCY PROTOCOL' }
     };
 
     // --- NAVIGATION ---
@@ -1397,7 +1505,6 @@
 
         document.querySelector('.scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
 
-        // AUTO-COLLAPSE SIDEBAR & OVERLAY
         if(closeMenu) {
             document.getElementById('sidebar').classList.remove('active');
             const overlay = document.getElementById('sidebar_overlay');
@@ -1417,18 +1524,27 @@
 
     // --- INTELLIGENT LOCKING ENGINE ---
     function checkLocks() {
-        let isPreviousComplete = true; // Task 0 is always open
+        let isPreviousComplete = true; 
         
         for (let i = 0; i < taskOrder.length; i++) {
             const taskId = taskOrder[i];
             const el = document.getElementById(taskId);
             
-            // If previous task is NOT complete, lock this one
+            // Failsafe tasks (tf_*) are never locked, they are optional/emergency
+            if(taskId.startsWith('tf_')) {
+                el.classList.remove('locked');
+                continue; 
+            }
+
             if (!isPreviousComplete) {
                 el.classList.add('locked');
                 const prevId = taskOrder[i-1];
-                const prevTaskTitle = document.querySelector(`#${prevId} .task-title`).innerText;
-                el.setAttribute('title', `LOCKED: You must complete "${prevTaskTitle}" first.`);
+                // Check if prevId exists to avoid error on first task
+                if (prevId) {
+                    const prevTaskEl = document.querySelector(`#${prevId} .task-title`);
+                    const prevTaskTitle = prevTaskEl ? prevTaskEl.innerText : "Previous Task";
+                    el.setAttribute('title', `LOCKED: You must complete "${prevTaskTitle}" first.`);
+                }
             } else {
                 el.classList.remove('locked');
                 el.removeAttribute('title');
@@ -1452,10 +1568,14 @@
 
         el.classList.toggle('completed');
         
+        // If unchecking, uncheck all subsequent tasks (strict linear progression)
         if (!el.classList.contains('completed')) {
             const index = taskOrder.indexOf(id);
             for(let i = index + 1; i < taskOrder.length; i++) {
-                document.getElementById(taskOrder[i]).classList.remove('completed');
+                // Don't auto-uncheck failsafe tasks
+                if(!taskOrder[i].startsWith('tf_')) {
+                    document.getElementById(taskOrder[i]).classList.remove('completed');
+                }
             }
         }
 
@@ -1466,9 +1586,11 @@
 
     // --- SYSTEM INTEGRITY CALCULATION ---
     function updateIntegrity() {
-        const total = taskOrder.length;
+        // Exclude failsafe tasks from integrity score
+        const mainTasks = taskOrder.filter(id => !id.startsWith('tf_'));
+        const total = mainTasks.length;
         let completed = 0;
-        taskOrder.forEach(id => {
+        mainTasks.forEach(id => {
             if(document.getElementById(id).classList.contains('completed')) {
                 completed++;
             }
@@ -1483,7 +1605,7 @@
         let activePhase = 0;
         let foundActive = false;
 
-        // Calc progress per phase
+        // Calc progress per phase (0-3)
         for(let i=0; i<=3; i++) {
             const tasks = Object.keys(taskMeta).filter(k => taskMeta[k].phase === i);
             let done = 0;
@@ -1494,13 +1616,15 @@
                 }
             });
             
-            const pct = Math.round((done / tasks.length) * 100);
+            const pct = tasks.length > 0 ? Math.round((done / tasks.length) * 100) : 0;
             
             // Update Bar & Text
-            document.getElementById(`bar_p${i}`).style.width = pct + '%';
-            document.getElementById(`txt_p${i}`).innerText = pct + '%';
-            
+            const bar = document.getElementById(`bar_p${i}`);
+            const txt = document.getElementById(`txt_p${i}`);
             const navBadge = document.getElementById(`nav_p${i}`);
+            
+            if(bar) bar.style.width = pct + '%';
+            if(txt) txt.innerText = pct + '%';
             if(navBadge) {
                 navBadge.innerText = pct + '%';
                 if(pct > 0) navBadge.style.color = 'var(--cyan)';
@@ -1514,18 +1638,31 @@
         
         if(!foundActive) activePhase = 3;
 
+        // Check if viewing failsafe
+        if(document.getElementById('failsafe').classList.contains('active')) {
+             activePhase = 4;
+        }
+
         const focusData = phaseConfig[activePhase];
-        document.getElementById('hud_focus_val').innerText = focusData.title;
-        document.getElementById('hud_focus_sub').innerText = focusData.sub;
+        if(focusData) {
+            document.getElementById('hud_focus_val').innerText = focusData.title;
+            document.getElementById('hud_focus_sub').innerText = focusData.sub;
+        }
 
         document.getElementById('hud_hours').innerText = totalHrs + " / 1000 H";
         
-        // UPDATE INTEGRITY
         updateIntegrity();
 
         // Next Step Logic
-        let nextTask = taskOrder.find(id => !document.getElementById(id).classList.contains('completed'));
-        if (nextTask) {
+        let nextTask = taskOrder.find(id => !document.getElementById(id).classList.contains('completed') && !id.startsWith('tf_'));
+        
+        if (activePhase === 4) {
+             // Failsafe Mode HUD
+             document.getElementById('hud_obj_label').innerText = "SYSTEM ALERT";
+             document.getElementById('hud_obj_text').innerText = "EMERGENCY PROTOCOL";
+             document.getElementById('hud_action').innerText = "VIEW TASKS";
+             document.getElementById('hud_action').setAttribute('onclick', "");
+        } else if (nextTask) {
             const meta = taskMeta[nextTask];
             document.getElementById('hud_obj_label').innerText = "OBJECTIVE // " + (meta.phase === 0 ? "GENESIS" : "EXECUTION");
             document.getElementById('hud_obj_text').innerText = meta.obj;
@@ -1544,13 +1681,13 @@
     function saveState() {
         taskOrder.forEach(id => {
             const completed = document.getElementById(id).classList.contains('completed');
-            localStorage.setItem('capital_v15_7_' + id, completed); // Version updated key
+            localStorage.setItem('capital_v15_8_' + id, completed); 
         });
     }
 
     function loadState() {
         taskOrder.forEach(id => {
-            if(localStorage.getItem('capital_v15_7_' + id) === 'true') {
+            if(localStorage.getItem('capital_v15_8_' + id) === 'true') {
                 document.getElementById(id).classList.add('completed');
             }
         });
@@ -1579,7 +1716,7 @@
     
     function c2() { 
         let rev = (v('in_f2_ret') * v('in_f2_cli')) + (v('in_f2_proj') * v('in_f2_pcount'));
-        let cost = v('in_f2_staff') * v('in_f2_sal');
+        let cost = (v('in_f2_staff') * v('in_f2_sal')) + v('in_f2_ads'); // Added Ads Cost
         t('out_f2_rev', '$' + rev.toLocaleString()); t('out_f2_cost', '-$' + cost.toLocaleString());
         t('out_f2_net', '$' + (rev - cost).toLocaleString()); t('out_f2_run', '$' + (rev * 12).toLocaleString());
     }
