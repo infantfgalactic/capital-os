@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CAPITAL // OS v15.5 [FINAL]</title>
+    <title>CAPITAL // OS v15.7 [FINAL]</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;800&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -88,13 +88,13 @@
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* NEW: Overlay for Mobile "Click Anywhere" close */
+        /* OVERLAY FOR MOBILE */
         .sidebar-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(2px);
-            z-index: 90; /* Below Sidebar (100) but above TopBar (10) */
+            z-index: 90;
             display: none;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -189,7 +189,7 @@
             align-items: center;
         }
 
-        /* UPDATED DASHBOARD BUTTON - PERMANENT CYAN */
+        /* DASHBOARD BUTTON - PERMANENT CYAN */
         .db-btn {
             background: var(--cyan-dim);
             border: 2px solid var(--cyan);
@@ -264,7 +264,6 @@
             -webkit-overflow-scrolling: touch; 
         }
 
-        /* ─── MASSIVE TEXT SIZES (FIXED) ─── */
         h1 { 
             font-size: 64px;
             color: var(--text-main); 
@@ -517,8 +516,8 @@
         <button class="nav-btn" onclick="go('p0')">P0 // GENESIS <span class="prog-tag" id="nav_p0">0%</span></button>
         
         <div class="nav-label">EXECUTION</div>
-        <button class="nav-btn" onclick="go('p1')">P1 // FREELANCE <span class="prog-tag" id="nav_p1">0%</span></button>
-        <button class="nav-btn" onclick="go('p2')">P2 // AGENCY <span class="prog-tag" id="nav_p2">0%</span></button>
+        <button class="nav-btn" onclick="go('p1')">P1 // PARTNER CHANNEL <span class="prog-tag" id="nav_p1">0%</span></button>
+        <button class="nav-btn" onclick="go('p2')">P2 // DELIVERY OS <span class="prog-tag" id="nav_p2">0%</span></button>
         <button class="nav-btn" onclick="go('p3')">P3 // SAAS EXIT <span class="prog-tag" id="nav_p3">0%</span></button>
     </div>
 </nav>
@@ -607,14 +606,14 @@
                         </div>
                         
                         <div class="prog-container" onclick="go('p1', false)">
-                            <div class="prog-label"><span>P1: FIRST CLIENTS</span><span id="txt_p1">0%</span></div>
+                            <div class="prog-label"><span>P1: PARTNER CHANNEL</span><span id="txt_p1">0%</span></div>
                             <div class="prog-track">
                                 <div id="bar_p1" class="prog-fill" style="width:0%; background:var(--text-dim);"></div>
                             </div>
                         </div>
 
                         <div class="prog-container" onclick="go('p2', false)">
-                            <div class="prog-label"><span>P2: SCALE AGENCY</span><span id="txt_p2">0%</span></div>
+                            <div class="prog-label"><span>P2: DELIVERY OS</span><span id="txt_p2">0%</span></div>
                             <div class="prog-track">
                                 <div id="bar_p2" class="prog-fill" style="width:0%; background:var(--text-dim);"></div>
                             </div>
@@ -641,7 +640,7 @@
             </div>
 
             <div class="calc-tabs">
-                <button class="c-tab active" onclick="ftab(event, 'f1')">PHASE 1 (FREELANCE)</button>
+                <button class="c-tab active" onclick="ftab(event, 'f1')">PHASE 1 (PARTNER)</button>
                 <button class="c-tab" onclick="ftab(event, 'f2')">PHASE 2 (AGENCY)</button>
                 <button class="c-tab" onclick="ftab(event, 'f3')">PHASE 3 (EXIT)</button>
             </div>
@@ -649,29 +648,29 @@
             <div id="f1" class="tab-content active">
                 <div class="calc-wrapper">
                     <div class="calc-panel">
-                        <span class="stat-label" style="text-align:left;">VARIABLES</span>
+                        <span class="stat-label" style="text-align:left;">VARIABLES (30 HR TOTAL CAPACITY)</span>
                         <div class="inp-group">
-                            <label class="inp-label">Hourly Rate ($)</label>
-                            <input type="number" class="inp-field" id="in_f1_rate" value="75" oninput="c1()">
+                            <label class="inp-label">Partner Rate ($/hr)</label>
+                            <input type="number" class="inp-field" id="in_f1_rate" value="50" oninput="c1()">
                         </div>
                         <div class="inp-group">
                             <label class="inp-label">Billable Hours / Week</label>
-                            <input type="number" class="inp-field" id="in_f1_hrs" value="30" oninput="c1()">
+                            <input type="number" class="inp-field" id="in_f1_hrs" value="25" oninput="c1()">
                         </div>
                     </div>
                     <div class="calc-panel output">
                         <span class="stat-label" style="text-align:left;">PROJECTIONS</span>
                         <div class="out-group" style="margin-bottom:20px;">
                             <span class="stat-label">WEEKLY GROSS</span>
-                            <div class="stat-val green" id="out_f1_wk">$2,250</div>
+                            <div class="stat-val green" id="out_f1_wk">$1,250</div>
                         </div>
                         <div class="out-group" style="margin-bottom:20px;">
                             <span class="stat-label">MONTHLY GROSS</span>
-                            <div class="stat-val green" id="out_f1_mo">$9,000</div>
+                            <div class="stat-val green" id="out_f1_mo">$5,000</div>
                         </div>
                         <div class="out-group" style="margin-bottom:20px;">
                             <span class="stat-label">ANNUAL GROSS</span>
-                            <div class="stat-val green" id="out_f1_yr">$108,000</div>
+                            <div class="stat-val gold" id="out_f1_yr">$60,000</div>
                         </div>
                     </div>
                 </div>
@@ -770,28 +769,28 @@
         </div>
         <div id="p0" class="section" data-phase="0">
             <div class="phase-header-grid">
-                <span class="pill">PHASE 0 (MONTH 1-6)</span>
+                <span class="pill">PHASE 0 (MONTH 1-3)</span>
                 <h1>GHOST PROTOCOL</h1>
-                <span class="earning-badge">POTENTIAL: $0 / 6 MO</span>
+                <span class="earning-badge">POTENTIAL: $0</span>
             </div>
             
             <div class="grid-2">
                 <div class="card dense" style="border-left: 2px solid var(--gold);">
                     <span class="stat-label">80/20 OPERATIONAL FOCUS</span>
-                    <h3 style="color:var(--gold); margin-bottom:5px;">MASTERY & TRUST</h3>
-                    <p style="font-size:13px; color:var(--text-dim);">Spend 80% time on <strong>Superbadges</strong> and <strong>Security Setup</strong>. Do not sell until you are "Enterprise Ready".</p>
+                    <h3 style="color:var(--gold); margin-bottom:5px;">TECHNICAL & DOMAIN</h3>
+                    <p style="font-size:13px; color:var(--text-dim);">You must master <strong>Salesforce FSC</strong> AND <strong>Wealth Management</strong> concepts. You are building a "Specialist" identity, not a "General Admin".</p>
                 </div>
                 <div class="card dense">
-                    <span class="stat-label">LEISURE PROTOCOL</span>
+                    <span class="stat-label">HIGH-LEVERAGE ABSORB [15 H]</span>
                     <div style="display:flex; flex-direction: column; gap:8px; margin-top:10px;">
-                        <a href="https://www.youtube.com/results?search_query=naval+ravikant" target="_blank" class="action-link"><div><span class="ico-txt">🎧</span> NAVAL RAVIKANT</div> <span>►</span></a>
-                        <a href="https://www.investopedia.com/articles/financial-advisors/121815/financial-advisor-vs-wealth-manager.asp" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> READ INVESTOPEDIA</div> <span>►</span></a>
+                        <a href="https://jamesclear.com/atomic-habits-summary" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> ATOMIC HABITS (5H)</div> <span>►</span></a>
+                        <a href="https://www.investopedia.com/articles/financial-advisors/121815/financial-advisor-vs-wealth-manager.asp" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> RIA VS BROKER (10H)</div> <span>►</span></a>
                     </div>
                 </div>
             </div>
 
             <div style="margin: 40px 0 20px 0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-                <span class="stat-label" style="color:var(--cyan); font-size:12px;">>>> DEPLOYED INTEL (REFERENCE MATERIAL & SPECS)</span>
+                <span class="stat-label" style="color:var(--cyan); font-size:12px;">>>> DEPLOYED INTEL (THE SPECIALIST STACK)</span>
             </div>
             
             <div class="grid-3">
@@ -799,31 +798,31 @@
                     <span class="stat-label">BASELINE [150 H]</span>
                     <h3 style="font-size:16px; color:var(--text-main); margin-bottom:10px;">ADMIN CERT</h3>
                     <div style="font-size:11px; color:var(--text-dim); margin-bottom:15px; line-height:1.4;">
-                        1. Complete 'Admin Beginner' Trail.<br>
-                        2. Score 90% on FocusOnForce Mocks.<br>
-                        3. Schedule Exam (ADM-201).
+                        1. Trailhead: Admin Beginner.<br>
+                        2. FocusOnForce: 90% Avg Score.<br>
+                        3. Exam: ADM-201.
                     </div>
                     <a href="https://trailhead.salesforce.com/en/credentials/administrator" target="_blank" class="action-link"><div>START TRAILHEAD</div> <span>↗</span></a>
                 </div>
                 <div class="card dense" style="align-items: flex-start; text-align: left;">
-                    <span class="stat-label">EXPERIENCE [40 H]</span>
-                    <h3 style="font-size:16px; color:var(--text-main); margin-bottom:10px;">SUPERBADGES</h3>
+                    <span class="stat-label">DOMAIN [30 H]</span>
+                    <h3 style="font-size:16px; color:var(--text-main); margin-bottom:10px;">WEALTH FLUENCY</h3>
                     <div style="font-size:11px; color:var(--text-dim); margin-bottom:15px; line-height:1.4;">
-                        1. Sign up for Developer Edition.<br>
-                        2. Solve 'Security Specialist'.<br>
-                        3. Solve 'Business Admin Specialist'.
+                        1. Learn RIA Compliance (SEC).<br>
+                        2. Understand AUM & Fee Structures.<br>
+                        3. Study 'Custodians' (Schwab/Fidelity).
                     </div>
-                    <a href="https://trailhead.salesforce.com/content/learn/superbadges/superbadge_admin_superset" target="_blank" class="action-link"><div>VIEW PROJECTS</div> <span>↗</span></a>
+                    <a href="https://www.nasaa.org/industry-resources/investment-advisers/investment-adviser-guide/" target="_blank" class="action-link"><div>READ NASAA GUIDE</div> <span>↗</span></a>
                 </div>
                 <div class="card dense" style="align-items: flex-start; text-align: left;">
-                    <span class="stat-label">SPECIALTY [20 H]</span>
-                    <h3 style="font-size:16px; color:var(--text-main); margin-bottom:10px;">FSC GUIDE</h3>
+                    <span class="stat-label">SPECIALTY [40 H]</span>
+                    <h3 style="font-size:16px; color:var(--text-main); margin-bottom:10px;">FSC MODEL</h3>
                     <div style="font-size:11px; color:var(--text-dim); margin-bottom:15px; line-height:1.4;">
-                        1. Install FSC Trial Org.<br>
-                        2. Map 'Household' Data Model.<br>
-                        3. Configure 'Financial Accounts'.
+                        1. Household Data Model.<br>
+                        2. Financial Accounts Rollups.<br>
+                        3. Action Plans & Life Events.
                     </div>
-                    <a href="https://developer.salesforce.com/docs/atlas.en-us.financial_services_cloud_admin_guide.meta/financial_services_cloud_admin_guide/fsc_admin_guide_intro.htm" target="_blank" class="action-link"><div>READ DOCS</div> <span>↗</span></a>
+                    <a href="https://developer.salesforce.com/docs/atlas.en-us.financial_services_cloud_admin_guide.meta/financial_services_cloud_admin_guide/fsc_admin_guide_intro.htm" target="_blank" class="action-link"><div>READ FSC DOCS</div> <span>↗</span></a>
                 </div>
             </div>
 
@@ -836,17 +835,16 @@
                     <span class="time-tag">[5 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: SECURE WORKSTATION</div>
+                    <div class="target-box">TARGET: ENCRYPTED WORKSTATION READY</div>
                     <div class="detail-block">
                         <div class="detail-title">ACTION STEPS</div>
                         <div class="detail-body">
-                            1. Purchase <strong>Dell Latitude 7490</strong> (i5/16GB) or equiv. <br>
-                            2. <strong>Security Layer (CRITICAL):</strong> Enable BitLocker encryption on Windows. <br>
-                            3. Install <strong>LastPass/1Password</strong>. Never store client passwords in plain text. <br>
-                            4. Create a dedicated Chrome profile named "Capital OS".
+                            1. <strong>Machine:</strong> Dell Latitude/ThinkPad (i5/16GB) or equiv.<br>
+                            2. <strong>Security (MANDATORY):</strong> Enable BitLocker. Wealth data requires encryption at rest.<br>
+                            3. <strong>Isolation:</strong> Create a dedicated Chrome Profile "Capital OS".<br>
+                            4. <strong>Password Manager:</strong> 1Password or Bitwarden.
                         </div>
                     </div>
-                    <a href="https://developer.salesforce.com/signup" target="_blank" class="action-link"><div>SIGNUP FSC TRIAL</div> <span>↗</span></a>
                 </div>
             </div>
 
@@ -857,14 +855,14 @@
                     <span class="time-tag">[150 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: PASS EXAM (ADM-201)</div>
+                    <div class="target-box">TARGET: PASS ADM-201 EXAM</div>
                     <div class="detail-block">
-                        <div class="detail-title">STUDY SOP (2 HRS/DAY)</div>
+                        <div class="detail-title">ROUTINE (3 HRS/DAY)</div>
                         <div class="detail-body">
-                            <strong>Daily Routine:</strong> <br>
-                            1. 90 Mins: <a href="https://trailhead.salesforce.com/content/learn/trails/force_com_admin_beginner" target="_blank" class="text-link">Trailhead Modules</a>. <br>
-                            2. 30 Mins: <a href="https://focusonforce.com/salesforce-administrator-certification/" target="_blank" class="text-link">Focus on Force</a> (Practice Exams). <br>
-                            <i>Do not book the exam until you score 80% consistently on FoF.</i>
+                            <strong>The Drill:</strong><br>
+                            1. 2 Hours: Trailhead (Active learning).<br>
+                            2. 1 Hour: FocusOnForce Practice Exams.<br>
+                            <i>Constraint: Do not book the exam until you score 85%+ on 3 consecutive mocks.</i>
                         </div>
                     </div>
                     <a href="https://webassessor.com/salesforce" target="_blank" class="action-link"><div>BOOK EXAM</div> <span>↗</span></a>
@@ -878,33 +876,34 @@
                     <span class="time-tag">[40 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: 2 SUPERBADGES</div>
+                    <div class="target-box">TARGET: 2 SUPERBADGES COMPLETED</div>
                     <div class="detail-block">
                         <div class="detail-title">THE SIMULATION</div>
                         <div class="detail-body">
-                            This is how you get "Experience" without a job. Complete these to prove you can build logic. <br>
-                            1. <strong><a href="https://trailhead.salesforce.com/content/learn/superbadges/superbadge_admin_superset" target="_blank" class="text-link">Security Specialist</a>:</strong> Essential for Finance. <br>
-                            2. <strong><a href="https://trailhead.salesforce.com/content/learn/superbadges/superbadge_admin_superset" target="_blank" class="text-link">Business Admin Specialist</a>:</strong> Proves you can automate.
+                            Complete these to prove you can build logic. Use the <strong>Admin Super Set</strong> to access both.<br>
+                            1. <strong>Security Specialist:</strong> Essential for Finance.<br>
+                            2. <strong>Business Admin Specialist:</strong> Process automation proof.
                         </div>
                     </div>
+                    <a href="https://trailhead.salesforce.com/content/learn/superbadges/superbadge_admin_superset" target="_blank" class="action-link"><div>OPEN SUPER SET</div> <span>↗</span></a>
                 </div>
             </div>
 
             <div class="task-item" id="t0_4">
                 <div class="task-header" onclick="toggleAccordion('t0_4')">
                     <div class="check-target" onclick="toggleCheck(event, 't0_4')"><div class="checkbox"></div></div>
-                    <div class="task-title">4. Trust Infrastructure (Month 3)</div>
-                    <span class="time-tag">[10 H]</span>
+                    <div class="task-title">4. Domain Fluency (Wealth 101)</div>
+                    <span class="time-tag">[30 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: INSTITUTIONAL LEGITIMACY</div>
+                    <div class="target-box">TARGET: PASS "VOCABULARY" CHECK</div>
                     <div class="detail-block">
-                        <div class="detail-title">THE "PROXY" STRATEGY</div>
+                        <div class="detail-title">VOCABULARY IS TRUST</div>
                         <div class="detail-body">
-                            You cannot sell to RIAs as a "random freelancer". <br>
-                            1. <strong>Identity:</strong> Buy Domain (wealthwise.io). Setup G-Suite. <br>
-                            2. <strong>Legal:</strong> Draft Mutual NDA & MSA (Master Services Agreement). <br>
-                            3. <strong>Insurance:</strong> Research E&O Insurance for international contractors. Have it ready to bind.
+                            You cannot sell to partners if you don't know their clients' business.<br>
+                            1. <strong>Read:</strong> NASAA Investment Adviser Guide (Cover to Cover).<br>
+                            2. <strong>Define:</strong> Write 1-page summary on AUM (Assets Under Management) Fees.<br>
+                            3. <strong>Define:</strong> Write 1-page summary on "Household" vs "Client" data models.
                         </div>
                     </div>
                 </div>
@@ -913,87 +912,94 @@
              <div class="task-item" id="t0_5">
                 <div class="task-header" onclick="toggleAccordion('t0_5')">
                     <div class="check-target" onclick="toggleCheck(event, 't0_5')"><div class="checkbox"></div></div>
-                    <div class="task-title">5. Portfolio & Tools (Month 4)</div>
-                    <span class="time-tag">[30 H]</span>
+                    <div class="task-title">5. Build "WealthWise" Demo Org</div>
+                    <span class="time-tag">[40 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: DEMO VIDEO ASSET</div>
+                    <div class="target-box">TARGET: FUNCTIONAL DEMO ENV</div>
                     <div class="detail-block">
-                        <div class="detail-title">BUILD SPEC: "WEALTHWISE 1.0"</div>
+                        <div class="detail-title">YOUR PRODUCT</div>
                         <div class="detail-body">
-                            <strong>Schema Requirements:</strong> <br>
-                            1. <code>Household__c</code> (Master) <br>
-                            2. <code>Financial_Account__c</code> (Detail). <br>
-                            3. <strong>Compliance Feature:</strong> Implement Field Level Security (FLS) to hide "SSN" from non-admins. <br>
+                            Build a Dev Org that mimics a real Wealth Firm.<br>
+                            1. Create 5 Households with $5M+ AUM.<br>
+                            2. Build a Flow: "When Client turns 72, auto-create task for RMD (Required Minimum Distribution)."<br>
+                            <i>This specific flow proves you understand the industry.</i>
                         </div>
                     </div>
+                    <a href="https://developer.salesforce.com/signup" target="_blank" class="action-link"><div>GET DEV ORG</div> <span>↗</span></a>
+                </div>
+            </div>
+
+            <div class="task-item" id="t0_6">
+                <div class="task-header" onclick="toggleAccordion('t0_6')">
+                    <div class="check-target" onclick="toggleCheck(event, 't0_6')"><div class="checkbox"></div></div>
+                    <div class="task-title">6. Systems & Mindset (Absorb)</div>
+                    <span class="time-tag">[15 H]</span>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: OPERATING SYSTEM INSTALLED</div>
                     <div class="detail-block">
-                        <div class="detail-title">STEP 2: RECORD DEMO</div>
+                        <div class="detail-title">REQUIRED READING</div>
                         <div class="detail-body">
-                            <strong>Setup Loom.</strong> Record a 3-minute video showing the Flow firing. <br>
-                            Script: "Watch how I automated the Gold Tier update, <i>while ensuring PII data remains encrypted.</i>"
+                            1. <strong>Atomic Habits:</strong> Implement "Habit Stacking" for your 30hr/week schedule.<br>
+                            2. <strong>RIA vs Broker:</strong> Read the Investopedia Article 3 times. You must explain the "Fiduciary Standard" to a 5-year-old.
                         </div>
                     </div>
-                    <a href="https://www.loom.com/" target="_blank" class="action-link"><div>GET LOOM FREE</div> <span>↗</span></a>
                 </div>
             </div>
         </div>
 
         <div id="p1" class="section" data-phase="1">
             <div class="phase-header-grid">
-                <span class="pill">PHASE 1 (MONTH 7-18)</span>
-                <h1>FREELANCE: THE HUNT</h1>
-                <span class="earning-badge">POTENTIAL: $6.5K / MO</span>
+                <span class="pill">PHASE 1 (MONTH 4-6)</span>
+                <h1>PARTNER CHANNEL</h1>
+                <span class="earning-badge">GOAL: 2 RETAINER PARTNERS</span>
             </div>
             
             <div class="grid-2">
                 <div class="card dense" style="border-left: 2px solid var(--gold);">
-                    <span class="stat-label">80/20 OPERATIONAL FOCUS</span>
-                    <h3 style="color:var(--gold); margin-bottom:5px;">SALES GRIND</h3>
-                    <p style="font-size:13px; color:var(--text-dim);">Spend 80% time on <strong>Sending Proposals</strong>. Only 20% on delivery. You are a salesperson now.</p>
+                    <span class="stat-label">STRATEGY SHIFT</span>
+                    <h3 style="color:var(--gold); margin-bottom:5px;">THE SUBCONTRACTOR</h3>
+                    <p style="font-size:13px; color:var(--text-dim);"><strong>Do not sell to end clients yet.</strong> Sell to Salesforce Consultancies (Partners) who have overflow work. They have the trust; you have the labor.</p>
                 </div>
                 <div class="card dense">
-                    <span class="stat-label">LEISURE PROTOCOL</span>
+                    <span class="stat-label">HIGH-LEVERAGE ABSORB [10 H]</span>
                     <div style="display:flex; flex-direction: column; gap:8px; margin-top:10px;">
-                        <a href="https://www.acquisition.com/training/leads" target="_blank" class="action-link"><div><span class="ico-txt">🎧</span> $100M LEADS (COURSE)</div> <span>►</span></a>
-                        <a href="https://www.coursera.org/specializations/sales-operations" target="_blank" class="action-link"><div><span class="ico-txt">🎓</span> COURSE: SALES OPS</div> <span>►</span></a>
+                        <a href="https://medium.com/engineering-management/how-to-write-a-good-engineering-blog-post-6c8430635489" target="_blank" class="action-link"><div><span class="ico-txt">✍️</span> GUIDE: TECH WRITING (5H)</div> <span>►</span></a>
+                        <a href="https://appexchange.salesforce.com/consulting" target="_blank" class="action-link"><div><span class="ico-txt">🔍</span> APPEXCHANGE FINDER (5H)</div> <span>►</span></a>
                     </div>
                 </div>
             </div>
 
             <div style="margin: 40px 0 20px 0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-                <span class="stat-label" style="color:var(--cyan); font-size:12px;">>>> DEPLOYED INTEL (LEGAL SHIELD)</span>
+                <span class="stat-label" style="color:var(--cyan); font-size:12px;">>>> DEPLOYED INTEL (CHANNEL SALES)</span>
             </div>
 
             <div class="card" style="border-left: 4px solid var(--cyan); margin-bottom: 30px; align-items: flex-start; text-align: left;">
-                <span class="stat-label" style="color:var(--cyan); margin-bottom:5px;">MANDATORY PROTOCOLS</span>
-                <p style="font-size:16px; color:var(--text-main); font-weight:700; margin-bottom:15px;">Have these documents ready <u>before</u> the client asks.</p>
-                <div class="grid-2" style="width:100%; gap:15px; margin:0;">
-                    <a href="https://www.hiscox.com/small-business-insurance/professional-liability-insurance" target="_blank" class="action-link"><div>🛡️ GET E&O INSURANCE</div> <span>↗</span></a>
-                    <a href="https://www.ycombinator.com/documents" target="_blank" class="action-link"><div>⚖️ DOWNLOAD NDA</div> <span>↗</span></a>
+                <span class="stat-label" style="color:var(--cyan); margin-bottom:5px;">THE "WHITE LABEL" OFFER</span>
+                <p style="font-size:16px; color:var(--text-main); font-weight:700; margin-bottom:15px;">Your Pitch: "I am a silent FSC Specialist who executes your backlog."</p>
+                <div style="font-size:13px; color:var(--text-dim); line-height:1.6;">
+                    • <strong>Rate:</strong> $50/hr (Lower than US, higher than Upwork).<br>
+                    • <strong>Speed:</strong> "I work IST (4 PM - 12 AM), so your work is done when you wake up."<br>
+                    • <strong>Compliance:</strong> "I have E&O Insurance and a registered entity."
                 </div>
             </div>
 
             <div class="task-item locked" id="t1_1" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_1')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_1')"><div class="checkbox"></div></div>
-                    <div class="task-title">1. Market Positioning</div>
-                    <span class="time-tag">[5 H]</span>
+                    <div class="task-title">1. The Content Ledger</div>
+                    <span class="time-tag">[40 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: OPTIMIZED PROFILE</div>
+                    <div class="target-box">TARGET: 3 ARTICLES (1,500 WORDS EACH)</div>
                     <div class="detail-block">
-                        <div class="detail-title">HEADLINE SCRIPT</div>
+                        <div class="detail-title">PROOF OF WORK</div>
                         <div class="detail-body">
-                            Copy Paste: <br>
-                            <strong>"Salesforce FSC Architect for Wealth Management | Helping RIAs Scale & Automate Compliance"</strong>
-                        </div>
-                    </div>
-                    <div class="detail-block">
-                        <div class="detail-title">FEATURED SECTION</div>
-                        <div class="detail-body">
-                            Upload the <strong>Loom Video</strong> from Phase 0. <br>
-                            Title: "How I Automate Household AUM Rollups in Salesforce".
+                            Partners don't read resumes. They read solutions. Write 3 articles on Medium/LinkedIn (min 1,500 words each):<br>
+                            1. "Automating RMD Tasks in Salesforce FSC using Flows".<br>
+                            2. "Handling Household-Level Security in Wealth Management".<br>
+                            3. "FSC vs Sales Cloud: A Data Model Comparison".
                         </div>
                     </div>
                 </div>
@@ -1002,58 +1008,58 @@
             <div class="task-item locked" id="t1_2" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_2')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_2')"><div class="checkbox"></div></div>
-                    <div class="task-title">2. Portfolio Website (No-Code)</div>
-                    <span class="time-tag">[10 H]</span>
+                    <div class="task-title">2. Partner Mapping</div>
+                    <span class="time-tag">[20 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: LIVE URL</div>
+                    <div class="target-box">TARGET: 50 PARTNERS IN SHEET</div>
                     <div class="detail-block">
-                        <div class="detail-title">THE BUILD</div>
+                        <div class="detail-title">THE HUNTING GROUNDS</div>
                         <div class="detail-body">
-                            Don't code from scratch. Use <strong>Carrd.co</strong> ($19/yr). <br>
-                            1. Buy Domain: <code>wealthwise.io</code> on Namecheap. <br>
-                            2. Content: Embed Loom Demo + "Book Audit" Button. <br>
-                            3. Connect: Add A-Records from Carrd to Namecheap DNS.
+                            Use the <strong>AppExchange Consultant Finder</strong>.<br>
+                            1. Filter: "Financial Services".<br>
+                            2. Size: Look for boutiques (10-50 employees). Avoid the Big 4.<br>
+                            3. Identify the "Practice Lead" or "Delivery Director" on LinkedIn.<br>
+                            4. Log 50 qualified firms in a spreadsheet.
                         </div>
                     </div>
-                    <a href="https://carrd.co/" target="_blank" class="action-link"><div>START CARRD</div> <span>↗</span></a>
+                    <a href="https://appexchange.salesforce.com/consulting" target="_blank" class="action-link"><div>START MAPPING</div> <span>↗</span></a>
                 </div>
             </div>
 
             <div class="task-item locked" id="t1_3" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_3')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_3')"><div class="checkbox"></div></div>
-                    <div class="task-title">3. Multi-Channel Hunt</div>
-                    <span class="time-tag">[300 H+]</span>
+                    <div class="task-title">3. The Channel Outreach</div>
+                    <span class="time-tag">[Ongoing]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: 5 PROPOSALS / DAY</div>
+                    <div class="target-box">TARGET: 5 OUTREACHES / DAY</div>
                     <div class="detail-block">
-                        <div class="detail-title">LINKEDIN SALES NAV SOP</div>
+                        <div class="detail-title">THE SCRIPT</div>
                         <div class="detail-body">
-                            <strong>Boolean Search String:</strong> <br>
-                            <code>("Operations Director" OR "COO") AND ("RIA" OR "Wealth Management") AND "Salesforce"</code> <br>
-                            <strong>The Grind:</strong> 5 Custom Loom Videos per day. No exceptions.
+                            "Hi [Name], I noticed [Firm] is growing its Wealth practice. I'm an FSC-specialized Admin (Certified + Superbadges). I just wrote a guide on [Link to Article] that might help your juniors.<br><br>
+                            If you ever need overflow capacity for configuration work, I have 30hrs/week open. White-label ready."
                         </div>
                     </div>
-                    <a href="https://www.linkedin.com/sales" target="_blank" class="action-link"><div>OPEN SALES NAV</div> <span>↗</span></a>
                 </div>
             </div>
 
             <div class="task-item locked" id="t1_4" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_4')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_4')"><div class="checkbox"></div></div>
-                    <div class="task-title">4. Async Protocol Strategy</div>
-                    <span class="time-tag">[Ongoing]</span>
+                    <div class="task-title">4. Professional Infrastructure</div>
+                    <span class="time-tag">[10 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: ZERO MEETINGS</div>
+                    <div class="target-box">TARGET: LEGAL & TAX SETUP COMPLETE</div>
                     <div class="detail-block">
-                        <div class="detail-title">TIMEZONE MASTERY</div>
+                        <div class="detail-title">ELIMINATE FRICTION</div>
                         <div class="detail-body">
-                            Use your Loom account to kill meetings. <br>
-                            <strong>The Rule:</strong> Never ask "When are you free?". <br>
-                            <strong>The Action:</strong> Send a video update every morning (their evening). "Here is what I built today."
+                            Partners need to know you are safe.<br>
+                            1. <strong>LLC/Proprietorship:</strong> Register locally.<br>
+                            2. <strong>Insurance:</strong> Get Professional Indemnity (E&O). Even a small policy ($1M coverage) separates you from "random freelancer".<br>
+                            3. <strong>W-8BEN:</strong> Have this tax form filled out for US partners.
                         </div>
                     </div>
                 </div>
@@ -1062,17 +1068,17 @@
             <div class="task-item locked" id="t1_5" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t1_5')">
                     <div class="check-target" onclick="toggleCheck(event, 't1_5')"><div class="checkbox"></div></div>
-                    <div class="task-title">5. Enterprise Registration</div>
-                    <span class="time-tag">[5 H]</span>
+                    <div class="task-title">5. First "Associate" Contract</div>
+                    <span class="time-tag">[Milestone]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: 0% TAX SETUP</div>
+                    <div class="target-box">TARGET: SIGNED MSA</div>
                     <div class="detail-block">
-                        <div class="detail-title">INDIA STACK</div>
+                        <div class="detail-title">EXECUTION</div>
                         <div class="detail-body">
-                            Do this as soon as you get your first client payment: <br>
-                            1. <strong><a href="https://udyamregistration.gov.in/" target="_blank" class="text-link">MSME (Udyam)</a>:</strong> Free registration. <br>
-                            2. <strong><a href="https://www.gst.gov.in/" target="_blank" class="text-link">GST + LUT</a>:</strong> Apply for "Letter of Undertaking" to pay <strong>0% GST</strong> on export services.
+                            Your goal is a <strong>Retainer</strong>, not hourly.<br>
+                            "I will handle all Ticket Level 1 & 2 config for your Wealth clients for $4,000/month (up to 80 hours)."<br>
+                            This gives them predictability, and you stability.
                         </div>
                     </div>
                 </div>
@@ -1085,37 +1091,54 @@
                     <span class="time-tag">[2 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: USD COLLECTION</div>
+                    <div class="target-box">TARGET: WISE ACCOUNT ACTIVE</div>
                     <div class="detail-block">
                         <div class="detail-title">GETTING PAID</div>
                         <div class="detail-body">
-                            US Clients cannot transfer to your Indian savings account easily. <br>
-                            1. <strong>Open Wise Business:</strong> Get a US Account Number (ACH). <br>
-                            2. <strong>FIRC:</strong> Wise automatically provides the FIRC needed for 0% GST compliance.
+                            1. <strong>Open Wise Business:</strong> Get a US Account Number (ACH).<br>
+                            2. <strong>FIRC:</strong> Wise provides FIRC. Use it to file for 0% GST (LUT) since this is Service Export.
                         </div>
                     </div>
                     <a href="https://wise.com/in/business/" target="_blank" class="action-link"><div>OPEN WISE BUSINESS</div> <span>↗</span></a>
+                </div>
+            </div>
+
+            <div class="task-item locked" id="t1_7" title="Complete Previous Phase to Unlock">
+                <div class="task-header" onclick="toggleAccordion('t1_7')">
+                    <div class="check-target" onclick="toggleCheck(event, 't1_7')"><div class="checkbox"></div></div>
+                    <div class="task-title">7. Sales Engineering (Absorb)</div>
+                    <span class="time-tag">[10 H]</span>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: RESEARCH COMPLETE</div>
+                    <div class="detail-block">
+                        <div class="detail-title">REQUIRED STUDY</div>
+                        <div class="detail-body">
+                            1. <strong>Tech Writing Guide:</strong> Read the Medium guide. Analyze 3 successful engineering blogs.<br>
+                            2. <strong>Consulting Finder:</strong> Spend 5 hours strictly filtering and analyzing competitor offerings on AppExchange.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div id="p2" class="section" data-phase="2">
             <div class="phase-header-grid">
                 <span class="pill">PHASE 2 (YEAR 2-4)</span>
-                <h1>AGENCY: SCALING</h1>
+                <h1>AGENCY: DELIVERY OS</h1>
                 <span class="earning-badge">POTENTIAL: $83K / MO</span>
             </div>
             
             <div class="grid-2">
                 <div class="card dense" style="border-left: 2px solid var(--gold);">
                     <span class="stat-label">80/20 OPERATIONAL FOCUS</span>
-                    <h3 style="color:var(--gold); margin-bottom:5px;">ARCHITECTING</h3>
-                    <p style="font-size:13px; color:var(--text-dim);">You draw the map (Schema/Logic). Junior Admins lay the bricks (Clicks). Never abdicate architecture.</p>
+                    <h3 style="color:var(--gold); margin-bottom:5px;">SYSTEMIZATION</h3>
+                    <p style="font-size:13px; color:var(--text-dim);">You cannot scale chaos. If you do a task twice, you must write a <strong>Script/SOP</strong>. You are building a factory, not a job.</p>
                 </div>
                  <div class="card dense">
-                    <span class="stat-label">LEISURE PROTOCOL</span>
+                    <span class="stat-label">HIGH-LEVERAGE ABSORB [10 H]</span>
                     <div style="display:flex; flex-direction: column; gap:8px; margin-top:10px;">
-                        <a href="https://www.amazon.com/Myth-Revisited-Small-Businesses-About/dp/0887307280" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> READ: E-MYTH REVISITED</div> <span>►</span></a>
-                        <a href="https://www.amazon.com/Who-Not-How-Accelerating-Teamwork-ebook/dp/B0867ZJ7J1" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> READ: WHO NOT HOW</div> <span>►</span></a>
+                        <a href="https://about.gitlab.com/handbook/" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> MODEL: GITLAB HANDBOOK (5H)</div> <span>►</span></a>
+                        <a href="https://www.notion.so/" target="_blank" class="action-link"><div><span class="ico-txt">🛠️</span> TOOL: NOTION WIKI (5H)</div> <span>►</span></a>
                     </div>
                 </div>
             </div>
@@ -1125,17 +1148,20 @@
             <div class="task-item locked" id="t2_1" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t2_1')">
                     <div class="check-target" onclick="toggleCheck(event, 't2_1')"><div class="checkbox"></div></div>
-                    <div class="task-title">1. Trust Infrastructure (Expanded)</div>
-                    <span class="time-tag">[5 H]</span>
+                    <div class="task-title">1. The SOP Library</div>
+                    <span class="time-tag">[20 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: INSURED ENTITY</div>
+                    <div class="target-box">TARGET: 5 CORE PROCEDURES WRITTEN</div>
                     <div class="detail-block">
-                        <div class="detail-title">ENTERPRISE READY</div>
+                        <div class="detail-title">DOCUMENT EVERYTHING</div>
                         <div class="detail-body">
-                            Wealth Managers are paranoid. You need: <br>
-                            1. <strong>E&O Insurance</strong> (Errors & Omissions). <br>
-                            2. <strong>Standard NDA</strong>. Have it ready <i>before</i> they ask.
+                            Create a Notion workspace. Write these 5 exact docs to ensure quality control:<br>
+                            1. <strong>"New User Setup":</strong> Exact license types and permission sets.<br>
+                            2. <strong>"Sandbox Refresh":</strong> Data masking steps for wealth data.<br>
+                            3. <strong>"Flow Naming Convention":</strong> Standardized API naming.<br>
+                            4. <strong>"Checkmarx Scan":</strong> How to run security reviews.<br>
+                            5. <strong>"Deployment Protocol":</strong> Change Set vs DevOps Center steps.
                         </div>
                     </div>
                 </div>
@@ -1144,18 +1170,20 @@
             <div class="task-item locked" id="t2_2" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t2_2')">
                     <div class="check-target" onclick="toggleCheck(event, 't2_2')"><div class="checkbox"></div></div>
-                    <div class="task-title">2. The Architect Model</div>
-                    <span class="time-tag">[50 H]</span>
+                    <div class="task-title">2. Asynchronous Delivery</div>
+                    <span class="time-tag">[10 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: 1ST HIRE</div>
+                    <div class="target-box">TARGET: 100% CLIENT RETENTION</div>
                     <div class="detail-block">
-                        <div class="detail-title">THE FILTER QUESTION</div>
+                        <div class="detail-title">CLIENT RETENTION PROTOCOL</div>
                         <div class="detail-body">
-                            Weed out fake candidates with this task: <br>
-                            "Create a Validation Rule on Opportunity that prevents closing if the 'Amount' is blank. Send me the formula." <br>
-                            <strong>Correct:</strong> <code>AND(IsWon, ISBLANK(Amount))</code>. <br>
-                            <i>If they google it or hesitate, reject them.</i>
+                            Churn happens when clients feel ignored. Setup Loom and draft your update template.<br>
+                            <strong>The Fix:</strong> Friday Video Updates.<br>
+                            Send a 2-minute Loom video every Friday to the Partner Lead summarizing:<br>
+                            1. What was done this week.<br>
+                            2. Any blockers.<br>
+                            3. Next week's plan.
                         </div>
                     </div>
                 </div>
@@ -1164,16 +1192,35 @@
              <div class="task-item locked" id="t2_3" title="Complete Previous Phase to Unlock">
                 <div class="task-header" onclick="toggleAccordion('t2_3')">
                     <div class="check-target" onclick="toggleCheck(event, 't2_3')"><div class="checkbox"></div></div>
-                    <div class="task-title">3. Automated Onboarding</div>
-                    <span class="time-tag">[20 H]</span>
+                    <div class="task-title">3. The Junior Clone</div>
+                    <span class="time-tag">[10 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: ZERO TOUCH</div>
+                    <div class="target-box">TARGET: 10 HOURS DELEGATED/WEEK</div>
                     <div class="detail-block">
-                        <div class="detail-title">SETUP</div>
+                        <div class="detail-title">DELEGATION</div>
                         <div class="detail-body">
-                            Build a Typeform connected to your own Salesforce org. <br>
-                            When a client signs, automatically generate their project record and Slack channel.
+                            Hire a junior admin (India based) to execute your SOPs.<br>
+                            <strong>Test Task:</strong> Give them your "Sandbox Refresh" SOP from Task 1.<br>
+                            <strong>Pass/Fail:</strong> If they ask questions already answered in the doc, do not hire. If they complete it without errors, hire for 10hrs/week.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item locked" id="t2_4" title="Complete Previous Phase to Unlock">
+                <div class="task-header" onclick="toggleAccordion('t2_4')">
+                    <div class="check-target" onclick="toggleCheck(event, 't2_4')"><div class="checkbox"></div></div>
+                    <div class="task-title">4. Systems Engineering (Absorb)</div>
+                    <span class="time-tag">[10 H]</span>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: NOTION TEMPLATE BUILT</div>
+                    <div class="detail-block">
+                        <div class="detail-title">REQUIRED STUDY</div>
+                        <div class="detail-body">
+                            1. <strong>GitLab Handbook:</strong> Read the "Communication" and "Asynchronous Work" sections.<br>
+                            2. <strong>Notion Architecture:</strong> Build a "Company Home" dashboard that links to your SOP database.
                         </div>
                     </div>
                 </div>
@@ -1191,13 +1238,13 @@
                 <div class="card dense" style="border-left: 2px solid var(--gold);">
                     <span class="stat-label">80/20 OPERATIONAL FOCUS</span>
                     <h3 style="color:var(--gold); margin-bottom:5px;">PRODUCT</h3>
-                    <p style="font-size:13px; color:var(--text-dim);">Spend 80% time defining the <strong>Product Roadmap</strong> based on client pain points.</p>
+                    <p style="font-size:13px; color:var(--text-dim);">Spend 80% time defining the <strong>Product Roadmap</strong> based on client pain points found in Phase 2.</p>
                 </div>
                 <div class="card dense">
-                    <span class="stat-label">LEISURE PROTOCOL</span>
+                    <span class="stat-label">HIGH-LEVERAGE ABSORB [20 H]</span>
                     <div style="display:flex; flex-direction: column; gap:8px; margin-top:10px;">
-                        <a href="https://www.momtestbook.com/" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> READ: THE MOM TEST</div> <span>►</span></a>
-                        <a href="https://www.ycombinator.com/library" target="_blank" class="action-link"><div><span class="ico-txt">🎓</span> YC STARTUP SCHOOL</div> <span>►</span></a>
+                        <a href="https://www.momtestbook.com/" target="_blank" class="action-link"><div><span class="ico-txt">📖</span> READ: THE MOM TEST (5H)</div> <span>►</span></a>
+                        <a href="https://www.ycombinator.com/library" target="_blank" class="action-link"><div><span class="ico-txt">🎓</span> YC STARTUP SCHOOL (15H)</div> <span>►</span></a>
                     </div>
                 </div>
             </div>
@@ -1211,12 +1258,15 @@
                     <span class="time-tag">[20 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: 10 PRE-ORDERS</div>
+                    <div class="target-box">TARGET: 10 SIGNED LOIs</div>
                     <div class="detail-block">
                         <div class="detail-title">STRATEGY</div>
                         <div class="detail-body">
-                            Before writing code, create a simple landing page describing the "Gap" plugin. <br>
-                            Run $500 of LinkedIn ads to wealth managers. Measure click-through rate.
+                            Do not write code yet.<br>
+                            1. Identify the "Gap" plugin you manually built 50 times in Phase 2.<br>
+                            2. Call your 10 best Partner contacts.<br>
+                            3. Ask: "If I built this as a plugin for $3k/year, would you buy it?"<br>
+                            4. Get a non-binding <strong>Letter of Intent (LOI)</strong>.
                         </div>
                     </div>
                 </div>
@@ -1229,14 +1279,14 @@
                     <span class="time-tag">[500 H+]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: FEATURE LOCK</div>
+                    <div class="target-box">TARGET: TECHNICAL SPEC DOC</div>
                     <div class="detail-block">
                         <div class="detail-title">TECH STACK</div>
                         <div class="detail-body">
-                            To survive the Security Review, you must use standard Salesforce tech: <br>
-                            1. <strong>LWC (Lightning Web Components)</strong> for UI. <br>
-                            2. <strong>Apex</strong> for backend logic. <br>
-                            3. <strong>Managed Package</strong> (1GP or 2GP) for distribution.
+                            To survive the Security Review, you must use standard Salesforce tech:<br>
+                            1. <strong>LWC (Lightning Web Components)</strong> for UI.<br>
+                            2. <strong>Apex</strong> for backend logic (Must be bulkified).<br>
+                            3. <strong>Managed Package</strong> (2GP) for distribution.
                         </div>
                     </div>
                 </div>
@@ -1249,16 +1299,35 @@
                     <span class="time-tag">[100 H]</span>
                 </div>
                 <div class="task-details">
-                    <div class="target-box">TARGET: APPEXCHANGE LIVE</div>
+                    <div class="target-box">TARGET: PASS SECURITY REVIEW</div>
                     <div class="detail-block">
                         <div class="detail-title">THE SECURITY TAX</div>
                         <div class="detail-body">
-                            To list on AppExchange, you must pass the <strong>Salesforce Security Review</strong>. <br>
-                            1. Budget <strong>$2,550</strong> for the listing fee. <br>
-                            2. Run <strong>Checkmarx</strong> scans on your code weekly.
+                            To list on AppExchange, you must pass the <strong>Salesforce Security Review</strong>.<br>
+                            1. Budget <strong>$2,550</strong> for the listing fee.<br>
+                            2. Run <strong>Checkmarx</strong> scans on your code weekly.<br>
+                            3. Submit false-positive report.
                         </div>
                     </div>
                     <a href="https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/security_review_overview.htm" target="_blank" class="action-link"><div>VIEW SEC GUIDELINES</div> <span>↗</span></a>
+                </div>
+            </div>
+
+            <div class="task-item locked" id="t3_4" title="Complete Previous Phase to Unlock">
+                <div class="task-header" onclick="toggleAccordion('t3_4')">
+                    <div class="check-target" onclick="toggleCheck(event, 't3_4')"><div class="checkbox"></div></div>
+                    <div class="task-title">4. Founder Mindset (Absorb)</div>
+                    <span class="time-tag">[20 H]</span>
+                </div>
+                <div class="task-details">
+                    <div class="target-box">TARGET: PRODUCT ROADMAP DRAFTED</div>
+                    <div class="detail-block">
+                        <div class="detail-title">REQUIRED STUDY</div>
+                        <div class="detail-body">
+                            1. <strong>The Mom Test:</strong> Read it. Write a script for your 10 validation calls.<br>
+                            2. <strong>YC Startup School:</strong> Watch the "How to Talk to Users" module.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1268,41 +1337,50 @@
 
 <script>
     // --- STATE & METADATA ---
+    // Updated to include new Absorb tasks (t0_6, t1_7, t2_4, t3_4)
     const taskOrder = [
-        't0_1','t0_2','t0_3','t0_4','t0_5',
-        't1_1','t1_2','t1_3','t1_4','t1_5','t1_6',
-        't2_1','t2_2','t2_3',
-        't3_1','t3_2','t3_3'
+        't0_1','t0_2','t0_3','t0_4','t0_5','t0_6',
+        't1_1','t1_2','t1_3','t1_4','t1_5','t1_6','t1_7',
+        't2_1','t2_2','t2_3','t2_4',
+        't3_1','t3_2','t3_3','t3_4'
     ];
     
     // Config defines the Dashboard Focus & Buttons
     const taskMeta = {
+        // Phase 0: Genesis
         't0_1': { phase: 0, obj: 'SECURE WORKSTATION', btn: 'OPEN STEPS', go: 'p0', hrs: 5 },
         't0_2': { phase: 0, obj: 'ADMIN CERTIFICATION', btn: 'OPEN STUDY GUIDE', go: 'p0', hrs: 150 },
         't0_3': { phase: 0, obj: 'SUPERBADGES (EXP)', btn: 'OPEN TRAILHEAD', go: 'p0', hrs: 40 },
-        't0_4': { phase: 0, obj: 'TRUST PROTOCOLS', btn: 'SETUP LEGAL', go: 'p0', hrs: 10 },
-        't0_5': { phase: 0, obj: 'BUILD DEMO', btn: 'VIEW SPECS', go: 'p0', hrs: 30 },
+        't0_4': { phase: 0, obj: 'DOMAIN FLUENCY', btn: 'READ NASAA', go: 'p0', hrs: 30 },
+        't0_5': { phase: 0, obj: 'BUILD DEMO ORG', btn: 'VIEW SPECS', go: 'p0', hrs: 40 },
+        't0_6': { phase: 0, obj: 'SYSTEMS & MINDSET', btn: 'READ ATOMIC', go: 'p0', hrs: 15 },
         
-        't1_1': { phase: 1, obj: 'LINKEDIN POSITIONING', btn: 'EDIT PROFILE', go: 'p1', hrs: 5 },
-        't1_2': { phase: 1, obj: 'PORTFOLIO SITE', btn: 'BUILD CARRD', go: 'p1', hrs: 10 },
-        't1_3': { phase: 1, obj: 'CLIENT HUNTING', btn: 'OPEN SALES NAV', go: 'p1', hrs: 300 },
-        't1_4': { phase: 1, obj: 'ASYNC OPS', btn: 'VIEW STRATEGY', go: 'p1', hrs: 5 },
-        't1_5': { phase: 1, obj: 'LEGAL SETUP', btn: 'VIEW INDIA STACK', go: 'p1', hrs: 5 },
+        // Phase 1: Partner Channel
+        't1_1': { phase: 1, obj: 'CONTENT LEDGER', btn: 'WRITE ARTICLES', go: 'p1', hrs: 40 },
+        't1_2': { phase: 1, obj: 'PARTNER MAPPING', btn: 'OPEN FINDER', go: 'p1', hrs: 20 },
+        't1_3': { phase: 1, obj: 'CHANNEL OUTREACH', btn: 'VIEW SCRIPT', go: 'p1', hrs: 100 },
+        't1_4': { phase: 1, obj: 'LEGAL INFRA', btn: 'SETUP LLC', go: 'p1', hrs: 10 },
+        't1_5': { phase: 1, obj: 'ASSOCIATE CONTRACT', btn: 'NEGOTIATE', go: 'p1', hrs: 20 },
         't1_6': { phase: 1, obj: 'PAYMENT RAILS', btn: 'SETUP WISE', go: 'p1', hrs: 2 },
+        't1_7': { phase: 1, obj: 'SALES ENGINEERING', btn: 'RESEARCH', go: 'p1', hrs: 10 },
         
-        't2_1': { phase: 2, obj: 'TRUST INFRASTRUCTURE', btn: 'GET INSURANCE', go: 'p2', hrs: 5 },
-        't2_2': { phase: 2, obj: 'HIRE BUILDER', btn: 'POST JOB', go: 'p2', hrs: 50 },
-        't2_3': { phase: 2, obj: 'AUTOMATE ONBOARDING', btn: 'BUILD FORM', go: 'p2', hrs: 20 },
+        // Phase 2: Delivery OS
+        't2_1': { phase: 2, obj: 'SOP LIBRARY', btn: 'OPEN NOTION', go: 'p2', hrs: 20 },
+        't2_2': { phase: 2, obj: 'ASYNC DELIVERY', btn: 'RECORD LOOM', go: 'p2', hrs: 10 },
+        't2_3': { phase: 2, obj: 'HIRE JUNIOR', btn: 'POST JOB', go: 'p2', hrs: 10 },
+        't2_4': { phase: 2, obj: 'SYSTEMS ENGINEERING', btn: 'STUDY GITLAB', go: 'p2', hrs: 10 },
         
-        't3_1': { phase: 3, obj: 'MARKET VALIDATION', btn: 'RUN ADS', go: 'p3', hrs: 20 },
+        // Phase 3: SaaS Exit
+        't3_1': { phase: 3, obj: 'MARKET VALIDATION', btn: 'ASK PARTNERS', go: 'p3', hrs: 20 },
         't3_2': { phase: 3, obj: 'MVP SCOPING', btn: 'DEFINE FEATURES', go: 'p3', hrs: 500 },
-        't3_3': { phase: 3, obj: 'SECURITY REVIEW', btn: 'RUN CHECKMARX', go: 'p3', hrs: 100 }
+        't3_3': { phase: 3, obj: 'SECURITY REVIEW', btn: 'RUN CHECKMARX', go: 'p3', hrs: 100 },
+        't3_4': { phase: 3, obj: 'FOUNDER MINDSET', btn: 'READ MOM TEST', go: 'p3', hrs: 20 }
     };
 
     const phaseConfig = {
-        0: { title: 'MASTERY & TRUST', sub: '80% SUPERBADGES' },
-        1: { title: 'SALES VOLUME', sub: '80% PROPOSALS' },
-        2: { title: 'ARCHITECTURE', sub: '0% CLICKING' },
+        0: { title: 'MASTERY & DOMAIN', sub: '80% SUPERBADGES' },
+        1: { title: 'PARTNER CHANNEL', sub: '80% OUTREACH' },
+        2: { title: 'DELIVERY OS', sub: '0% CHAOS' },
         3: { title: 'PRODUCT', sub: '80% ROADMAP' }
     };
 
@@ -1319,16 +1397,15 @@
 
         document.querySelector('.scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
 
-        // AUTO-COLLAPSE SIDEBAR ON ACTION
+        // AUTO-COLLAPSE SIDEBAR & OVERLAY
         if(closeMenu) {
             document.getElementById('sidebar').classList.remove('active');
-            // Remove overlay active state when clicking a nav item
             const overlay = document.getElementById('sidebar_overlay');
             if(overlay) overlay.classList.remove('active');
         }
     }
 
-    // UPDATED: Toggle Sidebar AND Overlay
+    // Toggle Sidebar AND Overlay
     function toggleSidebar() { 
         document.getElementById('sidebar').classList.toggle('active'); 
         const overlay = document.getElementById('sidebar_overlay');
@@ -1467,13 +1544,13 @@
     function saveState() {
         taskOrder.forEach(id => {
             const completed = document.getElementById(id).classList.contains('completed');
-            localStorage.setItem('capital_v15_5_' + id, completed); // Version updated key
+            localStorage.setItem('capital_v15_7_' + id, completed); // Version updated key
         });
     }
 
     function loadState() {
         taskOrder.forEach(id => {
-            if(localStorage.getItem('capital_v15_5_' + id) === 'true') {
+            if(localStorage.getItem('capital_v15_7_' + id) === 'true') {
                 document.getElementById(id).classList.add('completed');
             }
         });
@@ -1494,7 +1571,6 @@
     
     function c1() { 
         let wk = v('in_f1_rate') * v('in_f1_hrs');
-        // Monthly added
         let mo = wk * 4; 
         t('out_f1_wk', '$' + wk.toLocaleString()); 
         t('out_f1_mo', '$' + mo.toLocaleString());
